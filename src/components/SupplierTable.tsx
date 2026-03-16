@@ -11,7 +11,7 @@ interface ColumnDef {
 
 const columns: ColumnDef[] = [
   { key: "name", label: "Name", tooltip: "Legal entity name of the supplier in your procurement system." },
-  { key: "hq", label: "HQ", tooltip: "Headquarters region of the supplier." },
+  
   { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "score", label: "Score", tooltip: "Composite ESG score (0–100%) based on disclosed climate data quality." },
