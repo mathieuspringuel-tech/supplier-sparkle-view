@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2 } from "lucide-react";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
 import { CopyYearModal } from "./CopyYearModal";
+import { AddSupplierModal } from "./AddSupplierModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -63,6 +64,8 @@ export const SupplierTable = () => {
   const [yearData, setYearData] = useState<YearData[]>(initialYearData);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
@@ -118,6 +121,43 @@ export const SupplierTable = () => {
     toast.success("Supplier updated");
   };
 
+  const handleAddSupplier = (newSupplier: Supplier) => {
+    // Add supplier with synced = false
+    setYearData((prev) =>
+      prev.map((y) =>
+        y.year === selectedYear ? { ...y, suppliers: [...y.suppliers, newSupplier] } : y
+      )
+    );
+    toast.success(`${newSupplier.name} added`);
+
+    // Simulate syncing for 5 seconds
+    setSyncingIds((prev) => new Set(prev).add(newSupplier.id));
+    setTimeout(() => {
+      const ef = +(0.05 + Math.random() * 0.8).toFixed(3);
+      const tco2e = +(newSupplier.spend * ef).toFixed(2);
+      setYearData((prev) =>
+        prev.map((y) =>
+          y.year === selectedYear
+            ? {
+                ...y,
+                suppliers: y.suppliers.map((s) =>
+                  s.id === newSupplier.id
+                    ? { ...s, synced: true, emissionFactor: ef, tco2e }
+                    : s
+                ),
+              }
+            : y
+        )
+      );
+      setSyncingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(newSupplier.id);
+        return next;
+      });
+      toast.success(`${newSupplier.name} synced`);
+    }, 5000);
+  };
+
   return (
     <TooltipProvider>
       <>
@@ -154,6 +194,14 @@ export const SupplierTable = () => {
               Copy last year's suppliers
             </button>
           )}
+
+          <button
+            onClick={() => setAddModalOpen(true)}
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent rounded-lg hover:bg-accent/90 transition-colors duration-150"
+          >
+            <Plus size={14} />
+            Add Supplier
+          </button>
         </div>
 
         <div className="w-full overflow-x-auto rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,.05),0_2px_4px_rgba(0,0,0,.02)]">
@@ -214,9 +262,13 @@ export const SupplierTable = () => {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
                     <td className="px-4 py-3">
-                      <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
-                        {s.synced ? "Yes" : "No"}
-                      </span>
+                      {syncingIds.has(s.id) ? (
+                        <Loader2 size={16} className="text-muted-foreground animate-spin" />
+                      ) : (
+                        <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
+                          {s.synced ? "Yes" : "No"}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -227,6 +279,7 @@ export const SupplierTable = () => {
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
         <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} />
+        <AddSupplierModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddSupplier} />
         {copyModalData && (
           <CopyYearModal
             suppliers={copyModalData.suppliers}
