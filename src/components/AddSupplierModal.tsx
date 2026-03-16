@@ -209,7 +209,6 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
                   className="mt-1"
                 />
               </div>
-              )}
 
               <div>
                 <Label htmlFor="add-email">Email</Label>
