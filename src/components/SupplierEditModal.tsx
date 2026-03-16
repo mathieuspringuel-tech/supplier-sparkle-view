@@ -123,7 +123,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
             <Tabs defaultValue="year-data">
               <TabsList className="w-full">
-                <TabsTrigger value="year-data" className="flex-1">Year Data</TabsTrigger>
+                <TabsTrigger value="year-data" className="flex-1">{year || "Year"} Data</TabsTrigger>
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
               </TabsList>
 
