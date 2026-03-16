@@ -301,7 +301,22 @@ export const SupplierTable = () => {
                     <td className="px-4 py-3">
                       <CountryFlag countryCode={s.hqCountry} />
                     </td>
-                    <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
+                    <td className="px-4 py-3 font-mono-tabular">
+                      {!s.synced && s.calculationMethodology === "spend" ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex cursor-default">
+                              <AlertTriangle size={16} className="text-destructive" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs max-w-[220px]">
+                            No Emission Factor available as AI was not able to synch the company.
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        s.tco2e.toFixed(2)
+                      )}
+                    </td>
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <TargetStatusCell status={s.targetStatus} />
