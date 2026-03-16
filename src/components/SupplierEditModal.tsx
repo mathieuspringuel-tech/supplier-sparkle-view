@@ -72,7 +72,7 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
-export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditModalProps) => {
+export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
 
   useEffect(() => {
