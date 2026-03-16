@@ -250,16 +250,11 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                     <div>
                       <Label>Company HQ</Label>
-                      <Select value={draft.hqCountry} onValueChange={(v) => update("hqCountry", v)}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {countries.map((c) => (
-                            <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        value={countries.find((c) => c.code === draft.hqCountry)?.name || draft.hqCountry}
+                        disabled
+                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                      />
                     </div>
 
                     <div>
@@ -290,16 +285,11 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                     <div>
                       <Label>Industry</Label>
-                      <Select value={draft.industry} onValueChange={(v) => update("industry", v)}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {industries.map((ind) => (
-                            <SelectItem key={ind} value={ind}>{ind}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        value={draft.industry}
+                        disabled
+                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                      />
                     </div>
 
                     <div>
@@ -307,9 +297,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                       <Input
                         id="edit-website"
                         value={draft.website}
-                        onChange={(e) => update("website", e.target.value)}
-                        className="mt-1"
-                        placeholder="https://"
+                        disabled
+                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
                       />
                     </div>
 
