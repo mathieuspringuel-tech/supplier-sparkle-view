@@ -1,3 +1,5 @@
+export type TargetStatus = "sbti-validated" | "sbti-committed" | "non-sbti" | "no-targets";
+
 export interface Supplier {
   id: string;
   name: string;
@@ -5,7 +7,7 @@ export interface Supplier {
   description: string;
   tco2e: number;
   spend: number;
-  hasTargets: boolean;
+  targetStatus: TargetStatus;
   cdp: boolean;
   category: string;
   synced: boolean;
