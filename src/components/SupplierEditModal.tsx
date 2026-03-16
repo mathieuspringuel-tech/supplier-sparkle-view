@@ -127,7 +127,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="year-data" className="pt-4 max-h-[60vh] overflow-y-auto pr-1">
+              <TabsContent value="year-data" className="pt-4">
                 {/* CO2e Calculation Section */}
                 <div className="mb-6">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">CO₂e Calculation</p>
