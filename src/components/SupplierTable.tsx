@@ -118,7 +118,21 @@ export const SupplierTable = () => {
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
+
+  // Columns that can be toggled (exclude "name" as it's always visible)
+  const toggleableColumns = columns.filter((c) => c.key !== "name");
+  const visibleColumns = columns.filter((c) => !hiddenColumns.has(c.key));
+
+  const toggleColumn = (key: string) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
