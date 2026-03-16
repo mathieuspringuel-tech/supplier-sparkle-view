@@ -318,6 +318,27 @@ export const SupplierTable = () => {
                     <td className="px-4 py-3">
                       <CountryFlag countryCode={s.hqCountry} />
                     </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+                        s.calculationMethodology === "spend"
+                          ? "bg-secondary text-foreground"
+                          : "bg-accent/10 text-accent"
+                      }`}>
+                        {s.calculationMethodology === "spend" ? "Spend Data Input" : "CO₂e Data Input"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {s.calculationMethodology === "tco2e" ? (
+                        <span className="text-muted-foreground">-</span>
+                      ) : (
+                        <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+                          s.methodology === "Input by User"
+                            ? "bg-amber-500/10 text-amber-600"
+                            : "bg-secondary text-foreground"
+                        }`}>
+                          {s.methodology === "Input by User" ? "Custom" : "AI Generated"}
+                        </span>
+                      )}
                     <td className="px-4 py-3 font-mono-tabular">
                       {!s.synced && s.calculationMethodology === "spend" ? (
                         <Tooltip>
