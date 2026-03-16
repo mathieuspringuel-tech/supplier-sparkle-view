@@ -130,6 +130,17 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
 
             <div className="space-y-4">
               <div>
+                <Label htmlFor="add-name">Name *</Label>
+                <Input
+                  id="add-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mt-1"
+                  placeholder="Supplier name"
+                />
+              </div>
+
+              <div>
                 <Label>Geography *</Label>
                 <Select value={hqCountry} onValueChange={setHqCountry}>
                   <SelectTrigger className="mt-1">
@@ -158,17 +169,6 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
               </div>
 
               <div>
-                <Label htmlFor="add-name">Name *</Label>
-                <Input
-                  id="add-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1"
-                  placeholder="Supplier name"
-                />
-              </div>
-
-              <div>
                 <Label>Calculation Methodology *</Label>
                 <Select value={calcMethod} onValueChange={(v) => setCalcMethod(v as "spend" | "tco2e")}>
                   <SelectTrigger className="mt-1">
@@ -179,19 +179,6 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
                     <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="add-spend">
-                  Spend on Supplier{calcMethod === "spend" && <span className="text-destructive ml-1">*</span>}
-                </Label>
-                <Input
-                  id="add-spend"
-                  type="number"
-                  value={spend}
-                  onChange={(e) => setSpend(Number(e.target.value))}
-                  className="mt-1"
-                />
               </div>
 
               {calcMethod === "tco2e" && (
@@ -208,6 +195,20 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
                     className="mt-1"
                   />
                 </div>
+              )}
+
+              <div>
+                <Label htmlFor="add-spend">
+                  Spend on Supplier{calcMethod === "spend" && <span className="text-destructive ml-1">*</span>}
+                </Label>
+                <Input
+                  id="add-spend"
+                  type="number"
+                  value={spend}
+                  onChange={(e) => setSpend(Number(e.target.value))}
+                  className="mt-1"
+                />
+              </div>
               )}
 
               <div>
