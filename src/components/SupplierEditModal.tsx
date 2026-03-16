@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud, Info } from "lucide-react";
+import { X, DollarSign, Cloud, Info, Sparkles, PenLine } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -120,116 +120,205 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
             <h2 className="text-lg font-semibold text-foreground mb-4">Edit Supplier</h2>
 
-            <Tabs defaultValue="year-results">
+            <Tabs defaultValue="year-data">
               <TabsList className="w-full">
-                <TabsTrigger value="year-results" className="flex-1">Year Results</TabsTrigger>
+                <TabsTrigger value="year-data" className="flex-1">Year Data</TabsTrigger>
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="year-results" className="space-y-4 pt-4">
-                {draft.calculationMethodology === "tco2e" && (
-                  <div>
-                    <Label>
-                      tCO2e
-                      <span className="text-destructive ml-1">*</span>
-                    </Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={draft.tco2e}
-                      onChange={(e) => update("tco2e", Number(e.target.value))}
-                      className="mt-1"
-                      required
-                    />
-                  </div>
-                )}
+              <TabsContent value="year-data" className="pt-4 max-h-[60vh] overflow-y-auto pr-1">
+                {/* CO2e Calculation Section */}
+                <div className="mb-6">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">CO₂e Calculation</p>
 
-                <div>
-                  <Label htmlFor="spend">
-                    Spend on Supplier
-                    {draft.calculationMethodology === "spend" && <span className="text-destructive ml-1">*</span>}
-                  </Label>
-                  <Input
-                    id="spend"
-                    type="number"
-                    value={draft.spend}
-                    onChange={(e) => update("spend", Number(e.target.value))}
-                    className="mt-1"
-                    required={draft.calculationMethodology === "spend"}
-                  />
+                  {draft.calculationMethodology === "tco2e" ? (
+                    /* Direct tCO2e entry mode */
+                    <div className="space-y-4">
+                      <div>
+                        <Label>
+                          tCO₂e
+                          <span className="text-destructive ml-1">*</span>
+                        </Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={draft.tco2e}
+                          onChange={(e) => update("tco2e", Number(e.target.value))}
+                          className="mt-1"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="spend">Spend on Supplier</Label>
+                        <Input
+                          id="spend"
+                          type="number"
+                          value={draft.spend}
+                          onChange={(e) => update("spend", Number(e.target.value))}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    /* Spend-based calculation mode */
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="spend">
+                          Year Spend on Supplier
+                          <span className="text-destructive ml-1">*</span>
+                        </Label>
+                        <Input
+                          id="spend"
+                          type="number"
+                          value={draft.spend}
+                          onChange={(e) => update("spend", Number(e.target.value))}
+                          className="mt-1"
+                          required
+                        />
+                      </div>
+
+                      {/* Factor source selection */}
+                      <div>
+                        <Label className="mb-2 block">Emission Factor Source</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (draft.methodology === "Input by User") {
+                                update("methodology", "Industry benchmark");
+                              }
+                            }}
+                            className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                              draft.methodology !== "Input by User"
+                                ? "border-accent bg-accent/5"
+                                : "border-border hover:border-muted-foreground/30"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Sparkles size={16} className={draft.methodology !== "Input by User" ? "text-accent" : "text-muted-foreground"} />
+                              <span className="text-sm font-medium text-foreground">AI Generated Factor</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground leading-snug">
+                              Use an automatically estimated emission factor.
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => update("methodology", "Input by User")}
+                            className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                              draft.methodology === "Input by User"
+                                ? "border-accent bg-accent/5"
+                                : "border-border hover:border-muted-foreground/30"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <PenLine size={16} className={draft.methodology === "Input by User" ? "text-accent" : "text-muted-foreground"} />
+                              <span className="text-sm font-medium text-foreground">Use Your Own Factor</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground leading-snug">
+                              Enter a custom emission factor manually.
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Conditional fields based on factor source */}
+                      {draft.methodology !== "Input by User" ? (
+                        <div className="space-y-4">
+                          <div>
+                            <Label>Emission Factor (per £)</Label>
+                            <Input
+                              value={draft.emissionFactor}
+                              disabled
+                              className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                            />
+                          </div>
+                          <div>
+                            <Label>Emission Factor Methodology</Label>
+                            <Input
+                              value={draft.methodology}
+                              disabled
+                              className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="emissionFactor">
+                              Emission Factor (per £)
+                              <span className="text-destructive ml-1">*</span>
+                            </Label>
+                            <Input
+                              id="emissionFactor"
+                              type="number"
+                              step="0.001"
+                              value={draft.emissionFactor}
+                              onChange={(e) => update("emissionFactor", Number(e.target.value))}
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label>Emission Factor Methodology</Label>
+                            <Input
+                              value="Input by User"
+                              disabled
+                              className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* tCO2e calculated */}
+                      <div>
+                        <Label>tCO₂e (calculated)</Label>
+                        <Input
+                          value={+(draft.spend * draft.emissionFactor).toFixed(2)}
+                          disabled
+                          className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {draft.calculationMethodology !== "tco2e" && (
-                  <>
+                {/* Reporting & Targets Section */}
+                <div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Reporting & Targets</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                     <div>
-                      <Label htmlFor="emissionFactor">Emission Factor (per $)</Label>
-                      <Input
-                        id="emissionFactor"
-                        type="number"
-                        step="0.001"
-                        value={draft.emissionFactor}
-                        onChange={(e) => update("emissionFactor", Number(e.target.value))}
-                        className="mt-1"
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Emission Factor Methodology</Label>
+                      <Label>Targets</Label>
                       <Select
-                        value={draft.methodology}
-                        onValueChange={(v) => update("methodology", v as Supplier["methodology"])}
+                        value={draft.hasTargets ? "yes" : "no"}
+                        onValueChange={(v) => update("hasTargets", v === "yes")}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Organisation specific">Organisation specific</SelectItem>
-                          <SelectItem value="Industry benchmark">Industry benchmark</SelectItem>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div>
-                      <Label>tCO2e (calculated)</Label>
-                      <Input
-                        value={+(draft.spend * draft.emissionFactor).toFixed(2)}
-                        disabled
-                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                      />
+                      <Label>CDP</Label>
+                      <Select
+                        value={draft.cdp ? "yes" : "no"}
+                        onValueChange={(v) => update("cdp", v === "yes")}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                  </>
-                )}
-
-                <div>
-                  <Label>Targets</Label>
-                  <Select
-                    value={draft.hasTargets ? "yes" : "no"}
-                    onValueChange={(v) => update("hasTargets", v === "yes")}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>CDP</Label>
-                  <Select
-                    value={draft.cdp ? "yes" : "no"}
-                    onValueChange={(v) => update("cdp", v === "yes")}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="yes">Yes</SelectItem>
-                      <SelectItem value="no">No</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  </div>
                 </div>
               </TabsContent>
 
