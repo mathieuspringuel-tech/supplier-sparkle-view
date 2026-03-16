@@ -120,7 +120,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
             <h2 className="text-lg font-semibold text-foreground mb-4">Edit Supplier</h2>
 
-            <Tabs defaultValue="year-results">
+            <Tabs defaultValue="year-data">
               <TabsList className="w-full">
                 <TabsTrigger value="year-data" className="flex-1">Year Data</TabsTrigger>
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
