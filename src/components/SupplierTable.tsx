@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2 } from "lucide-react";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
 import { CopyYearModal } from "./CopyYearModal";
+import { AddSupplierModal } from "./AddSupplierModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
