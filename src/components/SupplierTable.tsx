@@ -323,8 +323,8 @@ export const SupplierTable = () => {
                       ) : (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <span className={`inline-flex cursor-default ${s.synced ? "text-confidence-high-text" : "text-destructive"}`}>
-                              {s.synced ? "Yes" : "No"}
+                            <span className={`inline-flex cursor-default`}>
+                              {s.synced ? <CheckCircle2 size={16} className="text-confidence-high-text" /> : <AlertTriangle size={16} className="text-destructive" />}
                             </span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
