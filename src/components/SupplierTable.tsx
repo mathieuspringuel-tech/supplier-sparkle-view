@@ -80,17 +80,6 @@ export const SupplierTable = () => {
                     {s.synced ? "Yes" : "No"}
                   </span>
                 </td>
-                <td className="px-4 py-3">
-                  <a
-                    href={s.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-accent transition-colors duration-150"
-                    title={s.website}
-                  >
-                    <Globe size={15} />
-                  </a>
-                </td>
               </tr>
             ))}
           </tbody>
