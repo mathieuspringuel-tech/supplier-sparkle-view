@@ -229,7 +229,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
                       {/* Conditional fields based on factor source */}
                       {draft.methodology !== "Input by User" ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div>
                             <Label>Emission Factor (per £)</Label>
                             <Input
