@@ -50,7 +50,7 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
                 </a>
               </div>
               <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                <span>{supplier.hqFlag}</span>
+                <span className="font-emoji">{supplier.hqFlag}</span>
                 <span>{supplier.industry}</span>
               </p>
             </header>
