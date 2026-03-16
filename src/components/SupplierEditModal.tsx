@@ -141,33 +141,37 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                   />
                 </div>
 
-                <div>
-                  <Label htmlFor="emissionFactor">Emission Factor (per $)</Label>
-                  <Input
-                    id="emissionFactor"
-                    type="number"
-                    step="0.001"
-                    value={draft.emissionFactor}
-                    onChange={(e) => update("emissionFactor", Number(e.target.value))}
-                    className="mt-1"
-                  />
-                </div>
+                {draft.calculationMethodology !== "tco2e" && (
+                  <>
+                    <div>
+                      <Label htmlFor="emissionFactor">Emission Factor (per $)</Label>
+                      <Input
+                        id="emissionFactor"
+                        type="number"
+                        step="0.001"
+                        value={draft.emissionFactor}
+                        onChange={(e) => update("emissionFactor", Number(e.target.value))}
+                        className="mt-1"
+                      />
+                    </div>
 
-                <div>
-                  <Label>Emission Factor Methodology</Label>
-                  <Select
-                    value={draft.methodology}
-                    onValueChange={(v) => update("methodology", v as Supplier["methodology"])}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Organisation specific">Organisation specific</SelectItem>
-                      <SelectItem value="Industry benchmark">Industry benchmark</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                    <div>
+                      <Label>Emission Factor Methodology</Label>
+                      <Select
+                        value={draft.methodology}
+                        onValueChange={(v) => update("methodology", v as Supplier["methodology"])}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Organisation specific">Organisation specific</SelectItem>
+                          <SelectItem value="Industry benchmark">Industry benchmark</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
 
                 <div>
                   <Label>
