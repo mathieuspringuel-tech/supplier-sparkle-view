@@ -72,36 +72,49 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
                 </p>
               </section>
 
-              {supplier.calculationMethodology !== "tco2e" && (
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
-                  <section>
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                      Emission Factor / $
-                    </label>
-                    <p className="text-xl font-mono-tabular font-medium text-foreground mt-1">
-                      {supplier.emissionFactor.toFixed(3)}
-                      <span className="text-xs text-muted-foreground ml-1">kgCO2e</span>
-                    </p>
-                  </section>
+              <div className="pt-4 border-t border-border space-y-4">
+                <section>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                    Methodology
+                  </label>
+                  <p className="text-sm text-foreground mt-1">
+                    {supplier.calculationMethodology === "spend" ? "Spend Data Input" : "CO2e Data Input"}
+                  </p>
+                </section>
 
-                  <section>
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                      Methodology
-                    </label>
-                    <div className="mt-2">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${
-                          supplier.methodology === "Organisation specific"
-                            ? "bg-confidence-high-bg text-confidence-high-text border-confidence-high-border"
-                            : "bg-confidence-low-bg text-confidence-low-text border-confidence-low-border"
-                        }`}
-                      >
-                        {supplier.methodology}
-                      </span>
-                    </div>
-                  </section>
-                </div>
-              )}
+                {supplier.calculationMethodology === "spend" && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <section>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                        Emission Factor / $
+                      </label>
+                      <p className="text-xl font-mono-tabular font-medium text-foreground mt-1">
+                        {supplier.emissionFactor.toFixed(3)}
+                        <span className="text-xs text-muted-foreground ml-1">kgCO2e</span>
+                      </p>
+                    </section>
+
+                    <section>
+                      <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                        Spend Factor Type
+                      </label>
+                      <div className="mt-2">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${
+                            supplier.methodology === "Input by User"
+                              ? "bg-confidence-low-bg text-confidence-low-text border-confidence-low-border"
+                              : supplier.methodology === "Organisation specific"
+                                ? "bg-confidence-high-bg text-confidence-high-text border-confidence-high-border"
+                                : "bg-confidence-low-bg text-confidence-low-text border-confidence-low-border"
+                          }`}
+                        >
+                          {supplier.methodology}
+                        </span>
+                      </div>
+                    </section>
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         </motion.div>
