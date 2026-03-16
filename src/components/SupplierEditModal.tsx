@@ -269,6 +269,22 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
+                  <Label>Calculation Methodology</Label>
+                  <Select
+                    value={draft.calculationMethodology || "spend"}
+                    onValueChange={(v) => update("calculationMethodology", v as "spend" | "tco2e")}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="spend">Use Spend Data</SelectItem>
+                      <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <Label>Category</Label>
                   <Select
                     value={draft.category}
