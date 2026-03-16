@@ -31,6 +31,45 @@ const categories = [
   "Upstream leased assets",
 ];
 
+const industries = [
+  "Enterprise Software",
+  "Route Optimization",
+  "Advertising Analytics",
+  "Financial Data & Analytics",
+  "Staffing & Recruitment",
+  "Creative Services",
+  "Data Center Infrastructure",
+  "Cloud Data Platform",
+  "Sales Enablement",
+  "Compensation Consulting",
+  "Supply Chain Emissions",
+  "CRM & Cloud Computing",
+  "Cloud Consulting",
+  "Audit & Advisory",
+  "IT Infrastructure",
+];
+
+const countries = [
+  { code: "US", name: "United States" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "DE", name: "Germany" },
+  { code: "FR", name: "France" },
+  { code: "BE", name: "Belgium" },
+  { code: "NL", name: "Netherlands" },
+  { code: "CH", name: "Switzerland" },
+  { code: "SE", name: "Sweden" },
+  { code: "NO", name: "Norway" },
+  { code: "DK", name: "Denmark" },
+  { code: "IE", name: "Ireland" },
+  { code: "CA", name: "Canada" },
+  { code: "AU", name: "Australia" },
+  { code: "JP", name: "Japan" },
+  { code: "SG", name: "Singapore" },
+  { code: "IN", name: "India" },
+  { code: "BR", name: "Brazil" },
+  { code: "IL", name: "Israel" },
+];
+
 export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
 
