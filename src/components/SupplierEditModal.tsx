@@ -179,7 +179,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                       {/* Factor source selection */}
                       <div>
-                        <Label className="mb-2 block">Emission Factor Source</Label>
+                        <Label className="mb-2 block">Spend Emission Factor Source</Label>
                         <div className="grid grid-cols-2 gap-3">
                           <button
                             type="button"
@@ -199,7 +199,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                               <span className="text-sm font-medium text-foreground">AI Generated Factor</span>
                             </div>
                             <span className="text-xs text-muted-foreground leading-snug">
-                              Use an automatically estimated emission factor.
+                              Use an AI generated emission factor.
                             </span>
                           </button>
 
