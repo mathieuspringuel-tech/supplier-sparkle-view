@@ -160,7 +160,7 @@ export const SupplierTable = () => {
   };
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <>
         <div className="flex items-center gap-3 mb-4">
           <DropdownMenu>
