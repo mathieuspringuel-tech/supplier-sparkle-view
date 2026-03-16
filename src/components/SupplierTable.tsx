@@ -43,8 +43,8 @@ export const SupplierTable = () => {
   const [selected, setSelected] = useState<Supplier | null>(null);
 
   return (
+    <TooltipProvider>
     <>
-      <div className="w-full overflow-x-auto rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,.05),0_2px_4px_rgba(0,0,0,.02)]">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border">
