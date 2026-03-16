@@ -229,6 +229,27 @@ export const SupplierTable = () => {
     <TooltipProvider delayDuration={0}>
       <>
         <div className="flex items-center gap-3 mb-4">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+                <Settings2 size={15} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-[280px] p-4">
+              <p className="text-sm font-semibold text-foreground mb-3">Fields</p>
+              <div className="grid grid-cols-2 gap-2">
+                {toggleableColumns.map((col) => (
+                  <label key={col.key} className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                    <Checkbox
+                      checked={!hiddenColumns.has(col.key)}
+                      onCheckedChange={() => toggleColumn(col.key)}
+                    />
+                    {col.label}
+                  </label>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
               {selectedYear}
