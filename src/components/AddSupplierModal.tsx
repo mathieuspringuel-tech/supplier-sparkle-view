@@ -72,17 +72,17 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
       name: name.trim(),
       industry: "Other",
       description: "",
-      tco2e: 0,
+      tco2e: calcMethod === "tco2e" ? tco2e : 0,
       spend,
       hasTargets: false,
       cdp: false,
       category,
-      synced: false, // starts as "loading"
+      synced: false,
       emissionFactor: 0,
       methodology: "Industry benchmark",
       hqCountry,
       website: website.trim(),
-      calculationMethodology: "spend",
+      calculationMethodology: calcMethod,
     };
 
     onSave(newSupplier);
