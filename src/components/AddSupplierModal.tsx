@@ -117,7 +117,7 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative w-full max-w-md bg-card rounded-xl p-6 shadow-[0_0_0_1px_rgba(0,0,0,.08),0_20px_25px_-5px_rgba(0,0,0,.1),0_10px_10px_-5px_rgba(0,0,0,.04)] z-10"
+            className="relative w-full max-w-lg bg-card rounded-xl p-6 shadow-[0_0_0_1px_rgba(0,0,0,.08),0_20px_25px_-5px_rgba(0,0,0,.1),0_10px_10px_-5px_rgba(0,0,0,.04)] z-10"
           >
             <button
               onClick={onClose}
@@ -128,7 +128,7 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
 
             <h2 className="text-lg font-semibold text-foreground mb-5">Add Supplier</h2>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
               <div>
                 <Label htmlFor="add-name">Name *</Label>
                 <Input
