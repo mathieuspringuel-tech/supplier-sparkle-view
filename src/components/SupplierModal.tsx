@@ -90,7 +90,7 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
                   <div className="mt-2">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${
-                        supplier.methodology === "Supplier specific"
+                        supplier.methodology === "Organisation specific"
                           ? "bg-confidence-high-bg text-confidence-high-text border-confidence-high-border"
                           : "bg-confidence-low-bg text-confidence-low-text border-confidence-low-border"
                       }`}
