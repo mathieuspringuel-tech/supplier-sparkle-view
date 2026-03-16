@@ -461,7 +461,10 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
                     <button
                       type="button"
-                      onClick={() => update("calculationMethodology", "tco2e")}
+                      onClick={() => {
+                        setDraft((prev) => prev ? { ...prev, calculationMethodology: "tco2e" as const, tco2e: 0 } : prev);
+                        setValidationError(null);
+                      }}
                       className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
                         draft.calculationMethodology === "tco2e"
                           ? "border-accent bg-accent/5"
