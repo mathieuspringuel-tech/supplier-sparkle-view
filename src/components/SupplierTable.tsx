@@ -228,6 +228,15 @@ export const SupplierTable = () => {
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
         <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} />
+        {copyModalData && (
+          <CopyYearModal
+            suppliers={copyModalData.suppliers}
+            fromYear={copyModalData.fromYear}
+            toYear={selectedYear}
+            onClose={() => setCopyModalData(null)}
+            onConfirm={handleCopyConfirm}
+          />
+        )}
       </>
     </TooltipProvider>
   );
