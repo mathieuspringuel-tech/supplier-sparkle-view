@@ -62,6 +62,7 @@ export const SupplierTable = () => {
   const [editing, setEditing] = useState<Supplier | null>(null);
   const [yearData, setYearData] = useState<YearData[]>(initialYearData);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
@@ -90,20 +91,21 @@ export const SupplierTable = () => {
 
     const prevYear = sortedYears[0];
     const prevData = yearData.find((y) => y.year === prevYear);
-    if (!prevData) return;
+    if (!prevData || prevData.suppliers.length === 0) return;
 
-    const copiedSuppliers = prevData.suppliers.map((s) => ({
-      ...s,
-      tco2e: 0,
-      spend: 0,
-    }));
+    setCopyModalData({ suppliers: prevData.suppliers, fromYear: prevYear });
+  };
 
+  const handleCopyConfirm = (selected: Supplier[]) => {
+    const copiedSuppliers = selected.map((s) => ({ ...s, tco2e: 0, spend: 0 }));
     setYearData((prev) =>
       prev.map((y) =>
         y.year === selectedYear ? { ...y, suppliers: copiedSuppliers } : y
       )
     );
-    toast.success(`Copied ${copiedSuppliers.length} suppliers from ${prevYear} (spend & tCO2e reset)`);
+    toast.success(`Copied ${copiedSuppliers.length} suppliers (spend & tCO2e reset)`);
+    setCopyModalData(null);
+  };
   };
 
   const handleSaveSupplier = (updated: Supplier) => {
