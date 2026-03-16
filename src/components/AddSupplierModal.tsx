@@ -266,9 +266,11 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                       GBP
                     </span>
                   </div>
-                  {calcMethod === "spend" && (
-                    <p className="text-[11px] text-muted-foreground mt-1">Used to estimate emissions via emission factor × spend</p>
-                  )}
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {calcMethod === "spend"
+                      ? "Used to estimate emissions via emission factor × spend"
+                      : "Optional input — not used in calculation"}
+                  </p>
                 </div>
 
                 <div className={calcMethod === "spend" ? "opacity-50" : ""}>
