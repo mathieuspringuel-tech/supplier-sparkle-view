@@ -3,6 +3,7 @@ import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil } from "lu
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
+import { CopyYearModal } from "./CopyYearModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
