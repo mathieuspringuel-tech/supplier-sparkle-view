@@ -179,7 +179,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                       {/* Factor source selection */}
                       <div>
-                        <Label className="mb-2 block">Emission Factor Source</Label>
+                        <Label className="mb-2 block">Spend Emission Factor Source</Label>
                         <div className="grid grid-cols-2 gap-3">
                           <button
                             type="button"
