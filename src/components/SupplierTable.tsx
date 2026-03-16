@@ -299,12 +299,14 @@ export const SupplierTable = () => {
             <option value="sbti-committed">SBTi Committed</option>
             <option value="non-sbti">Non-SBTi</option>
             <option value="no-targets">No Targets</option>
+            <option value="empty">Empty</option>
           </select>
 
           <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">CDP</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
+            <option value="empty">Empty</option>
           </select>
 
           <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
