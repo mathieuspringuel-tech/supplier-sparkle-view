@@ -8,6 +8,8 @@ import { CopyYearModal } from "./CopyYearModal";
 import { AddSupplierModal } from "./AddSupplierModal";
 import { BulkUploadModal } from "./BulkUploadModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
