@@ -232,7 +232,7 @@ export const SupplierTable = () => {
           <Popover>
             <PopoverTrigger asChild>
               <button className="inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
-                <Settings2 size={15} />
+                <Settings size={15} />
               </button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[280px] p-4">
