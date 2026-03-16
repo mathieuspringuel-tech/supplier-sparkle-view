@@ -360,7 +360,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       <Label>Targets</Label>
                       <Select
                         value={draft.targetStatus}
-                        onValueChange={(v) => update("targetStatus", v as any)}
+                        onValueChange={handleTargetChange}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
@@ -379,7 +379,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       <Label>CDP</Label>
                       <Select
                         value={draft.cdp ? "yes" : "no"}
-                        onValueChange={(v) => update("cdp", v === "yes")}
+                        onValueChange={handleCDPChange}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
