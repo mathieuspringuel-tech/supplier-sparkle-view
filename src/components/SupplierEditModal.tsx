@@ -84,7 +84,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
   const handleSave = () => {
     if (draft) {
-      onSave(draft);
+      const updated = { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+      onSave(updated);
       onClose();
     }
   };
@@ -135,6 +136,43 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
+                  <Label htmlFor="emissionFactor">Emission Factor (per $)</Label>
+                  <Input
+                    id="emissionFactor"
+                    type="number"
+                    step="0.001"
+                    value={draft.emissionFactor}
+                    onChange={(e) => update("emissionFactor", Number(e.target.value))}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Emission Factor Methodology</Label>
+                  <Select
+                    value={draft.methodology}
+                    onValueChange={(v) => update("methodology", v as Supplier["methodology"])}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Organisation specific">Organisation specific</SelectItem>
+                      <SelectItem value="Industry benchmark">Industry benchmark</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>tCO2e (calculated)</Label>
+                  <Input
+                    value={+(draft.spend * draft.emissionFactor).toFixed(2)}
+                    disabled
+                    className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
                   <Label>Targets</Label>
                   <Select
                     value={draft.hasTargets ? "yes" : "no"}
@@ -162,23 +200,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                     <SelectContent>
                       <SelectItem value="yes">Yes</SelectItem>
                       <SelectItem value="no">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Category</Label>
-                  <Select
-                    value={draft.category}
-                    onValueChange={(v) => update("category", v)}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -224,6 +245,23 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                     <SelectContent>
                       {industries.map((ind) => (
                         <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Category</Label>
+                  <Select
+                    value={draft.category}
+                    onValueChange={(v) => update("category", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
