@@ -196,35 +196,37 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
-                  <Label htmlFor="website">Website URL</Label>
-                  <Input
-                    id="website"
-                    value={draft.website}
-                    onChange={(e) => update("website", e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="hqCountry">HQ Country Code</Label>
-                  <Input
-                    id="hqCountry"
+                  <Label>HQ Country</Label>
+                  <Select
                     value={draft.hqCountry}
-                    onChange={(e) => update("hqCountry", e.target.value.toUpperCase())}
-                    className="mt-1"
-                    maxLength={2}
-                    placeholder="US"
-                  />
+                    onValueChange={(v) => update("hqCountry", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((c) => (
+                        <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="industry">Industry</Label>
-                  <Input
-                    id="industry"
+                  <Label>Industry</Label>
+                  <Select
                     value={draft.industry}
-                    onChange={(e) => update("industry", e.target.value)}
-                    className="mt-1"
-                  />
+                    onValueChange={(v) => update("industry", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {industries.map((ind) => (
+                        <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
