@@ -121,6 +121,16 @@ export const SupplierTable = () => {
   const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterHQ, setFilterHQ] = useState("");
+  const [filterTargets, setFilterTargets] = useState("");
+  const [filterCDP, setFilterCDP] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterSynced, setFilterSynced] = useState("");
+  const [filterCalcMethod, setFilterCalcMethod] = useState("");
+  const [filterSpendFactor, setFilterSpendFactor] = useState("");
+
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
   const visibleColumns = columns.filter((c) => !hiddenColumns.has(c.key));
@@ -135,7 +145,41 @@ export const SupplierTable = () => {
   };
 
   const currentData = yearData.find((y) => y.year === selectedYear);
-  const suppliers = currentData?.suppliers ?? [];
+  const allSuppliers = currentData?.suppliers ?? [];
+
+  // Apply filters
+  const suppliers = allSuppliers.filter((s) => {
+    if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (filterHQ && s.hqCountry !== filterHQ) return false;
+    if (filterTargets && s.targetStatus !== filterTargets) return false;
+    if (filterCDP === "yes" && !s.cdp) return false;
+    if (filterCDP === "no" && s.cdp) return false;
+    if (filterCategory && s.category !== filterCategory) return false;
+    if (filterSynced === "yes" && !s.synced) return false;
+    if (filterSynced === "no" && s.synced) return false;
+    if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
+    if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
+    if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
+    if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
+    return true;
+  });
+
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor;
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setFilterHQ("");
+    setFilterTargets("");
+    setFilterCDP("");
+    setFilterCategory("");
+    setFilterSynced("");
+    setFilterCalcMethod("");
+    setFilterSpendFactor("");
+  };
+
+  // Unique values for filter dropdowns
+  const uniqueCountries = [...new Set(allSuppliers.map((s) => s.hqCountry))].sort();
+  const uniqueCategories = [...new Set(allSuppliers.map((s) => s.category))].sort();
   const years = yearData.map((y) => y.year).sort((a, b) => b - a);
 
   const handleAddNewYear = () => {
