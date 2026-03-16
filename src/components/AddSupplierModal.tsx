@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud } from "lucide-react";
+import { X, DollarSign, Cloud, Info } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
