@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2 } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download } from "lucide-react";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
