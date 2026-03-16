@@ -195,13 +195,21 @@ export const SupplierTable = () => {
             </button>
           )}
 
-          <button
-            onClick={() => setAddModalOpen(true)}
-            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent rounded-lg hover:bg-accent/90 transition-colors duration-150"
-          >
-            <Plus size={14} />
-            Add Supplier
-          </button>
+          <div className="flex items-center gap-3 ml-auto">
+            <button
+              onClick={() => setAddModalOpen(true)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent rounded-lg hover:bg-accent/90 transition-colors duration-150"
+            >
+              <Plus size={14} />
+              Add Supplier
+            </button>
+            <button
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
+            >
+              <Download size={14} />
+              Download
+            </button>
+          </div>
         </div>
 
         <div className="w-full overflow-x-auto rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,.05),0_2px_4px_rgba(0,0,0,.02)]">
