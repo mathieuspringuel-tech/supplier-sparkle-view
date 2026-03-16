@@ -162,7 +162,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                     </div>
                   ) : (
                     /* Spend-based calculation mode */
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
                         <Label htmlFor="spend">
                           {year || "Year"} Spend on Supplier
