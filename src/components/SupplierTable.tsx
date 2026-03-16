@@ -24,15 +24,18 @@ const columns: ColumnDef[] = [
 ];
 
 const HeaderCell = ({ column }: { column: ColumnDef }) => (
-  <th className="group relative px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-table-header">
-    <div className="flex items-center gap-1.5 cursor-help">
-      {column.label}
-      <Info size={12} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-    </div>
-    <div className="absolute bottom-full mb-2 left-0 hidden group-hover:block w-52 p-2.5 bg-foreground text-primary-foreground text-[11px] leading-relaxed rounded-md shadow-xl z-50 normal-case tracking-normal">
-      {column.tooltip}
-      <div className="absolute top-full left-4 border-[6px] border-transparent border-t-foreground" />
-    </div>
+  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-table-header">
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="flex items-center gap-1.5 cursor-help">
+          {column.label}
+          <Info size={12} className="opacity-40 hover:opacity-100 transition-opacity" />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent side="bottom" className="max-w-[220px] text-xs leading-relaxed">
+        {column.tooltip}
+      </TooltipContent>
+    </Tooltip>
   </th>
 );
 
