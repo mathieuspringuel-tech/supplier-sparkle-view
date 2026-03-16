@@ -281,7 +281,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-1">
                     {calcMethod === "spend"
-                      ? "Used to estimate emissions."
+                      ? "Used to estimate emissions"
                       : "Optional input — not used in calculation"}
                   </p>
                 </div>
