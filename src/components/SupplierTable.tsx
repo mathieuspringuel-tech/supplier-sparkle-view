@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings2 } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -8,6 +8,8 @@ import { CopyYearModal } from "./CopyYearModal";
 import { AddSupplierModal } from "./AddSupplierModal";
 import { BulkUploadModal } from "./BulkUploadModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -116,7 +118,21 @@ export const SupplierTable = () => {
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
+
+  // Columns that can be toggled (exclude "name" as it's always visible)
+  const toggleableColumns = columns.filter((c) => c.key !== "name");
+  const visibleColumns = columns.filter((c) => !hiddenColumns.has(c.key));
+
+  const toggleColumn = (key: string) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
@@ -213,6 +229,27 @@ export const SupplierTable = () => {
     <TooltipProvider delayDuration={0}>
       <>
         <div className="flex items-center gap-3 mb-4">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+                <Settings2 size={15} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-[280px] p-4">
+              <p className="text-sm font-semibold text-foreground mb-3">Fields</p>
+              <div className="grid grid-cols-2 gap-2">
+                {toggleableColumns.map((col) => (
+                  <label key={col.key} className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                    <Checkbox
+                      checked={!hiddenColumns.has(col.key)}
+                      onCheckedChange={() => toggleColumn(col.key)}
+                    />
+                    {col.label}
+                  </label>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
               {selectedYear}
@@ -280,7 +317,7 @@ export const SupplierTable = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
-                {columns.map((col) => (
+                {visibleColumns.map((col) => (
                   <HeaderCell key={col.key} column={col} />
                 ))}
               </tr>
@@ -288,7 +325,7 @@ export const SupplierTable = () => {
             <tbody>
               {suppliers.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={visibleColumns.length} className="px-4 py-12 text-center text-muted-foreground">
                     No suppliers for {selectedYear}. Copy from a previous year to get started.
                   </td>
                 </tr>
@@ -298,6 +335,7 @@ export const SupplierTable = () => {
                     key={s.id}
                     className="border-b border-border last:border-b-0 hover:bg-table-hover transition-colors duration-75"
                   >
+                    {!hiddenColumns.has("name") && (
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <button
@@ -315,9 +353,13 @@ export const SupplierTable = () => {
                         </button>
                       </div>
                     </td>
+                    )}
+                    {!hiddenColumns.has("hq") && (
                     <td className="px-4 py-3">
                       <CountryFlag countryCode={s.hqCountry} />
                     </td>
+                    )}
+                    {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
                       {!s.synced && s.calculationMethodology === "spend" ? (
                         <Tooltip>
@@ -334,7 +376,11 @@ export const SupplierTable = () => {
                         s.tco2e.toFixed(2)
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("spend") && (
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
+                    )}
+                    {!hiddenColumns.has("targets") && (
                     <td className="px-4 py-3">
                       {!s.synced ? (
                         <span className="text-muted-foreground">-</span>
@@ -342,6 +388,8 @@ export const SupplierTable = () => {
                         <TargetStatusCell status={s.targetStatus} />
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("cdp") && (
                     <td className="px-4 py-3">
                       {!s.synced ? (
                         <span className="text-muted-foreground">-</span>
@@ -362,7 +410,11 @@ export const SupplierTable = () => {
                         </Tooltip>
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("category") && (
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
+                    )}
+                    {!hiddenColumns.has("calcMethod") && (
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
                         s.calculationMethodology === "spend"
@@ -372,6 +424,8 @@ export const SupplierTable = () => {
                         {s.calculationMethodology === "spend" ? "Spend Data Input" : "CO₂e Data Input"}
                       </span>
                     </td>
+                    )}
+                    {!hiddenColumns.has("spendFactorType") && (
                     <td className="px-4 py-3">
                       {s.calculationMethodology === "tco2e" ? (
                         <span className="text-muted-foreground">-</span>
@@ -385,6 +439,8 @@ export const SupplierTable = () => {
                         </span>
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("synced") && (
                     <td className="px-4 py-3">
                       {syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
@@ -401,6 +457,7 @@ export const SupplierTable = () => {
                         </Tooltip>
                       )}
                     </td>
+                    )}
                   </tr>
                 ))
               )}
