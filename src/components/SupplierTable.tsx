@@ -244,7 +244,6 @@ export const SupplierTable = () => {
                         >
                           <Pencil size={13} />
                         </button>
-                        <CountryFlag countryCode={s.hqCountry} />
                         <button
                           onClick={() => setSelected(s)}
                           className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
@@ -252,6 +251,9 @@ export const SupplierTable = () => {
                           {s.name}
                         </button>
                       </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <CountryFlag countryCode={s.hqCountry} />
                     </td>
                     <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
