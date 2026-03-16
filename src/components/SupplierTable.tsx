@@ -339,6 +339,7 @@ export const SupplierTable = () => {
                           {s.methodology === "Input by User" ? "Custom" : "AI Generated"}
                         </span>
                       )}
+                    </td>
                     <td className="px-4 py-3 font-mono-tabular">
                       {!s.synced && s.calculationMethodology === "spend" ? (
                         <Tooltip>
