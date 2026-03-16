@@ -90,7 +90,9 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
     setName("");
     setHqCountry("");
     setCategory("");
+    setCalcMethod("spend");
     setSpend(0);
+    setTco2e(0);
     setEmail("");
     setPhone("");
     setWebsite("");
