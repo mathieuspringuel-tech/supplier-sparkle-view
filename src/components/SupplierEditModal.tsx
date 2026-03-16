@@ -125,13 +125,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
               <TabsContent value="year-results" className="space-y-4 pt-4">
                 <div>
-                  <Label htmlFor="spend">Spend on Supplier</Label>
+                  <Label htmlFor="spend">
+                    Spend on Supplier
+                    {draft.calculationMethodology === "spend" && <span className="text-destructive ml-1">*</span>}
+                  </Label>
                   <Input
                     id="spend"
                     type="number"
                     value={draft.spend}
                     onChange={(e) => update("spend", Number(e.target.value))}
                     className="mt-1"
+                    required={draft.calculationMethodology === "spend"}
                   />
                 </div>
 
