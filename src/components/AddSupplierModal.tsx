@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud } from "lucide-react";
+import { X, DollarSign, Cloud, Info } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -158,7 +158,15 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                 </div>
 
                 <div>
-                  <Label>Category *</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label>Category *</Label>
+                    <div className="group relative">
+                      <Info size={13} className="text-muted-foreground cursor-help" />
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-52 rounded-lg bg-foreground px-3 py-2 text-xs text-background opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-20">
+                        Which business category does this supplier belong to? If unsure, select Purchased Goods & Services.
+                      </div>
+                    </div>
+                  </div>
                   <Select value={category} onValueChange={setCategory}>
                     <SelectTrigger className="mt-1">
                       <SelectValue placeholder="Select" />
