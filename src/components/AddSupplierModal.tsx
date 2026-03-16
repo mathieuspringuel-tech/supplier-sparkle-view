@@ -54,12 +54,15 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
   const [name, setName] = useState("");
   const [hqCountry, setHqCountry] = useState("");
   const [category, setCategory] = useState("");
+  const [calcMethod, setCalcMethod] = useState<"spend" | "tco2e">("spend");
   const [spend, setSpend] = useState(0);
+  const [tco2e, setTco2e] = useState(0);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
 
-  const canSave = name.trim() && hqCountry && category;
+  const canSave = name.trim() && hqCountry && category &&
+    (calcMethod === "spend" ? spend > 0 : tco2e > 0);
 
   const handleSave = () => {
     if (!canSave) return;
