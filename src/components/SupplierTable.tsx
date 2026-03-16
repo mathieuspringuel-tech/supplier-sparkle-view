@@ -60,6 +60,45 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   />
 );
 
+const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red" }> = {
+  "sbti-validated": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets", icon: "sbti", color: "green" },
+  "sbti-committed": { label: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", icon: "sbti", color: "orange" },
+  "non-sbti": { label: "", tooltip: "Company has Non-SBTi Targets", icon: "target", color: "blue" },
+  "no-targets": { label: "", tooltip: "Company has no public Targets", icon: "cross", color: "red" },
+};
+
+const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
+  const config = targetStatusConfig[status];
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-flex items-center gap-1.5 cursor-default">
+          {config.icon === "cross" ? (
+            <XCircle size={16} className="text-destructive/60" />
+          ) : (
+            <Target size={16} className={
+              config.color === "green" ? "text-target-sbti-validated-text" :
+              config.color === "orange" ? "text-target-sbti-committed-text" :
+              "text-target-non-sbti-text"
+            } />
+          )}
+          {config.label && (
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
+              config.color === "green"
+                ? "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border"
+                : "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border"
+            }`}>
+              {config.label}
+            </span>
+          )}
+        </span>
+      </TooltipTrigger>
+      <TooltipContent side="bottom" className="text-xs">
+        {config.tooltip}
+      </TooltipContent>
+    </Tooltip>
+  );
+};
 export const SupplierTable = () => {
   const [selected, setSelected] = useState<Supplier | null>(null);
   const [editing, setEditing] = useState<Supplier | null>(null);
