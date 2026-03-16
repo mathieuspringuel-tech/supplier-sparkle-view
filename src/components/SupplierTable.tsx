@@ -245,13 +245,26 @@ export const SupplierTable = () => {
           )}
 
           <div className="flex items-center gap-3 ml-auto">
-            <button
-              onClick={() => setAddModalOpen(true)}
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent rounded-lg hover:bg-accent/90 transition-colors duration-150"
-            >
-              <Plus size={14} />
-              Add Supplier
-            </button>
+            <div className="inline-flex rounded-lg overflow-hidden">
+              <button
+                onClick={() => setAddModalOpen(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent hover:bg-accent/90 transition-colors duration-150"
+              >
+                <Plus size={14} />
+                ADD
+              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="inline-flex items-center px-2 py-1.5 text-accent-foreground bg-accent hover:bg-accent/90 border-l border-accent-foreground/20 transition-colors duration-150">
+                  <ChevronDown size={14} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setBulkUploadOpen(true)}>
+                    <Upload size={14} className="mr-2" />
+                    Bulk Upload
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <button
               className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
             >
