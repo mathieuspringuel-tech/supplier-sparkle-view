@@ -289,8 +289,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
                 {/* Reporting & Targets Section */}
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Reporting & Targets</p>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Reporting & Targets</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                     <div>
                       <Label>Targets</Label>
                       <Select
