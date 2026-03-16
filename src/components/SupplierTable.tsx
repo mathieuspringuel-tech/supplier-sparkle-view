@@ -60,8 +60,9 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   />
 );
 
-const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red" }> = {
+const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red"; inherited?: boolean }> = {
   "sbti-validated": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets", icon: "sbti", color: "green" },
+  "sbti-validated-inherited": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets (inherited from parent company)", icon: "sbti", color: "green", inherited: true },
   "sbti-committed": { label: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", icon: "sbti", color: "orange" },
   "non-sbti": { label: "", tooltip: "Company has Non-SBTi Targets", icon: "target", color: "blue" },
   "no-targets": { label: "", tooltip: "Company has no public Targets", icon: "cross", color: "red" },
