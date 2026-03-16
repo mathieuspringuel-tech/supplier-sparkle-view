@@ -77,11 +77,16 @@ const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
           {config.icon === "cross" ? (
             <XCircle size={16} className="text-destructive/60" />
           ) : (
-            <Target size={16} className={
-              config.color === "green" ? "text-target-sbti-validated-text" :
-              config.color === "orange" ? "text-target-sbti-committed-text" :
-              "text-target-non-sbti-text"
-            } />
+            <span className="relative inline-flex">
+              <Target size={16} className={
+                config.color === "green" ? "text-target-sbti-validated-text" :
+                config.color === "orange" ? "text-target-sbti-committed-text" :
+                "text-target-non-sbti-text"
+              } />
+              {config.inherited && (
+                <ArrowUpRight size={10} className="absolute -top-1 -right-1.5 text-target-non-sbti-text" strokeWidth={3} />
+              )}
+            </span>
           )}
           {config.label && (
             <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
