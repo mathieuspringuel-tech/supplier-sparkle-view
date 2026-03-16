@@ -154,6 +154,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   };
 
   return (
+    <>
     <AnimatePresence>
       {supplier && (
         <motion.div
