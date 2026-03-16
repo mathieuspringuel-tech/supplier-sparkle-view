@@ -160,7 +160,7 @@ export const SupplierTable = () => {
   };
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <>
         <div className="flex items-center gap-3 mb-4">
           <DropdownMenu>
@@ -285,9 +285,16 @@ export const SupplierTable = () => {
                       {syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
                       ) : (
-                        <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
-                          {s.synced ? "Yes" : "No"}
-                        </span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className={`inline-flex cursor-default ${s.synced ? "text-confidence-high-text" : "text-destructive"}`}>
+                              {s.synced ? "Yes" : "No"}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs">
+                            {s.synced ? "AI successfully found data" : "AI could not synch company data."}
+                          </TooltipContent>
+                        </Tooltip>
                       )}
                     </td>
                   </tr>
