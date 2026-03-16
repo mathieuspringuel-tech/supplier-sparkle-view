@@ -10,7 +10,7 @@ export interface Supplier {
   category: string;
   synced: boolean;
   emissionFactor: number;
-  methodology: "Supplier specific" | "Industry benchmark";
+  methodology: "Organisation specific" | "Industry benchmark";
   hqCountry: string;
   website: string;
 }
