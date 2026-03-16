@@ -169,7 +169,22 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
               </div>
 
               <div>
-                <Label htmlFor="add-spend">Spend on Supplier</Label>
+                <Label>Calculation Methodology *</Label>
+                <Select value={calcMethod} onValueChange={(v) => setCalcMethod(v as "spend" | "tco2e")}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="spend">Use Spend Data</SelectItem>
+                    <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="add-spend">
+                  Spend on Supplier{calcMethod === "spend" && <span className="text-destructive ml-1">*</span>}
+                </Label>
                 <Input
                   id="add-spend"
                   type="number"
@@ -178,6 +193,22 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
                   className="mt-1"
                 />
               </div>
+
+              {calcMethod === "tco2e" && (
+                <div>
+                  <Label htmlFor="add-tco2e">
+                    tCO2e<span className="text-destructive ml-1">*</span>
+                  </Label>
+                  <Input
+                    id="add-tco2e"
+                    type="number"
+                    step="0.01"
+                    value={tco2e}
+                    onChange={(e) => setTco2e(Number(e.target.value))}
+                    className="mt-1"
+                  />
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="add-email">Email</Label>
