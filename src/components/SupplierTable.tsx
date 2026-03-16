@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, ExternalLink, Globe } from "lucide-react";
+import { Info, CheckCircle2, XCircle } from "lucide-react";
 import { suppliers, type Supplier } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 
@@ -11,7 +11,7 @@ interface ColumnDef {
 
 const columns: ColumnDef[] = [
   { key: "name", label: "Name", tooltip: "Legal entity name of the supplier in your procurement system." },
-  { key: "hq", label: "HQ", tooltip: "Headquarters region of the supplier." },
+  
   { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "score", label: "Score", tooltip: "Composite ESG score (0–100%) based on disclosed climate data quality." },
@@ -19,7 +19,7 @@ const columns: ColumnDef[] = [
   { key: "cdp", label: "CDP", tooltip: "Whether the supplier discloses environmental data through the CDP (formerly Carbon Disclosure Project)." },
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "synced", label: "Synced", tooltip: "Whether emission data is synced with the supplier's latest disclosure." },
-  { key: "website", label: "Web", tooltip: "Link to the supplier's website." },
+  
 ];
 
 const HeaderCell = ({ column }: { column: ColumnDef }) => (
@@ -63,12 +63,6 @@ export const SupplierTable = () => {
                     {s.name}
                   </button>
                 </td>
-                <td className="px-4 py-3">
-                  <span className="flex items-center gap-1.5" title={s.hqCountry}>
-                    <span className="text-base leading-none">{s.hqFlag}</span>
-                    <span className="text-muted-foreground text-xs">{s.hqCountry}</span>
-                  </span>
-                </td>
                 <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
                 <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
                 <td className="px-4 py-3 font-mono-tabular">{s.score}%</td>
@@ -85,17 +79,6 @@ export const SupplierTable = () => {
                   <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
                     {s.synced ? "Yes" : "No"}
                   </span>
-                </td>
-                <td className="px-4 py-3">
-                  <a
-                    href={s.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-accent transition-colors duration-150"
-                    title={s.website}
-                  >
-                    <Globe size={15} />
-                  </a>
                 </td>
               </tr>
             ))}

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Globe } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 
 interface SupplierModalProps {
@@ -37,8 +37,22 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
             </button>
 
             <header className="mb-6">
-              <h2 className="text-lg font-semibold text-foreground">{supplier.name}</h2>
-              <p className="text-sm text-muted-foreground">{supplier.industry}</p>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-foreground">{supplier.name}</h2>
+                <a
+                  href={supplier.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-accent transition-colors duration-150"
+                  title={supplier.website}
+                >
+                  <Globe size={15} />
+                </a>
+              </div>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                <span>{supplier.hqFlag}</span>
+                <span>{supplier.industry}</span>
+              </p>
             </header>
 
             <div className="space-y-5">
