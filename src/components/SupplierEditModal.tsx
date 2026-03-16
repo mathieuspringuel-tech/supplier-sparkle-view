@@ -126,6 +126,23 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
               </TabsList>
 
               <TabsContent value="year-results" className="space-y-4 pt-4">
+                {draft.calculationMethodology === "tco2e" && (
+                  <div>
+                    <Label>
+                      tCO2e
+                      <span className="text-destructive ml-1">*</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={draft.tco2e}
+                      onChange={(e) => update("tco2e", Number(e.target.value))}
+                      className="mt-1"
+                      required
+                    />
+                  </div>
+                )}
+
                 <div>
                   <Label htmlFor="spend">
                     Spend on Supplier
@@ -170,31 +187,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                         </SelectContent>
                       </Select>
                     </div>
+
+                    <div>
+                      <Label>tCO2e (calculated)</Label>
+                      <Input
+                        value={+(draft.spend * draft.emissionFactor).toFixed(2)}
+                        disabled
+                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                      />
+                    </div>
                   </>
                 )}
-
-                <div>
-                  <Label>
-                    tCO2e {draft.calculationMethodology === "spend" ? "(calculated)" : ""}
-                    {draft.calculationMethodology === "tco2e" && <span className="text-destructive ml-1">*</span>}
-                  </Label>
-                  {draft.calculationMethodology === "tco2e" ? (
-                    <Input
-                      type="number"
-                      step="0.01"
-                      value={draft.tco2e}
-                      onChange={(e) => update("tco2e", Number(e.target.value))}
-                      className="mt-1"
-                      required
-                    />
-                  ) : (
-                    <Input
-                      value={+(draft.spend * draft.emissionFactor).toFixed(2)}
-                      disabled
-                      className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                    />
-                  )}
-                </div>
 
                 <div>
                   <Label>Targets</Label>
