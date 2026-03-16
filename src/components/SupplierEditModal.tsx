@@ -195,11 +195,14 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                             type="number"
                             value={draft.spend}
                             onChange={(e) => update("spend", Number(e.target.value))}
-                            className="mt-1 pr-14"
+                            className={`mt-1 pr-14 ${validationError === "spend" ? "border-destructive ring-1 ring-destructive" : ""}`}
                             required
                           />
                           <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
                         </div>
+                        {validationError === "spend" && (
+                          <p className="text-xs text-destructive mt-1">Spend on Supplier is required.</p>
+                        )}
                       </div>
 
                       {/* Factor source selection */}
