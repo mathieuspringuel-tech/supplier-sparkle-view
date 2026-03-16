@@ -287,9 +287,11 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                     className="mt-1"
                     disabled={calcMethod === "spend"}
                   />
-                  {calcMethod === "tco2e" && (
-                    <p className="text-[11px] text-muted-foreground mt-1">Total CO₂ equivalent from supplier disclosure</p>
-                  )}
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {calcMethod === "tco2e"
+                      ? "Total CO₂ equivalent from supplier disclosure"
+                      : "This will be auto-calculated"}
+                  </p>
                 </div>
               </div>
             </div>
