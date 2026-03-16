@@ -165,17 +165,20 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="spend">
-                          Year Spend on Supplier
+                          {year || "Year"} Spend on Supplier
                           <span className="text-destructive ml-1">*</span>
                         </Label>
-                        <Input
-                          id="spend"
-                          type="number"
-                          value={draft.spend}
-                          onChange={(e) => update("spend", Number(e.target.value))}
-                          className="mt-1"
-                          required
-                        />
+                        <div className="relative">
+                          <Input
+                            id="spend"
+                            type="number"
+                            value={draft.spend}
+                            onChange={(e) => update("spend", Number(e.target.value))}
+                            className="mt-1 pr-14"
+                            required
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
+                        </div>
                       </div>
 
                       {/* Factor source selection */}
