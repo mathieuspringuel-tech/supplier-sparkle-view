@@ -272,6 +272,73 @@ export const SupplierTable = () => {
   return (
     <TooltipProvider delayDuration={0}>
       <>
+        {/* Filter bar */}
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <div className="relative">
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 pl-8 pr-3 text-sm bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent w-[160px]"
+            />
+          </div>
+
+          <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Company HQ</option>
+            {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Targets</option>
+            <option value="sbti-validated">SBTi Validated</option>
+            <option value="sbti-validated-inherited">SBTi Validated (Inherited)</option>
+            <option value="sbti-committed">SBTi Committed</option>
+            <option value="non-sbti">Non-SBTi</option>
+            <option value="no-targets">No Targets</option>
+          </select>
+
+          <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">CDP</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Category</option>
+            {uniqueCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <select value={filterSynced} onChange={(e) => setFilterSynced(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Synced</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
+          <select value={filterCalcMethod} onChange={(e) => setFilterCalcMethod(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Calc. Methodology</option>
+            <option value="spend">Spend Data Input</option>
+            <option value="tco2e">CO₂e Data Input</option>
+          </select>
+
+          <select value={filterSpendFactor} onChange={(e) => setFilterSpendFactor(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Spend Factor Type</option>
+            <option value="ai">AI Generated</option>
+            <option value="custom">Custom</option>
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
+            >
+              <X size={13} />
+              Clear
+            </button>
+          )}
+        </div>
+
         <div className="flex items-center gap-3 mb-4">
           <Popover>
             <PopoverTrigger asChild>
