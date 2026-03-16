@@ -163,9 +163,12 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                           step="0.01"
                           value={draft.tco2e}
                           onChange={(e) => update("tco2e", Number(e.target.value))}
-                          className="mt-1"
+                          className={`mt-1 ${validationError === "tco2e" ? "border-destructive ring-1 ring-destructive" : ""}`}
                           required
                         />
+                        {validationError === "tco2e" && (
+                          <p className="text-xs text-destructive mt-1">tCO₂e is required.</p>
+                        )}
                       </div>
                       <div>
                         <Label htmlFor="spend">Spend on Supplier</Label>
