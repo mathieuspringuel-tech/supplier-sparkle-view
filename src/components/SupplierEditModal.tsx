@@ -84,7 +84,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
   const handleSave = () => {
     if (draft) {
-      onSave(draft);
+      const updated = { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+      onSave(updated);
       onClose();
     }
   };
