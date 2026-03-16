@@ -63,12 +63,6 @@ export const SupplierTable = () => {
                     {s.name}
                   </button>
                 </td>
-                <td className="px-4 py-3">
-                  <span className="flex items-center gap-1.5" title={s.hqCountry}>
-                    <span className="text-base leading-none">{s.hqFlag}</span>
-                    <span className="text-muted-foreground text-xs">{s.hqCountry}</span>
-                  </span>
-                </td>
                 <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
                 <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
                 <td className="px-4 py-3 font-mono-tabular">{s.score}%</td>
