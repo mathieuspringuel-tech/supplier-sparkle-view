@@ -79,6 +79,7 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
       methodology: "Industry benchmark",
       hqCountry,
       website: website.trim(),
+      calculationMethodology: "spend",
     };
 
     onSave(newSupplier);
