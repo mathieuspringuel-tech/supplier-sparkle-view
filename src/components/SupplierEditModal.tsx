@@ -19,6 +19,7 @@ interface SupplierEditModalProps {
   supplier: Supplier | null;
   onClose: () => void;
   onSave: (updated: Supplier) => void;
+  year?: number;
 }
 
 const categories = [
