@@ -92,5 +92,6 @@ export const SupplierTable = () => {
 
       <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
     </>
+    </TooltipProvider>
   );
 };
