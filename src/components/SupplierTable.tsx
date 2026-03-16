@@ -335,6 +335,7 @@ export const SupplierTable = () => {
                     key={s.id}
                     className="border-b border-border last:border-b-0 hover:bg-table-hover transition-colors duration-75"
                   >
+                    {!hiddenColumns.has("name") && (
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <button
@@ -352,9 +353,13 @@ export const SupplierTable = () => {
                         </button>
                       </div>
                     </td>
+                    )}
+                    {!hiddenColumns.has("hq") && (
                     <td className="px-4 py-3">
                       <CountryFlag countryCode={s.hqCountry} />
                     </td>
+                    )}
+                    {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
                       {!s.synced && s.calculationMethodology === "spend" ? (
                         <Tooltip>
@@ -371,7 +376,11 @@ export const SupplierTable = () => {
                         s.tco2e.toFixed(2)
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("spend") && (
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
+                    )}
+                    {!hiddenColumns.has("targets") && (
                     <td className="px-4 py-3">
                       {!s.synced ? (
                         <span className="text-muted-foreground">-</span>
@@ -379,6 +388,8 @@ export const SupplierTable = () => {
                         <TargetStatusCell status={s.targetStatus} />
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("cdp") && (
                     <td className="px-4 py-3">
                       {!s.synced ? (
                         <span className="text-muted-foreground">-</span>
@@ -399,7 +410,11 @@ export const SupplierTable = () => {
                         </Tooltip>
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("category") && (
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
+                    )}
+                    {!hiddenColumns.has("calcMethod") && (
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
                         s.calculationMethodology === "spend"
@@ -409,6 +424,8 @@ export const SupplierTable = () => {
                         {s.calculationMethodology === "spend" ? "Spend Data Input" : "CO₂e Data Input"}
                       </span>
                     </td>
+                    )}
+                    {!hiddenColumns.has("spendFactorType") && (
                     <td className="px-4 py-3">
                       {s.calculationMethodology === "tco2e" ? (
                         <span className="text-muted-foreground">-</span>
@@ -422,6 +439,8 @@ export const SupplierTable = () => {
                         </span>
                       )}
                     </td>
+                    )}
+                    {!hiddenColumns.has("synced") && (
                     <td className="px-4 py-3">
                       {syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
@@ -438,6 +457,7 @@ export const SupplierTable = () => {
                         </Tooltip>
                       )}
                     </td>
+                    )}
                   </tr>
                 ))
               )}
