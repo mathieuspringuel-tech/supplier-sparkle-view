@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -46,6 +50,18 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        "table-header": "hsl(var(--table-header-bg))",
+        "table-hover": "hsl(var(--table-hover))",
+        "confidence-high": {
+          bg: "hsl(var(--confidence-high-bg))",
+          text: "hsl(var(--confidence-high-text))",
+          border: "hsl(var(--confidence-high-border))",
+        },
+        "confidence-low": {
+          bg: "hsl(var(--confidence-low-bg))",
+          text: "hsl(var(--confidence-low-text))",
+          border: "hsl(var(--confidence-low-border))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
