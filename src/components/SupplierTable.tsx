@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil } from "lucide-react";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
+import { SupplierEditModal } from "./SupplierEditModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -57,6 +58,7 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
 
 export const SupplierTable = () => {
   const [selected, setSelected] = useState<Supplier | null>(null);
+  const [editing, setEditing] = useState<Supplier | null>(null);
   const [yearData, setYearData] = useState<YearData[]>(initialYearData);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
 
@@ -101,6 +103,17 @@ export const SupplierTable = () => {
       )
     );
     toast.success(`Copied ${copiedSuppliers.length} suppliers from ${prevYear} (spend & tCO2e reset)`);
+  };
+
+  const handleSaveSupplier = (updated: Supplier) => {
+    setYearData((prev) =>
+      prev.map((y) =>
+        y.year === selectedYear
+          ? { ...y, suppliers: y.suppliers.map((s) => (s.id === updated.id ? updated : s)) }
+          : y
+      )
+    );
+    toast.success("Supplier updated");
   };
 
   return (
@@ -165,6 +178,13 @@ export const SupplierTable = () => {
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setEditing(s)}
+                          className="text-muted-foreground hover:text-accent transition-colors duration-150 shrink-0"
+                          title="Edit supplier"
+                        >
+                          <Pencil size={13} />
+                        </button>
                         <CountryFlag countryCode={s.hqCountry} />
                         <button
                           onClick={() => setSelected(s)}
@@ -183,7 +203,13 @@ export const SupplierTable = () => {
                         <XCircle size={16} className="text-destructive/60" />
                       )}
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{s.cdp ? "Yes" : "No"}</td>
+                    <td className="px-4 py-3">
+                      {s.cdp ? (
+                        <CheckCircle2 size={16} className="text-confidence-high-text" />
+                      ) : (
+                        <XCircle size={16} className="text-destructive/60" />
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
                     <td className="px-4 py-3">
                       <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
@@ -198,6 +224,7 @@ export const SupplierTable = () => {
         </div>
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
+        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} />
       </>
     </TooltipProvider>
   );
