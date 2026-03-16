@@ -44,6 +44,18 @@
     --confidence-low-text: 32 80% 40%;
     --confidence-low-border: 40 70% 78%;
 
+    --target-sbti-validated-bg: 145 60% 96%;
+    --target-sbti-validated-text: 152 60% 32%;
+    --target-sbti-validated-border: 152 50% 78%;
+
+    --target-sbti-committed-bg: 30 100% 96%;
+    --target-sbti-committed-text: 25 80% 40%;
+    --target-sbti-committed-border: 30 70% 78%;
+
+    --target-non-sbti-bg: 210 80% 96%;
+    --target-non-sbti-text: 215 70% 40%;
+    --target-non-sbti-border: 210 60% 78%;
+
     --table-header-bg: 210 20% 97%;
     --table-hover: 210 20% 98%;
 

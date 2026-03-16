@@ -259,11 +259,7 @@ export const SupplierTable = () => {
                     <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
                     <td className="px-4 py-3">
-                      {s.hasTargets ? (
-                        <CheckCircle2 size={16} className="text-confidence-high-text" />
-                      ) : (
-                        <XCircle size={16} className="text-destructive/60" />
-                      )}
+                      <TargetStatusCell status={s.targetStatus} />
                     </td>
                     <td className="px-4 py-3">
                       <Tooltip>
