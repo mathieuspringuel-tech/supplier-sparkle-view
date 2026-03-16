@@ -317,7 +317,7 @@ export const SupplierTable = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
-                {columns.map((col) => (
+                {visibleColumns.map((col) => (
                   <HeaderCell key={col.key} column={col} />
                 ))}
               </tr>
