@@ -26,6 +26,8 @@ interface ColumnDef {
 const columns: ColumnDef[] = [
   { key: "name", label: "Name", tooltip: "Legal entity name of the supplier in your procurement system." },
   { key: "hq", label: "Company HQ", tooltip: "Country where the supplier's headquarters is located." },
+  { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
+  { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
   { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
@@ -315,6 +317,28 @@ export const SupplierTable = () => {
                     </td>
                     <td className="px-4 py-3">
                       <CountryFlag countryCode={s.hqCountry} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+                        s.calculationMethodology === "spend"
+                          ? "bg-secondary text-foreground"
+                          : "bg-accent/10 text-accent"
+                      }`}>
+                        {s.calculationMethodology === "spend" ? "Spend Data Input" : "CO₂e Data Input"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {s.calculationMethodology === "tco2e" ? (
+                        <span className="text-muted-foreground">-</span>
+                      ) : (
+                        <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
+                          s.methodology === "Input by User"
+                            ? "bg-amber-500/10 text-amber-600"
+                            : "bg-secondary text-foreground"
+                        }`}>
+                          {s.methodology === "Input by User" ? "Custom" : "AI Generated"}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3 font-mono-tabular">
                       {!s.synced && s.calculationMethodology === "spend" ? (
