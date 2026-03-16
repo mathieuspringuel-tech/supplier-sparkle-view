@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -60,8 +60,9 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   />
 );
 
-const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red" }> = {
+const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red"; inherited?: boolean }> = {
   "sbti-validated": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets", icon: "sbti", color: "green" },
+  "sbti-validated-inherited": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets (inherited from parent company)", icon: "sbti", color: "green", inherited: true },
   "sbti-committed": { label: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", icon: "sbti", color: "orange" },
   "non-sbti": { label: "", tooltip: "Company has Non-SBTi Targets", icon: "target", color: "blue" },
   "no-targets": { label: "", tooltip: "Company has no public Targets", icon: "cross", color: "red" },
@@ -76,11 +77,16 @@ const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
           {config.icon === "cross" ? (
             <XCircle size={16} className="text-destructive/60" />
           ) : (
-            <Target size={16} className={
-              config.color === "green" ? "text-target-sbti-validated-text" :
-              config.color === "orange" ? "text-target-sbti-committed-text" :
-              "text-target-non-sbti-text"
-            } />
+            <span className="relative inline-flex">
+              <Target size={16} className={
+                config.color === "green" ? "text-target-sbti-validated-text" :
+                config.color === "orange" ? "text-target-sbti-committed-text" :
+                "text-target-non-sbti-text"
+              } />
+              {config.inherited && (
+                <ArrowUpRight size={10} className="absolute -top-1 -right-1.5 text-target-non-sbti-text" strokeWidth={3} />
+              )}
+            </span>
           )}
           {config.label && (
             <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
