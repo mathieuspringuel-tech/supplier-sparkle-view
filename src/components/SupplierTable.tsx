@@ -151,9 +151,11 @@ export const SupplierTable = () => {
   const suppliers = allSuppliers.filter((s) => {
     if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (filterHQ && s.hqCountry !== filterHQ) return false;
-    if (filterTargets && s.targetStatus !== filterTargets) return false;
+    if (filterTargets === "empty" && s.targetStatus) return false;
+    if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
     if (filterCDP === "yes" && !s.cdp) return false;
     if (filterCDP === "no" && s.cdp) return false;
+    if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
     if (filterSynced === "yes" && !s.synced) return false;
     if (filterSynced === "no" && s.synced) return false;
@@ -297,12 +299,14 @@ export const SupplierTable = () => {
             <option value="sbti-committed">SBTi Committed</option>
             <option value="non-sbti">Non-SBTi</option>
             <option value="no-targets">No Targets</option>
+            <option value="empty">Empty</option>
           </select>
 
           <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">CDP</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
+            <option value="empty">Empty</option>
           </select>
 
           <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
