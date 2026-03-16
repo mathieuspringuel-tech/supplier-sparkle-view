@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -121,6 +121,16 @@ export const SupplierTable = () => {
   const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterHQ, setFilterHQ] = useState("");
+  const [filterTargets, setFilterTargets] = useState("");
+  const [filterCDP, setFilterCDP] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterSynced, setFilterSynced] = useState("");
+  const [filterCalcMethod, setFilterCalcMethod] = useState("");
+  const [filterSpendFactor, setFilterSpendFactor] = useState("");
+
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
   const visibleColumns = columns.filter((c) => !hiddenColumns.has(c.key));
@@ -135,7 +145,41 @@ export const SupplierTable = () => {
   };
 
   const currentData = yearData.find((y) => y.year === selectedYear);
-  const suppliers = currentData?.suppliers ?? [];
+  const allSuppliers = currentData?.suppliers ?? [];
+
+  // Apply filters
+  const suppliers = allSuppliers.filter((s) => {
+    if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (filterHQ && s.hqCountry !== filterHQ) return false;
+    if (filterTargets && s.targetStatus !== filterTargets) return false;
+    if (filterCDP === "yes" && !s.cdp) return false;
+    if (filterCDP === "no" && s.cdp) return false;
+    if (filterCategory && s.category !== filterCategory) return false;
+    if (filterSynced === "yes" && !s.synced) return false;
+    if (filterSynced === "no" && s.synced) return false;
+    if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
+    if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
+    if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
+    if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
+    return true;
+  });
+
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor;
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setFilterHQ("");
+    setFilterTargets("");
+    setFilterCDP("");
+    setFilterCategory("");
+    setFilterSynced("");
+    setFilterCalcMethod("");
+    setFilterSpendFactor("");
+  };
+
+  // Unique values for filter dropdowns
+  const uniqueCountries = [...new Set(allSuppliers.map((s) => s.hqCountry))].sort();
+  const uniqueCategories = [...new Set(allSuppliers.map((s) => s.category))].sort();
   const years = yearData.map((y) => y.year).sort((a, b) => b - a);
 
   const handleAddNewYear = () => {
@@ -228,6 +272,73 @@ export const SupplierTable = () => {
   return (
     <TooltipProvider delayDuration={0}>
       <>
+        {/* Filter bar */}
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <div className="relative">
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 pl-8 pr-3 text-sm bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent w-[160px]"
+            />
+          </div>
+
+          <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Company HQ</option>
+            {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Targets</option>
+            <option value="sbti-validated">SBTi Validated</option>
+            <option value="sbti-validated-inherited">SBTi Validated (Inherited)</option>
+            <option value="sbti-committed">SBTi Committed</option>
+            <option value="non-sbti">Non-SBTi</option>
+            <option value="no-targets">No Targets</option>
+          </select>
+
+          <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">CDP</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
+          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Category</option>
+            {uniqueCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+
+          <select value={filterSynced} onChange={(e) => setFilterSynced(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Synced</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
+          <select value={filterCalcMethod} onChange={(e) => setFilterCalcMethod(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Calc. Methodology</option>
+            <option value="spend">Spend Data Input</option>
+            <option value="tco2e">CO₂e Data Input</option>
+          </select>
+
+          <select value={filterSpendFactor} onChange={(e) => setFilterSpendFactor(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Spend Factor Type</option>
+            <option value="ai">AI Generated</option>
+            <option value="custom">Custom</option>
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
+            >
+              <X size={13} />
+              Clear
+            </button>
+          )}
+        </div>
+
         <div className="flex items-center gap-3 mb-4">
           <Popover>
             <PopoverTrigger asChild>
