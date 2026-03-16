@@ -86,18 +86,49 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [overrideConfirm, setOverrideConfirm] = useState<{
+    field: "Targets" | "CDP";
+    applyChange: () => void;
+  } | null>(null);
+  const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
     setDraft(supplier ? { ...supplier } : null);
+    originalRef.current = supplier ? { ...supplier } : null;
     setActiveTab("year-data");
     setValidationError(null);
   }, [supplier]);
 
   if (!draft) return null;
 
+  const isSynced = draft.synced;
+
   const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
     setValidationError(null);
+  };
+
+  const handleTargetChange = (value: string) => {
+    if (isSynced && originalRef.current && value !== originalRef.current.targetStatus) {
+      setOverrideConfirm({
+        field: "Targets",
+        applyChange: () => update("targetStatus", value as any),
+      });
+    } else {
+      update("targetStatus", value as any);
+    }
+  };
+
+  const handleCDPChange = (value: string) => {
+    const newVal = value === "yes";
+    if (isSynced && originalRef.current && newVal !== originalRef.current.cdp) {
+      setOverrideConfirm({
+        field: "CDP",
+        applyChange: () => update("cdp", newVal),
+      });
+    } else {
+      update("cdp", newVal);
+    }
   };
 
   const handleSave = () => {
