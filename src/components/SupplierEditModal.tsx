@@ -250,6 +250,23 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
+                  <Label>Category</Label>
+                  <Select
+                    value={draft.category}
+                    onValueChange={(v) => update("category", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
