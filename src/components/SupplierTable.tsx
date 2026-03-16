@@ -23,6 +23,7 @@ interface ColumnDef {
 
 const columns: ColumnDef[] = [
   { key: "name", label: "Name", tooltip: "Legal entity name of the supplier in your procurement system." },
+  { key: "hq", label: "Company HQ", tooltip: "Country where the supplier's headquarters is located." },
   { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
@@ -243,7 +244,6 @@ export const SupplierTable = () => {
                         >
                           <Pencil size={13} />
                         </button>
-                        <CountryFlag countryCode={s.hqCountry} />
                         <button
                           onClick={() => setSelected(s)}
                           className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
@@ -251,6 +251,9 @@ export const SupplierTable = () => {
                           {s.name}
                         </button>
                       </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <CountryFlag countryCode={s.hqCountry} />
                     </td>
                     <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
                     <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
