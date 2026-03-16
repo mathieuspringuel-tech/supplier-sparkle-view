@@ -6,6 +6,7 @@ import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
 import { CopyYearModal } from "./CopyYearModal";
 import { AddSupplierModal } from "./AddSupplierModal";
+import { BulkUploadModal } from "./BulkUploadModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
