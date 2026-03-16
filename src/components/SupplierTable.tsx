@@ -44,54 +44,55 @@ export const SupplierTable = () => {
 
   return (
     <TooltipProvider>
-    <>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border">
-              {columns.map((col) => (
-                <HeaderCell key={col.key} column={col} />
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {suppliers.map((s) => (
-              <tr
-                key={s.id}
-                className="border-b border-border last:border-b-0 hover:bg-table-hover transition-colors duration-75"
-              >
-                <td className="px-4 py-3">
-                  <button
-                    onClick={() => setSelected(s)}
-                    className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
-                  >
-                    {s.name}
-                  </button>
-                </td>
-                <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
-                <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
-                <td className="px-4 py-3 font-mono-tabular">{s.score}%</td>
-                <td className="px-4 py-3">
-                  {s.hasTargets ? (
-                    <CheckCircle2 size={16} className="text-confidence-high-text" />
-                  ) : (
-                    <XCircle size={16} className="text-destructive/60" />
-                  )}
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">{s.cdp ? "Yes" : "No"}</td>
-                <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
-                <td className="px-4 py-3">
-                  <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
-                    {s.synced ? "Yes" : "No"}
-                  </span>
-                </td>
+      <>
+        <div className="w-full overflow-x-auto rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,.05),0_2px_4px_rgba(0,0,0,.02)]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                {columns.map((col) => (
+                  <HeaderCell key={col.key} column={col} />
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {suppliers.map((s) => (
+                <tr
+                  key={s.id}
+                  className="border-b border-border last:border-b-0 hover:bg-table-hover transition-colors duration-75"
+                >
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => setSelected(s)}
+                      className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
+                    >
+                      {s.name}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 font-mono-tabular">{s.tco2e.toFixed(2)}</td>
+                  <td className="px-4 py-3 font-mono-tabular">{s.spend.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-mono-tabular">{s.score}%</td>
+                  <td className="px-4 py-3">
+                    {s.hasTargets ? (
+                      <CheckCircle2 size={16} className="text-confidence-high-text" />
+                    ) : (
+                      <XCircle size={16} className="text-destructive/60" />
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">{s.cdp ? "Yes" : "No"}</td>
+                  <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
+                  <td className="px-4 py-3">
+                    <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
+                      {s.synced ? "Yes" : "No"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
-    </>
+        <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
+      </>
     </TooltipProvider>
   );
 };
