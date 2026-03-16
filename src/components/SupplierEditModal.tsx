@@ -74,24 +74,42 @@ const countries = [
 
 export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
+  const [activeTab, setActiveTab] = useState("year-data");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     setDraft(supplier ? { ...supplier } : null);
+    setActiveTab("year-data");
+    setValidationError(null);
   }, [supplier]);
 
   if (!draft) return null;
 
-  const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) =>
+  const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
+    setValidationError(null);
+  };
 
   const handleSave = () => {
-    if (draft) {
-      const updated = draft.calculationMethodology === "tco2e"
-        ? { ...draft }
-        : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
-      onSave(updated);
-      onClose();
+    if (!draft) return;
+
+    if (draft.calculationMethodology === "tco2e" && (!draft.tco2e || draft.tco2e <= 0)) {
+      setActiveTab("year-data");
+      setValidationError("tco2e");
+      return;
     }
+
+    if (draft.calculationMethodology === "spend" && (!draft.spend || draft.spend <= 0)) {
+      setActiveTab("year-data");
+      setValidationError("spend");
+      return;
+    }
+
+    const updated = draft.calculationMethodology === "tco2e"
+      ? { ...draft }
+      : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+    onSave(updated);
+    onClose();
   };
 
   return (
