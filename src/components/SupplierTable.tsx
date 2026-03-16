@@ -106,7 +106,6 @@ export const SupplierTable = () => {
     toast.success(`Copied ${copiedSuppliers.length} suppliers (spend & tCO2e reset)`);
     setCopyModalData(null);
   };
-  };
 
   const handleSaveSupplier = (updated: Supplier) => {
     setYearData((prev) =>
