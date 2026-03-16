@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Globe } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
+import { getFlagUrl } from "@/data/suppliers";
 
 interface SupplierModalProps {
   supplier: Supplier | null;
@@ -50,7 +51,13 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
                 </a>
               </div>
               <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                <span className="font-emoji">{supplier.hqFlag}</span>
+                <img
+                  src={getFlagUrl(supplier.hqCountry)}
+                  alt={supplier.hqCountry}
+                  width={20}
+                  height={15}
+                  className="inline-block rounded-[2px]"
+                />
                 <span>{supplier.industry}</span>
               </p>
             </header>
