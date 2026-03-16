@@ -210,7 +210,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                           <button
                             type="button"
                             onClick={() => update("methodology", "Input by User")}
-                            className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                            className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
                               draft.methodology === "Input by User"
                                 ? "border-accent bg-accent/5"
                                 : "border-border hover:border-muted-foreground/30"
