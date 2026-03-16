@@ -76,7 +76,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
       description: "",
       tco2e: calcMethod === "tco2e" ? tco2e : 0,
       spend,
-      hasTargets: false,
+      targetStatus: "no-targets",
       cdp: false,
       category,
       synced: false,

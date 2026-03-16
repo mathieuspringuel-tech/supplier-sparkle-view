@@ -63,6 +63,21 @@ export default {
           text: "hsl(var(--confidence-low-text))",
           border: "hsl(var(--confidence-low-border))",
         },
+        "target-sbti-validated": {
+          bg: "hsl(var(--target-sbti-validated-bg))",
+          text: "hsl(var(--target-sbti-validated-text))",
+          border: "hsl(var(--target-sbti-validated-border))",
+        },
+        "target-sbti-committed": {
+          bg: "hsl(var(--target-sbti-committed-bg))",
+          text: "hsl(var(--target-sbti-committed-text))",
+          border: "hsl(var(--target-sbti-committed-border))",
+        },
+        "target-non-sbti": {
+          bg: "hsl(var(--target-non-sbti-bg))",
+          text: "hsl(var(--target-non-sbti-text))",
+          border: "hsl(var(--target-non-sbti-border))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

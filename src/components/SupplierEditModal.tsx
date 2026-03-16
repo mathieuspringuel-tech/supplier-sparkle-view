@@ -294,15 +294,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                     <div>
                       <Label>Targets</Label>
                       <Select
-                        value={draft.hasTargets ? "yes" : "no"}
-                        onValueChange={(v) => update("hasTargets", v === "yes")}
+                        value={draft.targetStatus}
+                        onValueChange={(v) => update("targetStatus", v as any)}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
+                          <SelectItem value="sbti-validated">SBTi Validated</SelectItem>
+                          <SelectItem value="sbti-committed">SBTi Committed</SelectItem>
+                          <SelectItem value="non-sbti">Non-SBTi Targets</SelectItem>
+                          <SelectItem value="no-targets">No Targets</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
