@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, DollarSign, Cloud, Info, Sparkles, PenLine } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
@@ -7,6 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
@@ -76,18 +86,49 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [overrideConfirm, setOverrideConfirm] = useState<{
+    field: "Targets" | "CDP";
+    applyChange: () => void;
+  } | null>(null);
+  const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
     setDraft(supplier ? { ...supplier } : null);
+    originalRef.current = supplier ? { ...supplier } : null;
     setActiveTab("year-data");
     setValidationError(null);
   }, [supplier]);
 
   if (!draft) return null;
 
+  const isSynced = draft.synced;
+
   const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
     setValidationError(null);
+  };
+
+  const handleTargetChange = (value: string) => {
+    if (isSynced && originalRef.current && value !== originalRef.current.targetStatus) {
+      setOverrideConfirm({
+        field: "Targets",
+        applyChange: () => update("targetStatus", value as any),
+      });
+    } else {
+      update("targetStatus", value as any);
+    }
+  };
+
+  const handleCDPChange = (value: string) => {
+    const newVal = value === "yes";
+    if (isSynced && originalRef.current && newVal !== originalRef.current.cdp) {
+      setOverrideConfirm({
+        field: "CDP",
+        applyChange: () => update("cdp", newVal),
+      });
+    } else {
+      update("cdp", newVal);
+    }
   };
 
   const handleSave = () => {
@@ -113,6 +154,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   };
 
   return (
+    <>
     <AnimatePresence>
       {supplier && (
         <motion.div
@@ -319,7 +361,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       <Label>Targets</Label>
                       <Select
                         value={draft.targetStatus}
-                        onValueChange={(v) => update("targetStatus", v as any)}
+                        onValueChange={handleTargetChange}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
@@ -338,7 +380,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       <Label>CDP</Label>
                       <Select
                         value={draft.cdp ? "yes" : "no"}
-                        onValueChange={(v) => update("cdp", v === "yes")}
+                        onValueChange={handleCDPChange}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
@@ -502,5 +544,26 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
         </motion.div>
       )}
     </AnimatePresence>
+
+    <AlertDialog open={!!overrideConfirm} onOpenChange={(open) => !open && setOverrideConfirm(null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Override {overrideConfirm?.field} Data?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to override the "{overrideConfirm?.field}" data of the AI Database? This will replace the automatically synced value with your manual selection.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => {
+            overrideConfirm?.applyChange();
+            setOverrideConfirm(null);
+          }}>
+            Override
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </>
   );
 };
