@@ -74,24 +74,42 @@ const countries = [
 
 export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
+  const [activeTab, setActiveTab] = useState("year-data");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     setDraft(supplier ? { ...supplier } : null);
+    setActiveTab("year-data");
+    setValidationError(null);
   }, [supplier]);
 
   if (!draft) return null;
 
-  const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) =>
+  const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
+    setValidationError(null);
+  };
 
   const handleSave = () => {
-    if (draft) {
-      const updated = draft.calculationMethodology === "tco2e"
-        ? { ...draft }
-        : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
-      onSave(updated);
-      onClose();
+    if (!draft) return;
+
+    if (draft.calculationMethodology === "tco2e" && (!draft.tco2e || draft.tco2e <= 0)) {
+      setActiveTab("year-data");
+      setValidationError("tco2e");
+      return;
     }
+
+    if (draft.calculationMethodology === "spend" && (!draft.spend || draft.spend <= 0)) {
+      setActiveTab("year-data");
+      setValidationError("spend");
+      return;
+    }
+
+    const updated = draft.calculationMethodology === "tco2e"
+      ? { ...draft }
+      : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+    onSave(updated);
+    onClose();
   };
 
   return (
@@ -121,7 +139,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
             <h2 className="text-lg font-semibold text-foreground mb-4">Edit Supplier</h2>
 
-            <Tabs defaultValue="year-data">
+            <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setValidationError(null); }}>
               <TabsList className="w-full">
                 <TabsTrigger value="year-data" className="flex-1">{year || "Year"} Data</TabsTrigger>
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
@@ -145,9 +163,12 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                           step="0.01"
                           value={draft.tco2e}
                           onChange={(e) => update("tco2e", Number(e.target.value))}
-                          className="mt-1"
+                          className={`mt-1 ${validationError === "tco2e" ? "border-destructive ring-1 ring-destructive" : ""}`}
                           required
                         />
+                        {validationError === "tco2e" && (
+                          <p className="text-xs text-destructive mt-1">tCO₂e is required.</p>
+                        )}
                       </div>
                       <div>
                         <Label htmlFor="spend">Spend on Supplier</Label>
@@ -174,11 +195,14 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                             type="number"
                             value={draft.spend}
                             onChange={(e) => update("spend", Number(e.target.value))}
-                            className="mt-1 pr-14"
+                            className={`mt-1 pr-14 ${validationError === "spend" ? "border-destructive ring-1 ring-destructive" : ""}`}
                             required
                           />
                           <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
                         </div>
+                        {validationError === "spend" && (
+                          <p className="text-xs text-destructive mt-1">Spend on Supplier is required.</p>
+                        )}
                       </div>
 
                       {/* Factor source selection */}
