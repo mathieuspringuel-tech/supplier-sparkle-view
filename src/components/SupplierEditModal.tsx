@@ -134,7 +134,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
                   {draft.calculationMethodology === "tco2e" ? (
                     /* Direct tCO2e entry mode */
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
                         <Label>
                           tCO₂e
