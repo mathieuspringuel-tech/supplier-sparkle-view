@@ -10,7 +10,7 @@ export interface Supplier {
   category: string;
   synced: boolean;
   emissionFactor: number;
-  methodology: "Organisation specific" | "Industry benchmark";
+  methodology: "Organisation specific" | "Industry benchmark" | "Input by User";
   calculationMethodology: "spend" | "tco2e";
   hqCountry: string;
   website: string;
