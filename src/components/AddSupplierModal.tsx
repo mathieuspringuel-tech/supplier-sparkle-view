@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, DollarSign, BarChart3 } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,7 +86,6 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
     };
 
     onSave(newSupplier);
-    // Reset
     setName("");
     setHqCountry("");
     setCategory("");
@@ -128,118 +127,159 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
 
             <h2 className="text-lg font-semibold text-foreground mb-5">Add Supplier</h2>
 
-            <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-              <div>
-                <Label htmlFor="add-name">Name *</Label>
-                <Input
-                  id="add-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1"
-                  placeholder="Supplier name"
-                />
-              </div>
-
-              <div>
-                <Label>Geography *</Label>
-                <Select value={hqCountry} onValueChange={setHqCountry}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countries.map((c) => (
-                      <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label>Category *</Label>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label>Calculation Methodology *</Label>
-                <Select value={calcMethod} onValueChange={(v) => setCalcMethod(v as "spend" | "tco2e")}>
-                  <SelectTrigger className="mt-1">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="spend">Use Spend Data</SelectItem>
-                    <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {calcMethod === "tco2e" && (
+            {/* Supplier Info */}
+            <div className="mb-6">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                 <div>
-                  <Label htmlFor="add-tco2e">
-                    tCO2e<span className="text-destructive ml-1">*</span>
-                  </Label>
+                  <Label htmlFor="add-name">Name *</Label>
                   <Input
-                    id="add-tco2e"
-                    type="number"
-                    step="0.01"
-                    value={tco2e}
-                    onChange={(e) => setTco2e(Number(e.target.value))}
+                    id="add-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="mt-1"
+                    placeholder="Supplier name"
+                  />
+                </div>
+
+                <div>
+                  <Label>Geography *</Label>
+                  <Select value={hqCountry} onValueChange={setHqCountry}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((c) => (
+                        <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Category *</Label>
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="add-email">Email</Label>
+                  <Input
+                    id="add-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="mt-1"
                   />
                 </div>
-              )}
 
-              <div>
-                <Label htmlFor="add-spend">
-                  Spend on Supplier{calcMethod === "spend" && <span className="text-destructive ml-1">*</span>}
-                </Label>
-                <Input
-                  id="add-spend"
-                  type="number"
-                  value={spend}
-                  onChange={(e) => setSpend(Number(e.target.value))}
-                  className="mt-1"
-                />
+                <div>
+                  <Label htmlFor="add-phone">Phone</Label>
+                  <Input
+                    id="add-phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="add-url">URL</Label>
+                  <Input
+                    id="add-url"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    className="mt-1"
+                    placeholder="https://"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Calculation Data */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Calculation Data</p>
+
+              <Label className="mb-2 block">How do you want to calculate emissions? *</Label>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setCalcMethod("spend")}
+                  className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                    calcMethod === "spend"
+                      ? "border-accent bg-accent/5"
+                      : "border-border hover:border-muted-foreground/30"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <DollarSign size={16} className={calcMethod === "spend" ? "text-accent" : "text-muted-foreground"} />
+                    <span className="text-sm font-medium text-foreground">I know my spend</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    We'll estimate emissions using industry emission factors
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setCalcMethod("tco2e")}
+                  className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                    calcMethod === "tco2e"
+                      ? "border-accent bg-accent/5"
+                      : "border-border hover:border-muted-foreground/30"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <BarChart3 size={16} className={calcMethod === "tco2e" ? "text-accent" : "text-muted-foreground"} />
+                    <span className="text-sm font-medium text-foreground">I have tCO2e data</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground leading-snug">
+                    Enter emissions directly from supplier disclosures
+                  </span>
+                </button>
               </div>
 
-              <div>
-                <Label htmlFor="add-email">Email</Label>
-                <Input
-                  id="add-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                {calcMethod === "tco2e" && (
+                  <div>
+                    <Label htmlFor="add-tco2e">
+                      tCO2e<span className="text-destructive ml-1">*</span>
+                    </Label>
+                    <Input
+                      id="add-tco2e"
+                      type="number"
+                      step="0.01"
+                      value={tco2e}
+                      onChange={(e) => setTco2e(Number(e.target.value))}
+                      className="mt-1"
+                    />
+                    <p className="text-[11px] text-muted-foreground mt-1">Total CO2 equivalent from supplier disclosure</p>
+                  </div>
+                )}
 
-              <div>
-                <Label htmlFor="add-phone">Phone</Label>
-                <Input
-                  id="add-phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="add-url">URL</Label>
-                <Input
-                  id="add-url"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  className="mt-1"
-                  placeholder="https://"
-                />
+                <div>
+                  <Label htmlFor="add-spend">
+                    Spend on Supplier{calcMethod === "spend" && <span className="text-destructive ml-1">*</span>}
+                  </Label>
+                  <Input
+                    id="add-spend"
+                    type="number"
+                    value={spend}
+                    onChange={(e) => setSpend(Number(e.target.value))}
+                    className="mt-1"
+                  />
+                  {calcMethod === "spend" && (
+                    <p className="text-[11px] text-muted-foreground mt-1">Used to estimate emissions via emission factor × spend</p>
+                  )}
+                </div>
               </div>
             </div>
 
