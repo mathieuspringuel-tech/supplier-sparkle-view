@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -323,8 +323,8 @@ export const SupplierTable = () => {
                       ) : (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <span className={`inline-flex cursor-default ${s.synced ? "text-confidence-high-text" : "text-destructive"}`}>
-                              {s.synced ? "Yes" : "No"}
+                            <span className={`inline-flex cursor-default`}>
+                              {s.synced ? <CheckCircle2 size={16} className="text-confidence-high-text" /> : <AlertTriangle size={16} className="text-destructive" />}
                             </span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
