@@ -199,7 +199,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                               <span className="text-sm font-medium text-foreground">AI Generated Factor</span>
                             </div>
                             <span className="text-xs text-muted-foreground leading-snug">
-                              Use an automatically estimated emission factor.
+                              Use an AI generated emission factor.
                             </span>
                           </button>
 
