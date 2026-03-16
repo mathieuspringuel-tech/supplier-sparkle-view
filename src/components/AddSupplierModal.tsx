@@ -239,7 +239,7 @@ export const AddSupplierModal = ({ open, onClose, onSave }: AddSupplierModalProp
                 
                   <div className="flex items-center gap-2">
                     <BarChart3 size={16} className={calcMethod === "tco2e" ? "text-accent" : "text-muted-foreground"} />
-                    <span className="text-sm font-medium text-foreground">I have tCO2e data</span>
+                    <span className="text-sm font-medium text-foreground">I have CO2e data</span>
                   </div>
                   <span className="text-xs text-muted-foreground leading-snug">Enter emissions provided by the supplier directly.
 
