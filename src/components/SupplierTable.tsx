@@ -19,7 +19,7 @@ const columns: ColumnDef[] = [
   { key: "cdp", label: "CDP", tooltip: "Whether the supplier discloses environmental data through the CDP (formerly Carbon Disclosure Project)." },
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "synced", label: "Synced", tooltip: "Whether emission data is synced with the supplier's latest disclosure." },
-  { key: "website", label: "Web", tooltip: "Link to the supplier's website." },
+  
 ];
 
 const HeaderCell = ({ column }: { column: ColumnDef }) => (
