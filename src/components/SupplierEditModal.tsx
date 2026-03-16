@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, DollarSign, Cloud, Info } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -232,93 +233,141 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
               </TabsContent>
 
-              <TabsContent value="supplier-data" className="space-y-4 pt-4">
-                <div>
-                  <Label htmlFor="name">Supplier Name</Label>
-                  <Input
-                    id="name"
-                    value={draft.name}
-                    onChange={(e) => update("name", e.target.value)}
-                    className="mt-1"
-                  />
+              <TabsContent value="supplier-data" className="pt-4">
+                {/* Supplier Info */}
+                <div className="mb-6">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                    <div>
+                      <Label htmlFor="edit-name">Name</Label>
+                      <Input
+                        id="edit-name"
+                        value={draft.name}
+                        onChange={(e) => update("name", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Company HQ</Label>
+                      <Select value={draft.hqCountry} onValueChange={(v) => update("hqCountry", v)}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map((c) => (
+                            <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <Label>Category</Label>
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info size={13} className="text-muted-foreground cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-[220px] text-xs">
+                              Which business category does this supplier belong to? If unsure, select Purchased Goods & Services.
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <Select value={draft.category} onValueChange={(v) => update("category", v)}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label>Industry</Label>
+                      <Select value={draft.industry} onValueChange={(v) => update("industry", v)}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {industries.map((ind) => (
+                            <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="edit-website">Website</Label>
+                      <Input
+                        id="edit-website"
+                        value={draft.website}
+                        onChange={(e) => update("website", e.target.value)}
+                        className="mt-1"
+                        placeholder="https://"
+                      />
+                    </div>
+
+                    <div className="col-span-2">
+                      <Label htmlFor="edit-description">Description</Label>
+                      <Textarea
+                        id="edit-description"
+                        value={draft.description}
+                        onChange={(e) => update("description", e.target.value)}
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
                 </div>
 
+                {/* Calculation Data */}
                 <div>
-                  <Label>HQ Country</Label>
-                  <Select
-                    value={draft.hqCountry}
-                    onValueChange={(v) => update("hqCountry", v)}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {countries.map((c) => (
-                        <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Calculation Data</p>
 
-                <div>
-                  <Label>Industry</Label>
-                  <Select
-                    value={draft.industry}
-                    onValueChange={(v) => update("industry", v)}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {industries.map((ind) => (
-                        <SelectItem key={ind} value={ind}>{ind}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                  <Label className="mb-2 block">How do you want to calculate emissions?</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => update("calculationMethodology", "spend")}
+                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                        draft.calculationMethodology === "spend"
+                          ? "border-accent bg-accent/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <DollarSign size={16} className={draft.calculationMethodology === "spend" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-sm font-medium text-foreground">I have spend data</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        We'll estimate emissions using your annual spend with this supplier.
+                      </span>
+                    </button>
 
-                <div>
-                  <Label>Calculation Methodology</Label>
-                  <Select
-                    value={draft.calculationMethodology || "spend"}
-                    onValueChange={(v) => update("calculationMethodology", v as "spend" | "tco2e")}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="spend">Use Spend Data</SelectItem>
-                      <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Category</Label>
-                  <Select
-                    value={draft.category}
-                    onValueChange={(v) => update("category", v)}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={draft.description}
-                    onChange={(e) => update("description", e.target.value)}
-                    className="mt-1"
-                    rows={3}
-                  />
+                    <button
+                      type="button"
+                      onClick={() => update("calculationMethodology", "tco2e")}
+                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                        draft.calculationMethodology === "tco2e"
+                          ? "border-accent bg-accent/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Cloud size={16} className={draft.calculationMethodology === "tco2e" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-sm font-medium text-foreground">I have CO₂e data</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        Enter emissions provided by the supplier directly.
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
