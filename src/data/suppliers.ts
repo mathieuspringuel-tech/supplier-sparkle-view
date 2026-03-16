@@ -11,6 +11,7 @@ export interface Supplier {
   synced: boolean;
   emissionFactor: number;
   methodology: "Organisation specific" | "Industry benchmark";
+  calculationMethodology: "spend" | "tco2e";
   hqCountry: string;
   website: string;
 }
