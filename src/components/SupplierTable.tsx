@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Info, CheckCircle2, XCircle } from "lucide-react";
 import { suppliers, type Supplier } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ColumnDef {
   key: string;
