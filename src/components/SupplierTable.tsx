@@ -121,6 +121,43 @@ export const SupplierTable = () => {
     toast.success("Supplier updated");
   };
 
+  const handleAddSupplier = (newSupplier: Supplier) => {
+    // Add supplier with synced = false
+    setYearData((prev) =>
+      prev.map((y) =>
+        y.year === selectedYear ? { ...y, suppliers: [...y.suppliers, newSupplier] } : y
+      )
+    );
+    toast.success(`${newSupplier.name} added`);
+
+    // Simulate syncing for 5 seconds
+    setSyncingIds((prev) => new Set(prev).add(newSupplier.id));
+    setTimeout(() => {
+      const ef = +(0.05 + Math.random() * 0.8).toFixed(3);
+      const tco2e = +(newSupplier.spend * ef).toFixed(2);
+      setYearData((prev) =>
+        prev.map((y) =>
+          y.year === selectedYear
+            ? {
+                ...y,
+                suppliers: y.suppliers.map((s) =>
+                  s.id === newSupplier.id
+                    ? { ...s, synced: true, emissionFactor: ef, tco2e }
+                    : s
+                ),
+              }
+            : y
+        )
+      );
+      setSyncingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(newSupplier.id);
+        return next;
+      });
+      toast.success(`${newSupplier.name} synced`);
+    }, 5000);
+  };
+
   return (
     <TooltipProvider>
       <>
