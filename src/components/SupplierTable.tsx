@@ -289,7 +289,7 @@ export const SupplierTable = () => {
         </div>
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
-        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} />
+        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} year={selectedYear} />
         <AddSupplierModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddSupplier} year={selectedYear} />
         {copyModalData && (
           <CopyYearModal

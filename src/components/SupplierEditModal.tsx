@@ -19,6 +19,7 @@ interface SupplierEditModalProps {
   supplier: Supplier | null;
   onClose: () => void;
   onSave: (updated: Supplier) => void;
+  year?: number;
 }
 
 const categories = [
@@ -71,7 +72,7 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
-export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditModalProps) => {
+export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
 
   useEffect(() => {
@@ -122,18 +123,18 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
             <Tabs defaultValue="year-data">
               <TabsList className="w-full">
-                <TabsTrigger value="year-data" className="flex-1">Year Data</TabsTrigger>
+                <TabsTrigger value="year-data" className="flex-1">{year || "Year"} Data</TabsTrigger>
                 <TabsTrigger value="supplier-data" className="flex-1">Supplier Data</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="year-data" className="pt-4 max-h-[60vh] overflow-y-auto pr-1">
+              <TabsContent value="year-data" className="pt-3">
                 {/* CO2e Calculation Section */}
-                <div className="mb-6">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">CO₂e Calculation</p>
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">CO₂e Calculation</p>
 
                   {draft.calculationMethodology === "tco2e" ? (
                     /* Direct tCO2e entry mode */
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
                         <Label>
                           tCO₂e
@@ -161,20 +162,23 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                     </div>
                   ) : (
                     /* Spend-based calculation mode */
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div>
                         <Label htmlFor="spend">
-                          Year Spend on Supplier
+                          {year || "Year"} Spend on Supplier
                           <span className="text-destructive ml-1">*</span>
                         </Label>
-                        <Input
-                          id="spend"
-                          type="number"
-                          value={draft.spend}
-                          onChange={(e) => update("spend", Number(e.target.value))}
-                          className="mt-1"
-                          required
-                        />
+                        <div className="relative">
+                          <Input
+                            id="spend"
+                            type="number"
+                            value={draft.spend}
+                            onChange={(e) => update("spend", Number(e.target.value))}
+                            className="mt-1 pr-14"
+                            required
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
+                        </div>
                       </div>
 
                       {/* Factor source selection */}
@@ -188,7 +192,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                                 update("methodology", "Industry benchmark");
                               }
                             }}
-                            className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                            className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
                               draft.methodology !== "Input by User"
                                 ? "border-accent bg-accent/5"
                                 : "border-border hover:border-muted-foreground/30"
@@ -206,7 +210,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                           <button
                             type="button"
                             onClick={() => update("methodology", "Input by User")}
-                            className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                            className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
                               draft.methodology === "Input by User"
                                 ? "border-accent bg-accent/5"
                                 : "border-border hover:border-muted-foreground/30"
@@ -225,7 +229,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                       {/* Conditional fields based on factor source */}
                       {draft.methodology !== "Input by User" ? (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div>
                             <Label>Emission Factor (per £)</Label>
                             <Input
@@ -244,7 +248,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                           </div>
                         </div>
                       ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div>
                             <Label htmlFor="emissionFactor">
                               Emission Factor (per £)
@@ -285,8 +289,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
                 {/* Reporting & Targets Section */}
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Reporting & Targets</p>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Reporting & Targets</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                     <div>
                       <Label>Targets</Label>
                       <Select
