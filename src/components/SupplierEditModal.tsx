@@ -248,7 +248,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                           </div>
                         </div>
                       ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div>
                             <Label htmlFor="emissionFactor">
                               Emission Factor (per £)
