@@ -265,11 +265,20 @@ export const SupplierTable = () => {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {s.cdp ? (
-                        <CheckCircle2 size={16} className="text-confidence-high-text" />
-                      ) : (
-                        <XCircle size={16} className="text-destructive/60" />
-                      )}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-flex">
+                            {s.cdp ? (
+                              <CheckCircle2 size={16} className="text-confidence-high-text" />
+                            ) : (
+                              <XCircle size={16} className="text-destructive/60" />
+                            )}
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="text-xs">
+                          {s.cdp ? "Organisation has reported to CDP" : "Organisation has not reported to CDP"}
+                        </TooltipContent>
+                      </Tooltip>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
                     <td className="px-4 py-3">
