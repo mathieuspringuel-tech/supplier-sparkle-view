@@ -64,6 +64,8 @@ export const SupplierTable = () => {
   const [yearData, setYearData] = useState<YearData[]>(initialYearData);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
