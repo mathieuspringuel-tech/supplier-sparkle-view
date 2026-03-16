@@ -151,9 +151,11 @@ export const SupplierTable = () => {
   const suppliers = allSuppliers.filter((s) => {
     if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     if (filterHQ && s.hqCountry !== filterHQ) return false;
-    if (filterTargets && s.targetStatus !== filterTargets) return false;
+    if (filterTargets === "empty" && s.targetStatus !== undefined && s.targetStatus !== "") return false;
+    if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
     if (filterCDP === "yes" && !s.cdp) return false;
     if (filterCDP === "no" && s.cdp) return false;
+    if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
     if (filterSynced === "yes" && !s.synced) return false;
     if (filterSynced === "no" && s.synced) return false;
