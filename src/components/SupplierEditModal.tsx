@@ -543,5 +543,26 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
         </motion.div>
       )}
     </AnimatePresence>
+
+    <AlertDialog open={!!overrideConfirm} onOpenChange={(open) => !open && setOverrideConfirm(null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Override {overrideConfirm?.field} Data?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to override the "{overrideConfirm?.field}" data of the AI Database? This will replace the automatically synced value with your manual selection.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => {
+            overrideConfirm?.applyChange();
+            setOverrideConfirm(null);
+          }}>
+            Override
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </>
   );
 };
