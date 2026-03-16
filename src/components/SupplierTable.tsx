@@ -262,9 +262,13 @@ export const SupplierTable = () => {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground truncate max-w-[160px]">{s.category}</td>
                     <td className="px-4 py-3">
-                      <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
-                        {s.synced ? "Yes" : "No"}
-                      </span>
+                      {syncingIds.has(s.id) ? (
+                        <Loader2 size={16} className="text-muted-foreground animate-spin" />
+                      ) : (
+                        <span className={s.synced ? "text-confidence-high-text" : "text-destructive"}>
+                          {s.synced ? "Yes" : "No"}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))
