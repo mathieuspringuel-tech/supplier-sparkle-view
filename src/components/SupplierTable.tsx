@@ -3,6 +3,7 @@ import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil } from "lu
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
+import { CopyYearModal } from "./CopyYearModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -61,6 +62,7 @@ export const SupplierTable = () => {
   const [editing, setEditing] = useState<Supplier | null>(null);
   const [yearData, setYearData] = useState<YearData[]>(initialYearData);
   const [selectedYear, setSelectedYear] = useState<number>(2025);
+  const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
 
   const currentData = yearData.find((y) => y.year === selectedYear);
   const suppliers = currentData?.suppliers ?? [];
@@ -89,20 +91,20 @@ export const SupplierTable = () => {
 
     const prevYear = sortedYears[0];
     const prevData = yearData.find((y) => y.year === prevYear);
-    if (!prevData) return;
+    if (!prevData || prevData.suppliers.length === 0) return;
 
-    const copiedSuppliers = prevData.suppliers.map((s) => ({
-      ...s,
-      tco2e: 0,
-      spend: 0,
-    }));
+    setCopyModalData({ suppliers: prevData.suppliers, fromYear: prevYear });
+  };
 
+  const handleCopyConfirm = (selected: Supplier[]) => {
+    const copiedSuppliers = selected.map((s) => ({ ...s, tco2e: 0, spend: 0 }));
     setYearData((prev) =>
       prev.map((y) =>
         y.year === selectedYear ? { ...y, suppliers: copiedSuppliers } : y
       )
     );
-    toast.success(`Copied ${copiedSuppliers.length} suppliers from ${prevYear} (spend & tCO2e reset)`);
+    toast.success(`Copied ${copiedSuppliers.length} suppliers (spend & tCO2e reset)`);
+    setCopyModalData(null);
   };
 
   const handleSaveSupplier = (updated: Supplier) => {
@@ -225,6 +227,15 @@ export const SupplierTable = () => {
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
         <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} />
+        {copyModalData && (
+          <CopyYearModal
+            suppliers={copyModalData.suppliers}
+            fromYear={copyModalData.fromYear}
+            toYear={selectedYear}
+            onClose={() => setCopyModalData(null)}
+            onConfirm={handleCopyConfirm}
+          />
+        )}
       </>
     </TooltipProvider>
   );

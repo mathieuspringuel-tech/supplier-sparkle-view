@@ -31,6 +31,45 @@ const categories = [
   "Upstream leased assets",
 ];
 
+const industries = [
+  "Enterprise Software",
+  "Route Optimization",
+  "Advertising Analytics",
+  "Financial Data & Analytics",
+  "Staffing & Recruitment",
+  "Creative Services",
+  "Data Center Infrastructure",
+  "Cloud Data Platform",
+  "Sales Enablement",
+  "Compensation Consulting",
+  "Supply Chain Emissions",
+  "CRM & Cloud Computing",
+  "Cloud Consulting",
+  "Audit & Advisory",
+  "IT Infrastructure",
+];
+
+const countries = [
+  { code: "US", name: "United States" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "DE", name: "Germany" },
+  { code: "FR", name: "France" },
+  { code: "BE", name: "Belgium" },
+  { code: "NL", name: "Netherlands" },
+  { code: "CH", name: "Switzerland" },
+  { code: "SE", name: "Sweden" },
+  { code: "NO", name: "Norway" },
+  { code: "DK", name: "Denmark" },
+  { code: "IE", name: "Ireland" },
+  { code: "CA", name: "Canada" },
+  { code: "AU", name: "Australia" },
+  { code: "JP", name: "Japan" },
+  { code: "SG", name: "Singapore" },
+  { code: "IN", name: "India" },
+  { code: "BR", name: "Brazil" },
+  { code: "IL", name: "Israel" },
+];
+
 export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
 
@@ -157,35 +196,37 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
-                  <Label htmlFor="website">Website URL</Label>
-                  <Input
-                    id="website"
-                    value={draft.website}
-                    onChange={(e) => update("website", e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="hqCountry">HQ Country Code</Label>
-                  <Input
-                    id="hqCountry"
+                  <Label>HQ Country</Label>
+                  <Select
                     value={draft.hqCountry}
-                    onChange={(e) => update("hqCountry", e.target.value.toUpperCase())}
-                    className="mt-1"
-                    maxLength={2}
-                    placeholder="US"
-                  />
+                    onValueChange={(v) => update("hqCountry", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((c) => (
+                        <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="industry">Industry</Label>
-                  <Input
-                    id="industry"
+                  <Label>Industry</Label>
+                  <Select
                     value={draft.industry}
-                    onChange={(e) => update("industry", e.target.value)}
-                    className="mt-1"
-                  />
+                    onValueChange={(v) => update("industry", v)}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {industries.map((ind) => (
+                        <SelectItem key={ind} value={ind}>{ind}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
