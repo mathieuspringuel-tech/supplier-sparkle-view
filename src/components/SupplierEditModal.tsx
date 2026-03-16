@@ -84,7 +84,9 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
   const handleSave = () => {
     if (draft) {
-      const updated = { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+      const updated = draft.calculationMethodology === "tco2e"
+        ? { ...draft }
+        : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
       onSave(updated);
       onClose();
     }
@@ -125,13 +127,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
 
               <TabsContent value="year-results" className="space-y-4 pt-4">
                 <div>
-                  <Label htmlFor="spend">Spend on Supplier</Label>
+                  <Label htmlFor="spend">
+                    Spend on Supplier
+                    {draft.calculationMethodology === "spend" && <span className="text-destructive ml-1">*</span>}
+                  </Label>
                   <Input
                     id="spend"
                     type="number"
                     value={draft.spend}
                     onChange={(e) => update("spend", Number(e.target.value))}
                     className="mt-1"
+                    required={draft.calculationMethodology === "spend"}
                   />
                 </div>
 
@@ -164,12 +170,26 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                 </div>
 
                 <div>
-                  <Label>tCO2e (calculated)</Label>
-                  <Input
-                    value={+(draft.spend * draft.emissionFactor).toFixed(2)}
-                    disabled
-                    className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                  />
+                  <Label>
+                    tCO2e {draft.calculationMethodology === "spend" ? "(calculated)" : ""}
+                    {draft.calculationMethodology === "tco2e" && <span className="text-destructive ml-1">*</span>}
+                  </Label>
+                  {draft.calculationMethodology === "tco2e" ? (
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={draft.tco2e}
+                      onChange={(e) => update("tco2e", Number(e.target.value))}
+                      className="mt-1"
+                      required
+                    />
+                  ) : (
+                    <Input
+                      value={+(draft.spend * draft.emissionFactor).toFixed(2)}
+                      disabled
+                      className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                    />
+                  )}
                 </div>
 
                 <div>
@@ -246,6 +266,22 @@ export const SupplierEditModal = ({ supplier, onClose, onSave }: SupplierEditMod
                       {industries.map((ind) => (
                         <SelectItem key={ind} value={ind}>{ind}</SelectItem>
                       ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Calculation Methodology</Label>
+                  <Select
+                    value={draft.calculationMethodology || "spend"}
+                    onValueChange={(v) => update("calculationMethodology", v as "spend" | "tco2e")}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="spend">Use Spend Data</SelectItem>
+                      <SelectItem value="tco2e">Use tCO2e Data</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
