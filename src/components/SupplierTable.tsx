@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings2 } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -232,7 +232,7 @@ export const SupplierTable = () => {
           <Popover>
             <PopoverTrigger asChild>
               <button className="inline-flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
-                <Settings2 size={15} />
+                <Settings size={15} />
               </button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-[280px] p-4">
