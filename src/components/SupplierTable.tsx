@@ -325,7 +325,7 @@ export const SupplierTable = () => {
             <tbody>
               {suppliers.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={visibleColumns.length} className="px-4 py-12 text-center text-muted-foreground">
                     No suppliers for {selectedYear}. Copy from a previous year to get started.
                   </td>
                 </tr>
