@@ -101,7 +101,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
 
   if (!draft) return null;
 
-  const isSynced = draft.synced;
+  const isSynced = draft.synced === "synced";
 
   const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));

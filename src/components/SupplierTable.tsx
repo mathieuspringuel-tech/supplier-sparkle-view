@@ -53,7 +53,8 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
   ],
   synced: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
-    { icon: <AlertTriangle size={12} className="text-destructive" />, label: "Could not sync" },
+    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Partial data" },
+    { icon: <XCircle size={12} className="text-destructive" />, label: "Could not sync" },
   ],
   calcMethod: [
     { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">Spend</span>, label: "Spend Data Input" },
@@ -186,8 +187,8 @@ export const SupplierTable = () => {
     if (filterCDP === "no" && s.cdp) return false;
     if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
-    if (filterSynced === "yes" && !s.synced) return false;
-    if (filterSynced === "no" && s.synced) return false;
+    if (filterSynced === "yes" && s.synced !== "synced") return false;
+    if (filterSynced === "no" && s.synced === "synced") return false;
     if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
     if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
     if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
@@ -284,7 +285,7 @@ export const SupplierTable = () => {
                 ...y,
                 suppliers: y.suppliers.map((s) =>
                   s.id === newSupplier.id
-                    ? { ...s, synced: true, emissionFactor: ef, tco2e }
+                    ? { ...s, synced: "synced" as const, emissionFactor: ef, tco2e }
                     : s
                 ),
               }
@@ -506,7 +507,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
-                      {!s.synced && s.calculationMethodology === "spend" ? (
+                      {s.synced === "not-synced" && s.calculationMethodology === "spend" ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="inline-flex cursor-default">
@@ -527,7 +528,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("targets") && (
                     <td className="px-4 py-3">
-                      {!s.synced ? (
+                      {s.synced === "not-synced" ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <TargetStatusCell status={s.targetStatus} />
@@ -536,7 +537,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("cdp") && (
                     <td className="px-4 py-3">
-                      {!s.synced ? (
+                      {s.synced === "not-synced" ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <Tooltip>
@@ -593,11 +594,15 @@ export const SupplierTable = () => {
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className={`inline-flex cursor-default`}>
-                              {s.synced ? <CheckCircle2 size={16} className="text-confidence-high-text" /> : <AlertTriangle size={16} className="text-destructive" />}
+                              {s.synced === "synced" && <CheckCircle2 size={16} className="text-confidence-high-text" />}
+                              {s.synced === "warning" && <AlertTriangle size={16} className="text-amber-500" />}
+                              {s.synced === "not-synced" && <XCircle size={16} className="text-destructive" />}
                             </span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
-                            {s.synced ? "AI successfully found data" : "AI could not synch company data."}
+                            {s.synced === "synced" && "AI successfully found data"}
+                            {s.synced === "warning" && "AI found partial data"}
+                            {s.synced === "not-synced" && "AI could not sync company data."}
                           </TooltipContent>
                         </Tooltip>
                       )}
