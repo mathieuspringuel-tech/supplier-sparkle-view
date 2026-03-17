@@ -83,7 +83,7 @@ const pillColorClasses: Record<string, string> = {
 };
 
 const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
-  const config = targetStatusConfig[status];
+  const config = targetStatusConfig[status] || targetStatusConfig["no-targets"];
   return (
     <Tooltip>
       <TooltipTrigger asChild>
