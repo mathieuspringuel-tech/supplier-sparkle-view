@@ -53,7 +53,7 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
   ],
   synced: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
-    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Partial data" },
+    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Uncertain match" },
     { icon: <XCircle size={12} className="text-destructive" />, label: "Could not sync" },
   ],
   calcMethod: [
