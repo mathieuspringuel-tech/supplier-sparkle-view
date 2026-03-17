@@ -601,7 +601,7 @@ export const SupplierTable = () => {
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
                             {s.synced === "synced" && "AI successfully found data"}
-                            {s.synced === "warning" && "AI found partial data"}
+                            {s.synced === "warning" && "AI couldn't be sure which company this is"}
                             {s.synced === "not-synced" && "AI could not sync company data."}
                           </TooltipContent>
                         </Tooltip>
