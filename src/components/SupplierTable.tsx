@@ -23,6 +23,7 @@ interface ColumnDef {
   key: string;
   label: string;
   tooltip: string;
+  legend?: { icon: React.ReactNode; label: string }[];
 }
 
 const columns: ColumnDef[] = [
@@ -38,21 +39,61 @@ const columns: ColumnDef[] = [
   { key: "synced", label: "Synced", tooltip: "Whether emission data is synced with the supplier's latest disclosure." },
 ];
 
-const HeaderCell = ({ column }: { column: ColumnDef }) => (
-  <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-table-header">
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="flex items-center gap-1.5 cursor-help">
-          {column.label}
-          <Info size={12} className="opacity-40 hover:opacity-100 transition-opacity" />
-        </div>
-      </TooltipTrigger>
-      <TooltipContent side="bottom" className="max-w-[220px] text-xs leading-relaxed">
-        {column.tooltip}
-      </TooltipContent>
-    </Tooltip>
-  </th>
-);
+// Legends are built after targetStatusConfig is defined, so we use a function
+const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: string }[]> => ({
+  targets: [
+    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border">SBTi</span>, label: "Validated" },
+    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border">SBTi</span>, label: "Committed" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-non-sbti-bg text-target-non-sbti-text border-target-non-sbti-border">SBTi <ArrowUpRight size={7} strokeWidth={3} /></span>, label: "Inherited" },
+    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border">None</span>, label: "No Targets" },
+  ],
+  cdp: [
+    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
+    { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not reported" },
+  ],
+  synced: [
+    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
+    { icon: <AlertTriangle size={12} className="text-destructive" />, label: "Could not sync" },
+  ],
+  calcMethod: [
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">Spend</span>, label: "Spend Data Input" },
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-accent/10 text-accent">CO₂e</span>, label: "CO₂e Data Input" },
+  ],
+  spendFactorType: [
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">AI</span>, label: "AI Generated" },
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-amber-500/10 text-amber-600">Custom</span>, label: "User Input" },
+  ],
+});
+
+const HeaderCell = ({ column }: { column: ColumnDef }) => {
+  const legends = getColumnLegends();
+  const legend = legends[column.key];
+  return (
+    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-table-header">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center gap-1.5 cursor-help">
+            {column.label}
+            <Info size={12} className="opacity-40 hover:opacity-100 transition-opacity" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="max-w-[240px] text-xs leading-relaxed">
+          <p>{column.tooltip}</p>
+          {legend && (
+            <div className="mt-2 pt-2 border-t border-border/50 flex flex-col gap-1.5">
+              {legend.map((item, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  {item.icon}
+                  <span className="text-muted-foreground">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </TooltipContent>
+      </Tooltip>
+    </th>
+  );
+};
 
 const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   <img
