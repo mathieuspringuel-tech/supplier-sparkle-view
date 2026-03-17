@@ -594,11 +594,15 @@ export const SupplierTable = () => {
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className={`inline-flex cursor-default`}>
-                              {s.synced ? <CheckCircle2 size={16} className="text-confidence-high-text" /> : <AlertTriangle size={16} className="text-destructive" />}
+                              {s.synced === "synced" && <CheckCircle2 size={16} className="text-confidence-high-text" />}
+                              {s.synced === "warning" && <AlertTriangle size={16} className="text-amber-500" />}
+                              {s.synced === "not-synced" && <XCircle size={16} className="text-destructive" />}
                             </span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
-                            {s.synced ? "AI successfully found data" : "AI could not synch company data."}
+                            {s.synced === "synced" && "AI successfully found data"}
+                            {s.synced === "warning" && "AI found partial data"}
+                            {s.synced === "not-synced" && "AI could not sync company data."}
                           </TooltipContent>
                         </Tooltip>
                       )}

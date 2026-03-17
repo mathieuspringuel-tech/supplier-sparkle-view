@@ -79,7 +79,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
       targetStatus: "no-targets",
       cdp: false,
       category,
-      synced: false,
+      synced: "not-synced",
       emissionFactor: 0,
       methodology: "Industry benchmark",
       hqCountry,
