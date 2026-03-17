@@ -187,8 +187,8 @@ export const SupplierTable = () => {
     if (filterCDP === "no" && s.cdp) return false;
     if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
-    if (filterSynced === "yes" && !s.synced) return false;
-    if (filterSynced === "no" && s.synced) return false;
+    if (filterSynced === "yes" && s.synced !== "synced") return false;
+    if (filterSynced === "no" && s.synced === "synced") return false;
     if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
     if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
     if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
