@@ -65,12 +65,21 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   />
 );
 
-const targetStatusConfig: Record<TargetStatus, { label: string; tooltip: string; icon: "sbti" | "target" | "cross"; color: "green" | "orange" | "blue" | "red"; inherited?: boolean }> = {
-  "sbti-validated": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets", icon: "sbti", color: "green" },
-  "sbti-validated-inherited": { label: "SBTi", tooltip: "Supplier has SBTi Validated Targets (inherited from parent company)", icon: "sbti", color: "green", inherited: true },
-  "sbti-committed": { label: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", icon: "sbti", color: "orange" },
-  "non-sbti": { label: "", tooltip: "Company has Non-SBTi Targets", icon: "target", color: "blue" },
-  "no-targets": { label: "", tooltip: "Company has no public Targets", icon: "cross", color: "red" },
+const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: string; color: "green" | "orange" | "blue" | "red"; inherited?: boolean }> = {
+  "sbti-validated": { pillText: "SBTi", tooltip: "Supplier has SBTi Validated Targets", color: "green" },
+  "sbti-validated-inherited": { pillText: "SBTi", tooltip: "Supplier has SBTi Validated Targets (inherited from parent company)", color: "blue", inherited: true },
+  "sbti-committed": { pillText: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", color: "orange" },
+  "non-sbti-validated": { pillText: "Other", tooltip: "Supplier has validated non-SBTi targets", color: "green" },
+  "non-sbti-committed": { pillText: "Other", tooltip: "Supplier has committed to non-SBTi targets", color: "orange" },
+  "non-sbti-inherited": { pillText: "Other", tooltip: "Supplier has non-SBTi targets (inherited from parent company)", color: "blue", inherited: true },
+  "no-targets": { pillText: "None", tooltip: "Company has no public targets", color: "red" },
+};
+
+const pillColorClasses: Record<string, string> = {
+  green: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border",
+  orange: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border",
+  blue: "bg-target-non-sbti-bg text-target-non-sbti-text border-target-non-sbti-border",
+  red: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border",
 };
 
 const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
@@ -78,30 +87,9 @@ const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="inline-flex items-center gap-1.5 cursor-default">
-          {config.icon === "cross" ? (
-            <XCircle size={16} className="text-destructive/60" />
-          ) : (
-            <span className="relative inline-flex">
-              <Target size={16} className={
-                config.color === "green" ? "text-target-sbti-validated-text" :
-                config.color === "orange" ? "text-target-sbti-committed-text" :
-                "text-target-non-sbti-text"
-              } />
-              {config.inherited && (
-                <ArrowUpRight size={10} className="absolute -top-1 -right-1.5 text-target-non-sbti-text" strokeWidth={3} />
-              )}
-            </span>
-          )}
-          {config.label && (
-            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
-              config.color === "green"
-                ? "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border"
-                : "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border"
-            }`}>
-              {config.label}
-            </span>
-          )}
+        <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full border cursor-default ${pillColorClasses[config.color]}`}>
+          {config.pillText}
+          {config.inherited && <ArrowUpRight size={9} strokeWidth={3} />}
         </span>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="text-xs">
@@ -295,11 +283,12 @@ export const SupplierTable = () => {
           <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Targets</option>
             <option value="sbti-validated">SBTi Validated</option>
-            <option value="sbti-validated-inherited">SBTi Validated (Inherited)</option>
+            <option value="sbti-validated-inherited">SBTi Inherited</option>
             <option value="sbti-committed">SBTi Committed</option>
-            <option value="non-sbti">Non-SBTi</option>
+            <option value="non-sbti-validated">Other Validated</option>
+            <option value="non-sbti-committed">Other Committed</option>
+            <option value="non-sbti-inherited">Other Inherited</option>
             <option value="no-targets">No Targets</option>
-            <option value="empty">Empty</option>
           </select>
 
           <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">

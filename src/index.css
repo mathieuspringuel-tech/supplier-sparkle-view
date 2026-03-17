@@ -56,6 +56,10 @@
     --target-non-sbti-text: 215 70% 40%;
     --target-non-sbti-border: 210 60% 78%;
 
+    --target-no-targets-bg: 0 80% 96%;
+    --target-no-targets-text: 0 70% 40%;
+    --target-no-targets-border: 0 60% 78%;
+
     --table-header-bg: 210 20% 97%;
     --table-hover: 210 20% 98%;
 

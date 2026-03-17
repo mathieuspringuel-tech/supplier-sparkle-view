@@ -78,6 +78,11 @@ export default {
           text: "hsl(var(--target-non-sbti-text))",
           border: "hsl(var(--target-non-sbti-border))",
         },
+        "target-no-targets": {
+          bg: "hsl(var(--target-no-targets-bg))",
+          text: "hsl(var(--target-no-targets-text))",
+          border: "hsl(var(--target-no-targets-border))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
