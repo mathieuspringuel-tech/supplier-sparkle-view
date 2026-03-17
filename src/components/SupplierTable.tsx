@@ -285,7 +285,7 @@ export const SupplierTable = () => {
                 ...y,
                 suppliers: y.suppliers.map((s) =>
                   s.id === newSupplier.id
-                    ? { ...s, synced: true, emissionFactor: ef, tco2e }
+                    ? { ...s, synced: "synced" as const, emissionFactor: ef, tco2e }
                     : s
                 ),
               }
