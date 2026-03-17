@@ -528,7 +528,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("targets") && (
                     <td className="px-4 py-3">
-                      {!s.synced ? (
+                      {s.synced === "not-synced" ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <TargetStatusCell status={s.targetStatus} />
