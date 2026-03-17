@@ -507,7 +507,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
-                      {!s.synced && s.calculationMethodology === "spend" ? (
+                      {s.synced === "not-synced" && s.calculationMethodology === "spend" ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="inline-flex cursor-default">
