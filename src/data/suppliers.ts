@@ -10,7 +10,7 @@ export interface Supplier {
   targetStatus: TargetStatus;
   cdp: boolean;
   category: string;
-  synced: boolean;
+  synced: "synced" | "warning" | "not-synced";
   emissionFactor: number;
   methodology: "Organisation specific" | "Industry benchmark" | "Input by User";
   calculationMethodology: "spend" | "tco2e";
