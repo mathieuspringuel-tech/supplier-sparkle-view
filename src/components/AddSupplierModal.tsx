@@ -88,6 +88,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
       website: website.trim(),
       calculationMethodology: calcMethod,
       sbtAligned: deriveSbtAligned("no-targets").value,
+      influence,
     };
 
     onSave(newSupplier);
