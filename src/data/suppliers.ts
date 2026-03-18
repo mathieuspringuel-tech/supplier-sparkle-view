@@ -13,7 +13,8 @@ export interface Supplier {
   synced: "synced" | "warning" | "not-synced";
   emissionFactor: number;
   methodology: "Organisation specific" | "Industry benchmark" | "Input by User";
-  calculationMethodology: "spend" | "tco2e";
+  calculationMethodology: "spend" | "tco2e" | "activity";
+  activityData?: { factorId: string; quantity: number }[];
   hqCountry: string;
   website: string;
   sbtAligned: boolean;
