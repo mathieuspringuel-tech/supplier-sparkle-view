@@ -573,6 +573,30 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+    <AlertDialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Supplier</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete "{draft?.name}"? This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            onClick={() => {
+              if (draft && onDelete) {
+                onDelete(draft.id);
+                onClose();
+              }
+            }}
+          >
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </>
   );
 };
