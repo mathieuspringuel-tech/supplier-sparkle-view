@@ -152,7 +152,7 @@ export const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterHQ, setFilterHQ] = useState("");
   const [filterTargets, setFilterTargets] = useState("");
-  const [filterCDP, setFilterCDP] = useState("");
+  
   const [filterCategory, setFilterCategory] = useState("");
   const [filterSynced, setFilterSynced] = useState("");
   const [filterCalcMethod, setFilterCalcMethod] = useState("");
