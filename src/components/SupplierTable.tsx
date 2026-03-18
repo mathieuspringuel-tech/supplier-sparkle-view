@@ -137,7 +137,7 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
           {config.pillText}
         </span>
       </TooltipTrigger>
-      <TooltipContent side="bottom" className={status === "sbti-validated" || status === "self-published" ? "text-xs p-3" : "text-xs"}>
+      <TooltipContent side="bottom" className={status === "sbti-validated" || status === "self-published" || status === "sbti-committed" ? "text-xs p-3" : "text-xs"}>
         {status === "sbti-validated" ? (
           <div className="space-y-2">
             <p className="text-popover-foreground">Supplier has SBTi Validated Targets</p>
