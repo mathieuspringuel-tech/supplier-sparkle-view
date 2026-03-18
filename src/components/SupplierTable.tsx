@@ -122,8 +122,11 @@ const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: stri
   "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={10} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
 };
 
-const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
+const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inheritedFrom?: string }) => {
   const config = targetStatusConfig[status] || targetStatusConfig["no-targets"];
+  const tooltip = status === "sbti-inherited" && inheritedFrom
+    ? `Targets inherited from parent company: ${inheritedFrom}`
+    : config.tooltip;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -133,7 +136,7 @@ const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
         </span>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="text-xs">
-        {config.tooltip}
+        {tooltip}
       </TooltipContent>
     </Tooltip>
   );
@@ -537,7 +540,7 @@ export const SupplierTable = () => {
                       {s.synced === "not-synced" ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
-                        <TargetStatusCell status={s.targetStatus} />
+                        <TargetStatusCell status={s.targetStatus} inheritedFrom={s.inheritedFrom} />
                       )}
                     </td>
                     )}
