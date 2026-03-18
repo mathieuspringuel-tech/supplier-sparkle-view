@@ -110,13 +110,15 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   };
 
   const handleTargetChange = (value: string) => {
+    const applyTargetAndAlign = () => {
+      const ts = value as any;
+      const aligned = deriveSbtAligned(ts);
+      setDraft((prev) => prev ? { ...prev, targetStatus: ts, sbtAligned: aligned.locked ? aligned.value : prev.sbtAligned } : prev);
+    };
     if (isSynced && originalRef.current && value !== originalRef.current.targetStatus) {
-      setOverrideConfirm({
-        field: "Targets",
-        applyChange: () => update("targetStatus", value as any),
-      });
+      setOverrideConfirm({ field: "Targets", applyChange: applyTargetAndAlign });
     } else {
-      update("targetStatus", value as any);
+      applyTargetAndAlign();
     }
   };
 
