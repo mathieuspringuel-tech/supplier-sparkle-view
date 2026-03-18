@@ -368,21 +368,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       </Select>
                     </div>
 
-                    <div>
-                      <Label>CDP</Label>
-                      <Select
-                        value={draft.cdp ? "yes" : "no"}
-                        onValueChange={handleCDPChange}
-                      >
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                     </div>
 
                     {/* SBT Aligned */}
