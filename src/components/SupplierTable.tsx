@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus, ExternalLink } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl, deriveSbtAligned } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -137,7 +137,7 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
           {config.pillText}
         </span>
       </TooltipTrigger>
-      <TooltipContent side="bottom" className={status === "sbti-validated" ? "text-xs p-3" : "text-xs"}>
+      <TooltipContent side="bottom" className={status === "sbti-validated" || status === "self-published" ? "text-xs p-3" : "text-xs"}>
         {status === "sbti-validated" ? (
           <div className="space-y-2">
             <p className="text-popover-foreground">Supplier has SBTi Validated Targets</p>
@@ -155,6 +155,29 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
                 <div className="flex items-center justify-between gap-3">
                   <span className="text-muted-foreground">Net Zero</span>
                   <SbtiStatusBadge label="Targets set" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : status === "self-published" ? (
+          <div className="space-y-2">
+            <p className="text-popover-foreground">Supplier has self-published targets</p>
+            <div className="border-t border-border pt-2">
+              <p className="font-semibold text-popover-foreground mb-1.5">Document-based Targets</p>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Near Term</span>
+                  <SbtiStatusBadge label="Targets Set" />
+                  <a href="https://www.51tocarbonzero.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Net Zero</span>
+                  <SbtiStatusBadge label="Targets Set" />
+                  <a href="https://www.51tocarbonzero.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                    <ExternalLink size={12} />
+                  </a>
                 </div>
               </div>
             </div>
