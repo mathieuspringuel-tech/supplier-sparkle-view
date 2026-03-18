@@ -33,7 +33,7 @@ const columns: ColumnDef[] = [
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
   { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
-  { key: "cdp", label: "CDP", tooltip: "Whether the supplier discloses environmental data through the CDP (formerly Carbon Disclosure Project)." },
+  
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
