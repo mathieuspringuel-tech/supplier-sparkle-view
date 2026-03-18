@@ -259,6 +259,7 @@ export const SupplierTable = () => {
     if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
     if (filterSbtAligned === "yes" && !s.sbtAligned) return false;
     if (filterSbtAligned === "no" && s.sbtAligned) return false;
+    if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
     return true;
   });
 
