@@ -97,8 +97,18 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
   const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
-    setDraft(supplier ? { ...supplier } : null);
-    originalRef.current = supplier ? { ...supplier } : null;
+    if (supplier) {
+      const initial = { ...supplier };
+      // If not synced, force methodology to library selection since no AI factor exists
+      if (initial.synced === "not-synced" && initial.methodology !== "Input by User") {
+        initial.methodology = "Input by User";
+      }
+      setDraft(initial);
+      originalRef.current = { ...supplier };
+    } else {
+      setDraft(null);
+      originalRef.current = null;
+    }
     setActiveTab("year-data");
     setValidationError(null);
   }, [supplier]);
