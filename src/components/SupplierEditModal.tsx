@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, DollarSign, Cloud, Info, Sparkles, PenLine } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
+import { deriveSbtAligned } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
