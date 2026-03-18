@@ -140,19 +140,22 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
       <TooltipContent side="bottom" className={status === "sbti-validated" ? "text-xs p-3" : "text-xs"}>
         {status === "sbti-validated" ? (
           <div className="space-y-2">
-            <p className="font-semibold text-popover-foreground">SBTi Status</p>
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground">Near Term</span>
-                <SbtiStatusBadge label="Targets Set" />
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground">Long Term</span>
-                <SbtiStatusBadge label="Targets Set" />
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground">Net Zero</span>
-                <SbtiStatusBadge label="Targets set" />
+            <p className="text-popover-foreground">Supplier has SBTi Validated Targets</p>
+            <div className="border-t border-border pt-2">
+              <p className="font-semibold text-popover-foreground mb-1.5">SBTi Status</p>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Near Term</span>
+                  <SbtiStatusBadge label="Targets Set" />
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Long Term</span>
+                  <SbtiStatusBadge label="Targets Set" />
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Net Zero</span>
+                  <SbtiStatusBadge label="Targets set" />
+                </div>
               </div>
             </div>
           </div>
