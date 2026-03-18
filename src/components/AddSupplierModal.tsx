@@ -101,6 +101,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
     setEmail("");
     setPhone("");
     setWebsite("");
+    setInfluence(undefined);
     onClose();
   };
 
