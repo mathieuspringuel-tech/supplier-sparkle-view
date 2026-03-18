@@ -441,6 +441,15 @@ export const SupplierTable = () => {
             <option value="no">No</option>
           </select>
 
+          <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Influence</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
