@@ -18,7 +18,8 @@ export interface Supplier {
   hqCountry: string;
   website: string;
   sbtAligned: boolean;
-  inheritedFrom?: string; // In production: sbti.inherited_from.legal_name
+  inheritedFrom?: string;
+  influence?: number; // 1-5 scale: how much influence you have over this supplier
 }
 
 export function deriveSbtAligned(targetStatus: TargetStatus): { value: boolean; locked: boolean } {

@@ -548,6 +548,38 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                         rows={3}
                       />
                     </div>
+
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <Label>Influence on Supplier</Label>
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info size={13} className="text-muted-foreground cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-[220px] text-xs">
+                              Rate 1–5 how much influence you believe you have over this supplier's sustainability practices. 1 = very low, 5 = very high.
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <div className="flex gap-1.5 mt-1">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() => update("influence", n)}
+                            className={`w-9 h-9 rounded-lg border-2 text-sm font-semibold transition-all duration-150 ${
+                              draft.influence === n
+                                ? "border-accent bg-accent/10 text-accent"
+                                : "border-border text-muted-foreground hover:border-muted-foreground/50"
+                            }`}
+                          >
+                            {n}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
