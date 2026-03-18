@@ -684,6 +684,22 @@ export const SupplierTable = () => {
                       )}
                     </td>
                     )}
+                    {!hiddenColumns.has("influence") && (
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <span
+                            key={n}
+                            className={`inline-block w-2.5 h-2.5 rounded-full ${
+                              s.influence && n <= s.influence
+                                ? "bg-accent"
+                                : "bg-border"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </td>
+                    )}
                     {!hiddenColumns.has("synced") && (
                     <td className="px-4 py-3">
                       {syncingIds.has(s.id) ? (
