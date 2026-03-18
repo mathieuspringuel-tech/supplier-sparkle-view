@@ -73,10 +73,15 @@ export default {
           text: "hsl(var(--target-sbti-committed-text))",
           border: "hsl(var(--target-sbti-committed-border))",
         },
-        "target-non-sbti": {
-          bg: "hsl(var(--target-non-sbti-bg))",
-          text: "hsl(var(--target-non-sbti-text))",
-          border: "hsl(var(--target-non-sbti-border))",
+        "target-sbti-inherited": {
+          bg: "hsl(var(--target-sbti-inherited-bg))",
+          text: "hsl(var(--target-sbti-inherited-text))",
+          border: "hsl(var(--target-sbti-inherited-border))",
+        },
+        "target-self-published": {
+          bg: "hsl(var(--target-self-published-bg))",
+          text: "hsl(var(--target-self-published-text))",
+          border: "hsl(var(--target-self-published-border))",
         },
         "target-no-targets": {
           bg: "hsl(var(--target-no-targets-bg))",

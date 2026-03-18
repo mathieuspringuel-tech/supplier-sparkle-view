@@ -368,11 +368,9 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="sbti-validated">SBTi Validated</SelectItem>
-                          <SelectItem value="sbti-validated-inherited">SBTi Inherited</SelectItem>
                           <SelectItem value="sbti-committed">SBTi Committed</SelectItem>
-                          <SelectItem value="non-sbti-validated">Other Validated</SelectItem>
-                          <SelectItem value="non-sbti-committed">Other Committed</SelectItem>
-                          <SelectItem value="non-sbti-inherited">Other Inherited</SelectItem>
+                          <SelectItem value="sbti-inherited">Inherited</SelectItem>
+                          <SelectItem value="self-published">Self Published</SelectItem>
                           <SelectItem value="no-targets">No Targets</SelectItem>
                         </SelectContent>
                       </Select>

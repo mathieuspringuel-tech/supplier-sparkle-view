@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, Target, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -42,10 +42,11 @@ const columns: ColumnDef[] = [
 // Legends are built after targetStatusConfig is defined, so we use a function
 const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: string }[]> => ({
   targets: [
-    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border">SBTi</span>, label: "Validated" },
-    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border">SBTi</span>, label: "Committed" },
-    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-non-sbti-bg text-target-non-sbti-text border-target-non-sbti-border">SBTi <ArrowUpRight size={7} strokeWidth={3} /></span>, label: "Inherited" },
-    { icon: <span className="inline-flex items-center text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border">None</span>, label: "No Targets" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border"><ShieldCheck size={8} /> SBTi</span>, label: "Validated" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border"><Clock size={8} /> SBTi</span>, label: "Committed" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} strokeWidth={3} /></span>, label: "Inherited" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-self-published-bg text-target-self-published-text border-target-self-published-border"><FileText size={8} /></span>, label: "Self Published" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border"><Minus size={8} /></span>, label: "No Targets" },
   ],
   cdp: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
@@ -107,21 +108,12 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
   />
 );
 
-const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: string; color: "green" | "orange" | "blue" | "red"; inherited?: boolean }> = {
-  "sbti-validated": { pillText: "SBTi", tooltip: "Supplier has SBTi Validated Targets", color: "green" },
-  "sbti-validated-inherited": { pillText: "SBTi", tooltip: "Supplier has SBTi Validated Targets (inherited from parent company)", color: "blue", inherited: true },
-  "sbti-committed": { pillText: "SBTi", tooltip: "Supplier has committed to set SBTi Targets", color: "orange" },
-  "non-sbti-validated": { pillText: "Other", tooltip: "Supplier has validated non-SBTi targets", color: "green" },
-  "non-sbti-committed": { pillText: "Other", tooltip: "Supplier has committed to non-SBTi targets", color: "orange" },
-  "non-sbti-inherited": { pillText: "Other", tooltip: "Supplier has non-SBTi targets (inherited from parent company)", color: "blue", inherited: true },
-  "no-targets": { pillText: "None", tooltip: "Company has no public targets", color: "red" },
-};
-
-const pillColorClasses: Record<string, string> = {
-  green: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border",
-  orange: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border",
-  blue: "bg-target-non-sbti-bg text-target-non-sbti-text border-target-non-sbti-border",
-  red: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border",
+const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: string; icon: React.ReactNode; colorClass: string }> = {
+  "sbti-validated": { pillText: "SBTi Validated", tooltip: "Supplier has SBTi Validated Targets", icon: <ShieldCheck size={11} />, colorClass: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border" },
+  "sbti-committed": { pillText: "SBTi Committed", tooltip: "Supplier has committed to set SBTi Targets", icon: <Clock size={11} />, colorClass: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border" },
+  "sbti-inherited": { pillText: "Inherited", tooltip: "Targets inherited from parent company", icon: <ArrowUpRight size={11} strokeWidth={3} />, colorClass: "bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border" },
+  "self-published": { pillText: "Self Published", tooltip: "Supplier has self-published targets", icon: <FileText size={11} />, colorClass: "bg-target-self-published-bg text-target-self-published-text border-target-self-published-border" },
+  "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={11} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
 };
 
 const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
@@ -129,9 +121,9 @@ const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full border cursor-default ${pillColorClasses[config.color]}`}>
+        <span className={`inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full border cursor-default ${config.colorClass}`}>
+          {config.icon}
           {config.pillText}
-          {config.inherited && <ArrowUpRight size={9} strokeWidth={3} />}
         </span>
       </TooltipTrigger>
       <TooltipContent side="bottom" className="text-xs">
@@ -325,11 +317,9 @@ export const SupplierTable = () => {
           <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Targets</option>
             <option value="sbti-validated">SBTi Validated</option>
-            <option value="sbti-validated-inherited">SBTi Inherited</option>
             <option value="sbti-committed">SBTi Committed</option>
-            <option value="non-sbti-validated">Other Validated</option>
-            <option value="non-sbti-committed">Other Committed</option>
-            <option value="non-sbti-inherited">Other Inherited</option>
+            <option value="sbti-inherited">Inherited</option>
+            <option value="self-published">Self Published</option>
             <option value="no-targets">No Targets</option>
           </select>
 

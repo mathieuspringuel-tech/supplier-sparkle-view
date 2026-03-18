@@ -52,9 +52,13 @@
     --target-sbti-committed-text: 25 80% 40%;
     --target-sbti-committed-border: 30 70% 78%;
 
-    --target-non-sbti-bg: 210 80% 96%;
-    --target-non-sbti-text: 215 70% 40%;
-    --target-non-sbti-border: 210 60% 78%;
+    --target-sbti-inherited-bg: 210 80% 96%;
+    --target-sbti-inherited-text: 215 70% 40%;
+    --target-sbti-inherited-border: 210 60% 78%;
+
+    --target-self-published-bg: 220 15% 96%;
+    --target-self-published-text: 220 10% 45%;
+    --target-self-published-border: 220 10% 80%;
 
     --target-no-targets-bg: 0 80% 96%;
     --target-no-targets-text: 0 70% 40%;
