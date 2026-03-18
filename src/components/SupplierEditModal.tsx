@@ -125,39 +125,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
     }
   };
 
-  const addActivityRow = () => {
-    setDraft((prev) => {
-      if (!prev) return prev;
-      const existing = prev.activityData || [];
-      return { ...prev, activityData: [...existing, { factorId: "", quantity: 0 }] };
-    });
-  };
-
-  const updateActivityRow = (index: number, field: "factorId" | "quantity", value: string | number) => {
-    setDraft((prev) => {
-      if (!prev) return prev;
-      const rows = [...(prev.activityData || [])];
-      rows[index] = { ...rows[index], [field]: value };
-      return { ...prev, activityData: rows };
-    });
-  };
-
-  const removeActivityRow = (index: number) => {
-    setDraft((prev) => {
-      if (!prev) return prev;
-      const rows = [...(prev.activityData || [])];
-      rows.splice(index, 1);
-      return { ...prev, activityData: rows };
-    });
-  };
-
-  const getActivityTotalCo2e = () => {
-    if (!draft?.activityData) return 0;
-    return draft.activityData.reduce((sum, row) => {
-      const factor = activityFactors.find((f) => f.id === row.factorId);
-      return sum + (factor ? row.quantity * factor.factor : 0);
-    }, 0);
-  };
 
   const handleSave = () => {
     if (!draft) return;
