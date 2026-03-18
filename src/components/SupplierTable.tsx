@@ -328,7 +328,7 @@ export const SupplierTable = () => {
             <option value="">Targets</option>
             <option value="sbti-validated">SBTi Validated</option>
             <option value="sbti-committed">SBTi Committed</option>
-            <option value="sbti-inherited">Inherited</option>
+            <option value="sbti-inherited">SBTi Inherited</option>
             <option value="self-published">Self Published</option>
             <option value="no-targets">No Targets</option>
           </select>
