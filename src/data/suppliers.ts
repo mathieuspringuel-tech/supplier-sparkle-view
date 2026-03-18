@@ -1,4 +1,4 @@
-export type TargetStatus = "sbti-validated" | "sbti-validated-inherited" | "sbti-committed" | "non-sbti-validated" | "non-sbti-committed" | "non-sbti-inherited" | "no-targets";
+export type TargetStatus = "sbti-validated" | "sbti-committed" | "sbti-inherited" | "self-published" | "no-targets";
 
 export interface Supplier {
   id: string;
