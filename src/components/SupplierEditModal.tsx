@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud, Info, Sparkles, PenLine, Trash2 } from "lucide-react";
+import { X, DollarSign, Cloud, Info, Sparkles, PenLine, Trash2, Activity, Plus, Trash } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { deriveSbtAligned } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -84,6 +84,12 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
+const activityFactors = [
+  { id: "bottles", label: "# of bottles purchased", unit: "bottles", factor: 0.46 },
+  { id: "km-driven", label: "# of km driven", unit: "km", factor: 0.21 },
+  { id: "kg-food", label: "kg of food", unit: "kg", factor: 3.18 },
+];
+
 export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
@@ -124,6 +130,39 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
     }
   };
 
+  const addActivityRow = () => {
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const existing = prev.activityData || [];
+      return { ...prev, activityData: [...existing, { factorId: "", quantity: 0 }] };
+    });
+  };
+
+  const updateActivityRow = (index: number, field: "factorId" | "quantity", value: string | number) => {
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const rows = [...(prev.activityData || [])];
+      rows[index] = { ...rows[index], [field]: value };
+      return { ...prev, activityData: rows };
+    });
+  };
+
+  const removeActivityRow = (index: number) => {
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const rows = [...(prev.activityData || [])];
+      rows.splice(index, 1);
+      return { ...prev, activityData: rows };
+    });
+  };
+
+  const getActivityTotalCo2e = () => {
+    if (!draft?.activityData) return 0;
+    return draft.activityData.reduce((sum, row) => {
+      const factor = activityFactors.find((f) => f.id === row.factorId);
+      return sum + (factor ? row.quantity * factor.factor : 0);
+    }, 0);
+  };
 
   const handleSave = () => {
     if (!draft) return;
@@ -140,9 +179,14 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
       return;
     }
 
-    const updated = draft.calculationMethodology === "tco2e"
-      ? { ...draft }
-      : { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+    let updated: Supplier;
+    if (draft.calculationMethodology === "tco2e") {
+      updated = { ...draft };
+    } else if (draft.calculationMethodology === "activity") {
+      updated = { ...draft, tco2e: +getActivityTotalCo2e().toFixed(2) };
+    } else {
+      updated = { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
+    }
     onSave(updated);
     onClose();
   };
@@ -164,7 +208,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative w-full max-w-lg bg-card rounded-xl p-6 shadow-[0_0_0_1px_rgba(0,0,0,.08),0_20px_25px_-5px_rgba(0,0,0,.1),0_10px_10px_-5px_rgba(0,0,0,.04)] z-10"
+            className="relative w-full max-w-lg bg-card rounded-xl p-6 shadow-[0_0_0_1px_rgba(0,0,0,.08),0_20px_25px_-5px_rgba(0,0,0,.1),0_10px_10px_-5px_rgba(0,0,0,.04)] z-10 max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={onClose}
@@ -187,22 +231,22 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Calculation Data</p>
 
                   <Label className="mb-2 block">How do you want to calculate emissions?</Label>
-                  <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="grid grid-cols-3 gap-2 mb-4">
                     <button
                       type="button"
                       onClick={() => update("calculationMethodology", "spend")}
-                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                      className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
                         draft.calculationMethodology === "spend"
                           ? "border-accent bg-accent/5"
                           : "border-border hover:border-muted-foreground/30"
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <DollarSign size={16} className={draft.calculationMethodology === "spend" ? "text-accent" : "text-muted-foreground"} />
-                        <span className="text-sm font-medium text-foreground">I have spend data</span>
+                      <div className="flex items-center gap-1.5">
+                        <DollarSign size={14} className={draft.calculationMethodology === "spend" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-xs font-medium text-foreground">I have spend data</span>
                       </div>
-                      <span className="text-xs text-muted-foreground leading-snug">
-                        We'll estimate emissions using your annual spend with this supplier.
+                      <span className="text-[10px] text-muted-foreground leading-snug">
+                        We'll estimate emissions using your annual spend.
                       </span>
                     </button>
 
@@ -212,18 +256,43 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                         setDraft((prev) => prev ? { ...prev, calculationMethodology: "tco2e" as const, tco2e: 0 } : prev);
                         setValidationError(null);
                       }}
-                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                      className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
                         draft.calculationMethodology === "tco2e"
                           ? "border-accent bg-accent/5"
                           : "border-border hover:border-muted-foreground/30"
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <Cloud size={16} className={draft.calculationMethodology === "tco2e" ? "text-accent" : "text-muted-foreground"} />
-                        <span className="text-sm font-medium text-foreground">I have CO₂e data</span>
+                      <div className="flex items-center gap-1.5">
+                        <Cloud size={14} className={draft.calculationMethodology === "tco2e" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-xs font-medium text-foreground">I have CO₂e data</span>
                       </div>
-                      <span className="text-xs text-muted-foreground leading-snug">
+                      <span className="text-[10px] text-muted-foreground leading-snug">
                         Enter emissions provided by the supplier directly.
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDraft((prev) => prev ? {
+                          ...prev,
+                          calculationMethodology: "activity" as const,
+                          activityData: prev.activityData?.length ? prev.activityData : [{ factorId: "", quantity: 0 }],
+                        } : prev);
+                        setValidationError(null);
+                      }}
+                      className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
+                        draft.calculationMethodology === "activity"
+                          ? "border-accent bg-accent/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <Activity size={14} className={draft.calculationMethodology === "activity" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-xs font-medium text-foreground">I have Activity Data</span>
+                      </div>
+                      <span className="text-[10px] text-muted-foreground leading-snug">
+                        We'll calculate emissions based on your operational data.
                       </span>
                     </button>
                   </div>
@@ -233,7 +302,86 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                 <div className="mb-4">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">CO₂e Calculation</p>
 
-                  {draft.calculationMethodology === "tco2e" ? (
+                  {draft.calculationMethodology === "activity" ? (
+                    /* Activity-based calculation mode */
+                    <div className="space-y-3">
+                      <div className="border border-border rounded-lg overflow-hidden">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="bg-muted/50">
+                              <th className="text-left px-3 py-2 text-xs font-medium text-muted-foreground">Factor</th>
+                              <th className="text-left px-3 py-2 text-xs font-medium text-muted-foreground">Quantity</th>
+                              <th className="text-left px-3 py-2 text-xs font-medium text-muted-foreground">tCO₂e</th>
+                              <th className="w-8"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(draft.activityData || []).map((row, idx) => {
+                              const factor = activityFactors.find((f) => f.id === row.factorId);
+                              const rowCo2e = factor ? +(row.quantity * factor.factor).toFixed(4) : 0;
+                              return (
+                                <tr key={idx} className="border-t border-border">
+                                  <td className="px-3 py-2">
+                                    <Select value={row.factorId} onValueChange={(v) => updateActivityRow(idx, "factorId", v)}>
+                                      <SelectTrigger className="h-8 text-xs">
+                                        <SelectValue placeholder="Select factor" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {activityFactors.map((f) => (
+                                          <SelectItem key={f.id} value={f.id}>{f.label}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    <Input
+                                      type="number"
+                                      value={row.quantity || ""}
+                                      onChange={(e) => updateActivityRow(idx, "quantity", Number(e.target.value))}
+                                      className="h-8 text-xs"
+                                      placeholder={factor ? factor.unit : "0"}
+                                    />
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    <Input
+                                      value={rowCo2e}
+                                      disabled
+                                      className="h-8 text-xs bg-muted text-muted-foreground cursor-not-allowed"
+                                    />
+                                  </td>
+                                  <td className="px-1 py-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => removeActivityRow(idx)}
+                                      className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                                    >
+                                      <Trash size={12} />
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={addActivityRow}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent/80 transition-colors"
+                      >
+                        <Plus size={12} />
+                        Add Row
+                      </button>
+                      <div>
+                        <Label>Total tCO₂e (calculated)</Label>
+                        <Input
+                          value={+getActivityTotalCo2e().toFixed(2)}
+                          disabled
+                          className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                        />
+                      </div>
+                    </div>
+                  ) : draft.calculationMethodology === "tco2e" ? (
                     /* Direct tCO2e entry mode */
                     <div className="space-y-3">
                       <div>
