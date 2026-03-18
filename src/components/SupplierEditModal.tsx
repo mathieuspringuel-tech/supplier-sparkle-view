@@ -191,7 +191,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Calculation Data</p>
 
                   <Label className="mb-2 block">How do you want to calculate emissions?</Label>
-                  <div className="grid grid-cols-3 gap-2 mb-4">
+                  <div className="grid grid-cols-2 gap-2 mb-4">
                     <button
                       type="button"
                       onClick={() => update("calculationMethodology", "spend")}
@@ -228,31 +228,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                       </div>
                       <span className="text-[10px] text-muted-foreground leading-snug">
                         Enter emissions provided by the supplier directly.
-                      </span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDraft((prev) => prev ? {
-                          ...prev,
-                          calculationMethodology: "activity" as const,
-                          activityData: prev.activityData?.length ? prev.activityData : [{ factorId: "", quantity: 0 }],
-                        } : prev);
-                        setValidationError(null);
-                      }}
-                      className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
-                        draft.calculationMethodology === "activity"
-                          ? "border-accent bg-accent/5"
-                          : "border-border hover:border-muted-foreground/30"
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <Activity size={14} className={draft.calculationMethodology === "activity" ? "text-accent" : "text-muted-foreground"} />
-                        <span className="text-xs font-medium text-foreground">I have Activity Data</span>
-                      </div>
-                      <span className="text-[10px] text-muted-foreground leading-snug">
-                        We'll calculate emissions based on your operational data.
                       </span>
                     </button>
                   </div>
