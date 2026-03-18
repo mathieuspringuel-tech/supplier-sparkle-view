@@ -567,6 +567,7 @@ export const SupplierTable = () => {
                         </Tooltip>
                       )}
                     </td>
+                    )}
                     {!hiddenColumns.has("cdp") && (
                     <td className="px-4 py-3">
                       {s.synced === "not-synced" ? (
