@@ -193,7 +193,7 @@ export const SupplierTable = () => {
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
 
   const clearFilters = () => {
     setSearchQuery("");
