@@ -33,7 +33,7 @@ const columns: ColumnDef[] = [
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
   { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
-  { key: "cdp", label: "CDP", tooltip: "Whether the supplier discloses environmental data through the CDP (formerly Carbon Disclosure Project)." },
+  
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
@@ -48,10 +48,6 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} /></span>, label: "SBTi Inherited" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-self-published-bg text-target-self-published-text border-target-self-published-border"><FileText size={8} /></span>, label: "Self Published" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border"><Minus size={8} /></span>, label: "No Targets" },
-  ],
-  cdp: [
-    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
-    { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not reported" },
   ],
   sbtAligned: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "SBTi Aligned" },
@@ -156,7 +152,7 @@ export const SupplierTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterHQ, setFilterHQ] = useState("");
   const [filterTargets, setFilterTargets] = useState("");
-  const [filterCDP, setFilterCDP] = useState("");
+  
   const [filterCategory, setFilterCategory] = useState("");
   const [filterSynced, setFilterSynced] = useState("");
   const [filterCalcMethod, setFilterCalcMethod] = useState("");
@@ -185,9 +181,6 @@ export const SupplierTable = () => {
     if (filterHQ && s.hqCountry !== filterHQ) return false;
     if (filterTargets === "empty" && s.targetStatus) return false;
     if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
-    if (filterCDP === "yes" && !s.cdp) return false;
-    if (filterCDP === "no" && s.cdp) return false;
-    if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
     if (filterSynced === "yes" && s.synced !== "synced") return false;
     if (filterSynced === "no" && s.synced === "synced") return false;
@@ -200,13 +193,13 @@ export const SupplierTable = () => {
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
 
   const clearFilters = () => {
     setSearchQuery("");
     setFilterHQ("");
     setFilterTargets("");
-    setFilterCDP("");
+    
     setFilterCategory("");
     setFilterSynced("");
     setFilterCalcMethod("");
@@ -336,12 +329,6 @@ export const SupplierTable = () => {
             <option value="no-targets">No Targets</option>
           </select>
 
-          <select value={filterCDP} onChange={(e) => setFilterCDP(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">CDP</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="empty">Empty</option>
-          </select>
 
           <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Category</option>
@@ -572,28 +559,6 @@ export const SupplierTable = () => {
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs">
                             {s.sbtAligned ? "SBTi Aligned" : "Not SBTi Aligned"}
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-                    </td>
-                    )}
-                    {!hiddenColumns.has("cdp") && (
-                    <td className="px-4 py-3">
-                      {s.synced === "not-synced" ? (
-                        <span className="text-muted-foreground">-</span>
-                      ) : (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="inline-flex">
-                              {s.cdp ? (
-                                <CheckCircle2 size={16} className="text-confidence-high-text" />
-                              ) : (
-                                <XCircle size={16} className="text-destructive/60" />
-                              )}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="text-xs">
-                            {s.cdp ? "Organisation has reported to CDP" : "Organisation has not reported to CDP"}
                           </TooltipContent>
                         </Tooltip>
                       )}

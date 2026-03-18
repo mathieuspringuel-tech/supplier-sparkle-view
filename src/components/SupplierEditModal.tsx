@@ -88,7 +88,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [overrideConfirm, setOverrideConfirm] = useState<{
-    field: "Targets" | "CDP";
+    field: "Targets";
     applyChange: () => void;
   } | null>(null);
   const originalRef = useRef<Supplier | null>(null);
@@ -122,17 +122,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
     }
   };
 
-  const handleCDPChange = (value: string) => {
-    const newVal = value === "yes";
-    if (isSynced && originalRef.current && newVal !== originalRef.current.cdp) {
-      setOverrideConfirm({
-        field: "CDP",
-        applyChange: () => update("cdp", newVal),
-      });
-    } else {
-      update("cdp", newVal);
-    }
-  };
 
   const handleSave = () => {
     if (!draft) return;
@@ -379,21 +368,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                       </Select>
                     </div>
 
-                    <div>
-                      <Label>CDP</Label>
-                      <Select
-                        value={draft.cdp ? "yes" : "no"}
-                        onValueChange={handleCDPChange}
-                      >
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                     </div>
 
                     {/* SBT Aligned */}
