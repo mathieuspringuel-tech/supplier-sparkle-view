@@ -199,7 +199,7 @@ export const SupplierTable = () => {
     setSearchQuery("");
     setFilterHQ("");
     setFilterTargets("");
-    setFilterCDP("");
+    
     setFilterCategory("");
     setFilterSynced("");
     setFilterCalcMethod("");
