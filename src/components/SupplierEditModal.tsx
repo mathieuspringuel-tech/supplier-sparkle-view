@@ -84,7 +84,7 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
-export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
+export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -92,6 +92,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
     field: "Targets";
     applyChange: () => void;
   } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
