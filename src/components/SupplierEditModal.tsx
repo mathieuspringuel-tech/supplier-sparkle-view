@@ -274,6 +274,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                       {/* Factor source selection */}
                       <div>
                         <Label className="mb-2 block">Spend Emission Factor Source</Label>
+                        {draft.synced === "not-synced" ? (
+                          <div className="rounded-lg border-2 border-accent bg-accent/5 p-2.5">
+                            <div className="flex items-center gap-2">
+                              <PenLine size={16} className="text-accent" />
+                              <span className="text-sm font-medium text-foreground">Select from Library</span>
+                            </div>
+                            <span className="text-xs text-muted-foreground leading-snug">
+                              No AI factor available — supplier data has not been synced.
+                            </span>
+                          </div>
+                        ) : (
                         <div className="grid grid-cols-2 gap-3">
                           <button
                             type="button"
@@ -321,6 +332,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                             </span>
                           </button>
                         </div>
+                        )}
                       </div>
 
                       {/* Conditional fields based on factor source */}
