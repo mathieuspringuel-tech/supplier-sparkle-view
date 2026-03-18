@@ -208,6 +208,7 @@ export const SupplierTable = () => {
     setFilterSynced("");
     setFilterCalcMethod("");
     setFilterSpendFactor("");
+    setFilterSbtAligned("");
   };
 
   // Unique values for filter dropdowns
