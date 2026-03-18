@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud, Info, Sparkles, PenLine, Trash2, Activity, Plus, Trash } from "lucide-react";
+import { X, DollarSign, Cloud, Info, Sparkles, PenLine, Trash2 } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { deriveSbtAligned } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
