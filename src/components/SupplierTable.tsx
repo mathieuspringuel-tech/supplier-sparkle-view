@@ -181,9 +181,6 @@ export const SupplierTable = () => {
     if (filterHQ && s.hqCountry !== filterHQ) return false;
     if (filterTargets === "empty" && s.targetStatus) return false;
     if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
-    if (filterCDP === "yes" && !s.cdp) return false;
-    if (filterCDP === "no" && s.cdp) return false;
-    if (filterCDP === "empty" && s.cdp !== undefined) return false;
     if (filterCategory && s.category !== filterCategory) return false;
     if (filterSynced === "yes" && s.synced !== "synced") return false;
     if (filterSynced === "no" && s.synced === "synced") return false;
