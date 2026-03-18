@@ -535,19 +535,28 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
               </TabsContent>
             </Tabs>
 
-            <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-border">
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
               <button
-                onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150"
+                onClick={() => setDeleteConfirm(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors duration-150"
               >
-                Cancel
+                <Trash2 size={14} />
+                Delete
               </button>
-              <button
-                onClick={handleSave}
-                className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
-              >
-                Save Changes
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </motion.div>
         </motion.div>

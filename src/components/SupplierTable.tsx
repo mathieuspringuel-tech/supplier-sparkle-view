@@ -262,6 +262,17 @@ export const SupplierTable = () => {
     toast.success("Supplier updated");
   };
 
+  const handleDeleteSupplier = (supplierId: string) => {
+    setYearData((prev) =>
+      prev.map((y) =>
+        y.year === selectedYear
+          ? { ...y, suppliers: y.suppliers.filter((s) => s.id !== supplierId) }
+          : y
+      )
+    );
+    toast.success("Supplier deleted");
+  };
+
   const handleAddSupplier = (newSupplier: Supplier) => {
     // Add supplier with synced = false
     setYearData((prev) =>
