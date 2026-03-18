@@ -158,6 +158,7 @@ export const SupplierTable = () => {
   const [filterSynced, setFilterSynced] = useState("");
   const [filterCalcMethod, setFilterCalcMethod] = useState("");
   const [filterSpendFactor, setFilterSpendFactor] = useState("");
+  const [filterSbtAligned, setFilterSbtAligned] = useState("");
 
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
