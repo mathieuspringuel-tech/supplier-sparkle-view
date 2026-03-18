@@ -118,6 +118,12 @@ const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: stri
   "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={10} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
 };
 
+const SbtiStatusBadge = ({ label }: { label: string }) => (
+  <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-target-sbti-validated-bg text-target-sbti-validated-text border border-target-sbti-validated-border">
+    {label}
+  </span>
+);
+
 const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inheritedFrom?: string }) => {
   const config = targetStatusConfig[status] || targetStatusConfig["no-targets"];
   const tooltip = status === "sbti-inherited" && inheritedFrom
@@ -131,8 +137,26 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
           {config.pillText}
         </span>
       </TooltipTrigger>
-      <TooltipContent side="bottom" className="text-xs">
-        {tooltip}
+      <TooltipContent side="bottom" className={status === "sbti-validated" ? "text-xs p-3" : "text-xs"}>
+        {status === "sbti-validated" ? (
+          <div className="space-y-2">
+            <p className="font-semibold text-popover-foreground">SBTi Status</p>
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-muted-foreground">Near Term</span>
+                <SbtiStatusBadge label="Targets Set" />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-muted-foreground">Long Term</span>
+                <SbtiStatusBadge label="Targets Set" />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-muted-foreground">Net Zero</span>
+                <SbtiStatusBadge label="Targets set" />
+              </div>
+            </div>
+          </div>
+        ) : tooltip}
       </TooltipContent>
     </Tooltip>
   );
