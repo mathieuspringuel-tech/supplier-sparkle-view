@@ -84,11 +84,6 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
-const activityFactors = [
-  { id: "bottles", label: "# of bottles purchased", unit: "bottles", factor: 0.46 },
-  { id: "km-driven", label: "# of km driven", unit: "km", factor: 0.21 },
-  { id: "kg-food", label: "kg of food", unit: "kg", factor: 3.18 },
-];
 
 export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
