@@ -16,6 +16,13 @@ export interface Supplier {
   calculationMethodology: "spend" | "tco2e";
   hqCountry: string;
   website: string;
+  sbtAligned: boolean;
+}
+
+export function deriveSbtAligned(targetStatus: TargetStatus): { value: boolean; locked: boolean } {
+  if (targetStatus === "sbti-validated" || targetStatus === "sbti-inherited") return { value: true, locked: true };
+  if (targetStatus === "sbti-committed" || targetStatus === "no-targets") return { value: false, locked: true };
+  return { value: false, locked: false }; // self-published: editable, default no
 }
 
 export interface YearData {
