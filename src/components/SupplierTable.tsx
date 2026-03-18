@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus, ExternalLink } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl, deriveSbtAligned } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
