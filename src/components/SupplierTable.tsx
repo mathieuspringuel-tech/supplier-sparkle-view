@@ -37,6 +37,7 @@ const columns: ColumnDef[] = [
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
+  { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
   { key: "synced", label: "Synced", tooltip: "Whether emission data is synced with the supplier's latest disclosure." },
 ];
 
@@ -212,7 +213,7 @@ export const SupplierTable = () => {
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
-  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType", "influence"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
   // Filter state
@@ -225,6 +226,7 @@ export const SupplierTable = () => {
   const [filterCalcMethod, setFilterCalcMethod] = useState("");
   const [filterSpendFactor, setFilterSpendFactor] = useState("");
   const [filterSbtAligned, setFilterSbtAligned] = useState("");
+  const [filterInfluence, setFilterInfluence] = useState("");
 
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
@@ -257,10 +259,11 @@ export const SupplierTable = () => {
     if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
     if (filterSbtAligned === "yes" && !s.sbtAligned) return false;
     if (filterSbtAligned === "no" && s.sbtAligned) return false;
+    if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned || filterInfluence;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -272,6 +275,7 @@ export const SupplierTable = () => {
     setFilterCalcMethod("");
     setFilterSpendFactor("");
     setFilterSbtAligned("");
+    setFilterInfluence("");
   };
 
   // Unique values for filter dropdowns
@@ -435,6 +439,15 @@ export const SupplierTable = () => {
             <option value="">SBT Aligned?</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
+          </select>
+
+          <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">Influence</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
 
           {hasActiveFilters && (
@@ -669,6 +682,22 @@ export const SupplierTable = () => {
                           {s.methodology === "Input by User" ? "Custom" : "AI Generated"}
                         </span>
                       )}
+                    </td>
+                    )}
+                    {!hiddenColumns.has("influence") && (
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <span
+                            key={n}
+                            className={`inline-block w-2.5 h-2.5 rounded-full ${
+                              s.influence && n <= s.influence
+                                ? "bg-accent"
+                                : "bg-border"
+                            }`}
+                          />
+                        ))}
+                      </div>
                     </td>
                     )}
                     {!hiddenColumns.has("synced") && (
