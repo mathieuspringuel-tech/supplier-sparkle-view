@@ -88,7 +88,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [overrideConfirm, setOverrideConfirm] = useState<{
-    field: "Targets" | "CDP";
+    field: "Targets";
     applyChange: () => void;
   } | null>(null);
   const originalRef = useRef<Supplier | null>(null);
