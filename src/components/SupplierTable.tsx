@@ -262,6 +262,17 @@ export const SupplierTable = () => {
     toast.success("Supplier updated");
   };
 
+  const handleDeleteSupplier = (supplierId: string) => {
+    setYearData((prev) =>
+      prev.map((y) =>
+        y.year === selectedYear
+          ? { ...y, suppliers: y.suppliers.filter((s) => s.id !== supplierId) }
+          : y
+      )
+    );
+    toast.success("Supplier deleted");
+  };
+
   const handleAddSupplier = (newSupplier: Supplier) => {
     // Add supplier with synced = false
     setYearData((prev) =>
@@ -623,7 +634,7 @@ export const SupplierTable = () => {
         </div>
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
-        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} year={selectedYear} />
+        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} onDelete={handleDeleteSupplier} year={selectedYear} />
         <AddSupplierModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddSupplier} year={selectedYear} />
         <BulkUploadModal open={bulkUploadOpen} onClose={() => setBulkUploadOpen(false)} />
         {copyModalData && (

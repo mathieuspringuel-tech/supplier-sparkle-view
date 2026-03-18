@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, Cloud, Info, Sparkles, PenLine } from "lucide-react";
+import { X, DollarSign, Cloud, Info, Sparkles, PenLine, Trash2 } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
 import { deriveSbtAligned } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -30,6 +30,7 @@ interface SupplierEditModalProps {
   supplier: Supplier | null;
   onClose: () => void;
   onSave: (updated: Supplier) => void;
+  onDelete?: (supplierId: string) => void;
   year?: number;
 }
 
@@ -83,7 +84,7 @@ const countries = [
   { code: "IL", name: "Israel" },
 ];
 
-export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierEditModalProps) => {
+export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -91,6 +92,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
     field: "Targets";
     applyChange: () => void;
   } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
@@ -533,19 +535,28 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
               </TabsContent>
             </Tabs>
 
-            <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-border">
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
               <button
-                onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150"
+                onClick={() => setDeleteConfirm(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors duration-150"
               >
-                Cancel
+                <Trash2 size={14} />
+                Delete
               </button>
-              <button
-                onClick={handleSave}
-                className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
-              >
-                Save Changes
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-150"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -567,6 +578,30 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
             setOverrideConfirm(null);
           }}>
             Override
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    <AlertDialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Supplier</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete "{draft?.name}"? This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            onClick={() => {
+              if (draft && onDelete) {
+                onDelete(draft.id);
+                onClose();
+              }
+            }}
+          >
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
