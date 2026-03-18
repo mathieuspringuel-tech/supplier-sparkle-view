@@ -275,6 +275,7 @@ export const SupplierTable = () => {
     setFilterCalcMethod("");
     setFilterSpendFactor("");
     setFilterSbtAligned("");
+    setFilterInfluence("");
   };
 
   // Unique values for filter dropdowns
