@@ -213,7 +213,7 @@ export const SupplierTable = () => {
   const [copyModalData, setCopyModalData] = useState<{ suppliers: Supplier[]; fromYear: number } | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
-  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType"]));
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType", "influence"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
 
   // Filter state
