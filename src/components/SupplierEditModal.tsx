@@ -144,8 +144,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
     let updated: Supplier;
     if (draft.calculationMethodology === "tco2e") {
       updated = { ...draft };
-    } else if (draft.calculationMethodology === "activity") {
-      updated = { ...draft, tco2e: +getActivityTotalCo2e().toFixed(2) };
     } else {
       updated = { ...draft, tco2e: +(draft.spend * draft.emissionFactor).toFixed(2) };
     }
