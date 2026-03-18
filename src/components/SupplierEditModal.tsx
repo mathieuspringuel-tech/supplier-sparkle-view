@@ -241,18 +241,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                     /* Direct tCO2e entry mode */
                     <div className="space-y-3">
                       <div>
-                        <Label htmlFor="spend">{year || "Year"} Spend on Supplier</Label>
-                        <Input
-                          id="spend"
-                          type="number"
-                          value={draft.spend}
-                          onChange={(e) => update("spend", Number(e.target.value))}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
                         <Label>
-                          tCO₂e
+                          tCO₂e (for goods/services provided to you in {year || "Year"})
                           <span className="text-destructive ml-1">*</span>
                         </Label>
                         <Input
@@ -266,6 +256,16 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                         {validationError === "tco2e" && (
                           <p className="text-xs text-destructive mt-1">tCO₂e is required.</p>
                         )}
+                      </div>
+                      <div>
+                        <Label htmlFor="spend">{year || "Year"} Spend on Supplier</Label>
+                        <Input
+                          id="spend"
+                          type="number"
+                          value={draft.spend}
+                          onChange={(e) => update("spend", Number(e.target.value))}
+                          className="mt-1"
+                        />
                       </div>
                     </div>
                   ) : (
