@@ -363,6 +363,12 @@ export const SupplierTable = () => {
             <option value="custom">Custom</option>
           </select>
 
+          <select value={filterSbtAligned} onChange={(e) => setFilterSbtAligned(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">SBT Aligned?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
