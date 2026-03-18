@@ -182,6 +182,53 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
               </TabsList>
 
               <TabsContent value="year-data" className="pt-3">
+                {/* Calculation Data - Method Selection */}
+                <div className="mb-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Calculation Data</p>
+
+                  <Label className="mb-2 block">How do you want to calculate emissions?</Label>
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => update("calculationMethodology", "spend")}
+                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                        draft.calculationMethodology === "spend"
+                          ? "border-accent bg-accent/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <DollarSign size={16} className={draft.calculationMethodology === "spend" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-sm font-medium text-foreground">I have spend data</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        We'll estimate emissions using your annual spend with this supplier.
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDraft((prev) => prev ? { ...prev, calculationMethodology: "tco2e" as const, tco2e: 0 } : prev);
+                        setValidationError(null);
+                      }}
+                      className={`relative flex flex-col items-start gap-1.5 rounded-lg border-2 p-3 text-left transition-all duration-150 ${
+                        draft.calculationMethodology === "tco2e"
+                          ? "border-accent bg-accent/5"
+                          : "border-border hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Cloud size={16} className={draft.calculationMethodology === "tco2e" ? "text-accent" : "text-muted-foreground"} />
+                        <span className="text-sm font-medium text-foreground">I have CO₂e data</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        Enter emissions provided by the supplier directly.
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
                 {/* CO2e Calculation Section */}
                 <div className="mb-4">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">CO₂e Calculation</p>
