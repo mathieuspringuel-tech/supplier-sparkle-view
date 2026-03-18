@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, DollarSign, Cloud, Info, Sparkles, PenLine } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
+import { deriveSbtAligned } from "@/data/suppliers";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -109,13 +110,15 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
   };
 
   const handleTargetChange = (value: string) => {
+    const applyTargetAndAlign = () => {
+      const ts = value as any;
+      const aligned = deriveSbtAligned(ts);
+      setDraft((prev) => prev ? { ...prev, targetStatus: ts, sbtAligned: aligned.locked ? aligned.value : prev.sbtAligned } : prev);
+    };
     if (isSynced && originalRef.current && value !== originalRef.current.targetStatus) {
-      setOverrideConfirm({
-        field: "Targets",
-        applyChange: () => update("targetStatus", value as any),
-      });
+      setOverrideConfirm({ field: "Targets", applyChange: applyTargetAndAlign });
     } else {
-      update("targetStatus", value as any);
+      applyTargetAndAlign();
     }
   };
 
@@ -369,7 +372,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                         <SelectContent>
                           <SelectItem value="sbti-validated">SBTi Validated</SelectItem>
                           <SelectItem value="sbti-committed">SBTi Committed</SelectItem>
-                          <SelectItem value="sbti-inherited">Inherited</SelectItem>
+                          <SelectItem value="sbti-inherited">SBTi Inherited</SelectItem>
                           <SelectItem value="self-published">Self Published</SelectItem>
                           <SelectItem value="no-targets">No Targets</SelectItem>
                         </SelectContent>
@@ -391,7 +394,37 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
+                    </div>
+
+                    {/* SBT Aligned */}
+                    <div>
+                      <Label>SBT Aligned?</Label>
+                      {(() => {
+                        const aligned = deriveSbtAligned(draft.targetStatus);
+                        return (
+                          <>
+                            <Select
+                              value={draft.sbtAligned ? "yes" : "no"}
+                              onValueChange={(v) => update("sbtAligned", v === "yes")}
+                              disabled={aligned.locked}
+                            >
+                              <SelectTrigger className={`mt-1 ${aligned.locked ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="yes">Yes</SelectItem>
+                                <SelectItem value="no">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {!aligned.locked && draft.targetStatus === "self-published" && (
+                              <p className="text-[11px] text-amber-600 mt-1">
+                                Please verify whether self-published targets are SBTi aligned
+                              </p>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
                 </div>
               </TabsContent>
 

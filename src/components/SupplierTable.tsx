@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
-import { type Supplier, type YearData, initialYearData, getFlagUrl } from "@/data/suppliers";
+import { type Supplier, type YearData, initialYearData, getFlagUrl, deriveSbtAligned } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
 import { SupplierEditModal } from "./SupplierEditModal";
 import { CopyYearModal } from "./CopyYearModal";
@@ -32,6 +32,7 @@ const columns: ColumnDef[] = [
   { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
+  { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
   { key: "cdp", label: "CDP", tooltip: "Whether the supplier discloses environmental data through the CDP (formerly Carbon Disclosure Project)." },
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
@@ -44,13 +45,18 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
   targets: [
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border"><ShieldCheck size={8} /> SBTi</span>, label: "Validated" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border"><Clock size={8} /> SBTi</span>, label: "Committed" },
-    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} strokeWidth={3} /></span>, label: "Inherited" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} /></span>, label: "SBTi Inherited" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-self-published-bg text-target-self-published-text border-target-self-published-border"><FileText size={8} /></span>, label: "Self Published" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border"><Minus size={8} /></span>, label: "No Targets" },
   ],
   cdp: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
     { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not reported" },
+  ],
+  sbtAligned: [
+    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "SBTi Aligned" },
+    { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not Aligned" },
+    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Verify (Self Published)" },
   ],
   synced: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
@@ -109,11 +115,11 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
 );
 
 const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: string; icon: React.ReactNode; colorClass: string }> = {
-  "sbti-validated": { pillText: "SBTi Validated", tooltip: "Supplier has SBTi Validated Targets", icon: <ShieldCheck size={11} />, colorClass: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border" },
-  "sbti-committed": { pillText: "SBTi Committed", tooltip: "Supplier has committed to set SBTi Targets", icon: <Clock size={11} />, colorClass: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border" },
-  "sbti-inherited": { pillText: "Inherited", tooltip: "Targets inherited from parent company", icon: <ArrowUpRight size={11} strokeWidth={3} />, colorClass: "bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border" },
-  "self-published": { pillText: "Self Published", tooltip: "Supplier has self-published targets", icon: <FileText size={11} />, colorClass: "bg-target-self-published-bg text-target-self-published-text border-target-self-published-border" },
-  "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={11} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
+  "sbti-validated": { pillText: "SBTi Validated", tooltip: "Supplier has SBTi Validated Targets", icon: <ShieldCheck size={10} />, colorClass: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border" },
+  "sbti-committed": { pillText: "SBTi Committed", tooltip: "Supplier has committed to set SBTi Targets", icon: <Clock size={10} />, colorClass: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border" },
+  "sbti-inherited": { pillText: "SBTi Inherited", tooltip: "Targets inherited from parent company", icon: <ArrowUpRight size={10} />, colorClass: "bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border" },
+  "self-published": { pillText: "Self Published", tooltip: "Supplier has self-published targets", icon: <FileText size={10} />, colorClass: "bg-target-self-published-bg text-target-self-published-text border-target-self-published-border" },
+  "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={10} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
 };
 
 const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
@@ -152,6 +158,7 @@ export const SupplierTable = () => {
   const [filterSynced, setFilterSynced] = useState("");
   const [filterCalcMethod, setFilterCalcMethod] = useState("");
   const [filterSpendFactor, setFilterSpendFactor] = useState("");
+  const [filterSbtAligned, setFilterSbtAligned] = useState("");
 
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
@@ -185,10 +192,12 @@ export const SupplierTable = () => {
     if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
     if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
     if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
+    if (filterSbtAligned === "yes" && !s.sbtAligned) return false;
+    if (filterSbtAligned === "no" && s.sbtAligned) return false;
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor;
+  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCDP || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned;
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -199,6 +208,7 @@ export const SupplierTable = () => {
     setFilterSynced("");
     setFilterCalcMethod("");
     setFilterSpendFactor("");
+    setFilterSbtAligned("");
   };
 
   // Unique values for filter dropdowns
@@ -318,7 +328,7 @@ export const SupplierTable = () => {
             <option value="">Targets</option>
             <option value="sbti-validated">SBTi Validated</option>
             <option value="sbti-committed">SBTi Committed</option>
-            <option value="sbti-inherited">Inherited</option>
+            <option value="sbti-inherited">SBTi Inherited</option>
             <option value="self-published">Self Published</option>
             <option value="no-targets">No Targets</option>
           </select>
@@ -351,6 +361,12 @@ export const SupplierTable = () => {
             <option value="">Spend Factor Type</option>
             <option value="ai">AI Generated</option>
             <option value="custom">Custom</option>
+          </select>
+
+          <select value={filterSbtAligned} onChange={(e) => setFilterSbtAligned(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
+            <option value="">SBT Aligned?</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
 
           {hasActiveFilters && (
@@ -522,6 +538,39 @@ export const SupplierTable = () => {
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <TargetStatusCell status={s.targetStatus} />
+                      )}
+                    </td>
+                    )}
+                    {!hiddenColumns.has("sbtAligned") && (
+                    <td className="px-4 py-3">
+                      {s.synced === "not-synced" ? (
+                        <span className="text-muted-foreground">-</span>
+                      ) : s.targetStatus === "self-published" && !s.sbtAligned ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex cursor-default">
+                              <AlertTriangle size={16} className="text-amber-500" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs max-w-[220px]">
+                            Self-published targets — please verify SBTi alignment
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex">
+                              {s.sbtAligned ? (
+                                <CheckCircle2 size={16} className="text-confidence-high-text" />
+                              ) : (
+                                <XCircle size={16} className="text-destructive/60" />
+                              )}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs">
+                            {s.sbtAligned ? "SBTi Aligned" : "Not SBTi Aligned"}
+                          </TooltipContent>
+                        </Tooltip>
                       )}
                     </td>
                     )}
