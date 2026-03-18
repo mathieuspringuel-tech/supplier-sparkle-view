@@ -115,11 +115,11 @@ const CountryFlag = ({ countryCode }: { countryCode: string }) => (
 );
 
 const targetStatusConfig: Record<TargetStatus, { pillText: string; tooltip: string; icon: React.ReactNode; colorClass: string }> = {
-  "sbti-validated": { pillText: "SBTi Validated", tooltip: "Supplier has SBTi Validated Targets", icon: <ShieldCheck size={11} />, colorClass: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border" },
-  "sbti-committed": { pillText: "SBTi Committed", tooltip: "Supplier has committed to set SBTi Targets", icon: <Clock size={11} />, colorClass: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border" },
-  "sbti-inherited": { pillText: "Inherited", tooltip: "Targets inherited from parent company", icon: <ArrowUpRight size={11} strokeWidth={3} />, colorClass: "bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border" },
-  "self-published": { pillText: "Self Published", tooltip: "Supplier has self-published targets", icon: <FileText size={11} />, colorClass: "bg-target-self-published-bg text-target-self-published-text border-target-self-published-border" },
-  "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={11} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
+  "sbti-validated": { pillText: "SBTi Validated", tooltip: "Supplier has SBTi Validated Targets", icon: <ShieldCheck size={10} />, colorClass: "bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border" },
+  "sbti-committed": { pillText: "SBTi Committed", tooltip: "Supplier has committed to set SBTi Targets", icon: <Clock size={10} />, colorClass: "bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border" },
+  "sbti-inherited": { pillText: "SBTi Inherited", tooltip: "Targets inherited from parent company", icon: <ArrowUpRight size={10} />, colorClass: "bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border" },
+  "self-published": { pillText: "Self Published", tooltip: "Supplier has self-published targets", icon: <FileText size={10} />, colorClass: "bg-target-self-published-bg text-target-self-published-text border-target-self-published-border" },
+  "no-targets": { pillText: "No Targets", tooltip: "No public targets found", icon: <Minus size={10} />, colorClass: "bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border" },
 };
 
 const TargetStatusCell = ({ status }: { status: TargetStatus }) => {
