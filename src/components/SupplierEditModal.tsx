@@ -278,8 +278,14 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                           <button
                             type="button"
                             onClick={() => {
-                              if (draft.methodology === "Input by User") {
-                                update("methodology", "Industry benchmark");
+                              if (draft.methodology === "Input by User" && originalRef.current) {
+                                const orig = originalRef.current;
+                                setDraft((prev) => prev ? {
+                                  ...prev,
+                                  methodology: orig.methodology !== "Input by User" ? orig.methodology : "Industry benchmark",
+                                  emissionFactor: orig.methodology !== "Input by User" ? orig.emissionFactor : prev.emissionFactor,
+                                } : prev);
+                                setValidationError(null);
                               }
                             }}
                             className={`relative flex flex-col items-start gap-1 rounded-lg border-2 p-2.5 text-left transition-all duration-150 ${
