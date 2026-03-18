@@ -122,17 +122,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
     }
   };
 
-  const handleCDPChange = (value: string) => {
-    const newVal = value === "yes";
-    if (isSynced && originalRef.current && newVal !== originalRef.current.cdp) {
-      setOverrideConfirm({
-        field: "CDP",
-        applyChange: () => update("cdp", newVal),
-      });
-    } else {
-      update("cdp", newVal);
-    }
-  };
 
   const handleSave = () => {
     if (!draft) return;
