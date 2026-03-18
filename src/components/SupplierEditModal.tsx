@@ -271,27 +271,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                   ) : (
                     /* Spend-based calculation mode */
                     <div className="space-y-3">
-                      <div>
-                        <Label htmlFor="spend">
-                          {year || "Year"} Spend on Supplier
-                          <span className="text-destructive ml-1">*</span>
-                        </Label>
-                        <div className="relative">
-                          <Input
-                            id="spend"
-                            type="number"
-                            value={draft.spend}
-                            onChange={(e) => update("spend", Number(e.target.value))}
-                            className={`mt-1 pr-14 ${validationError === "spend" ? "border-destructive ring-1 ring-destructive" : ""}`}
-                            required
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
-                        </div>
-                        {validationError === "spend" && (
-                          <p className="text-xs text-destructive mt-1">Spend on Supplier is required.</p>
-                        )}
-                      </div>
-
                       {/* Factor source selection */}
                       <div>
                         <Label className="mb-2 block">Spend Emission Factor Source</Label>
@@ -391,6 +370,28 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                           </div>
                         </div>
                       )}
+
+                      {/* Spend field */}
+                      <div>
+                        <Label htmlFor="spend">
+                          {year || "Year"} Spend on Supplier
+                          <span className="text-destructive ml-1">*</span>
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            id="spend"
+                            type="number"
+                            value={draft.spend}
+                            onChange={(e) => update("spend", Number(e.target.value))}
+                            className={`mt-1 pr-14 ${validationError === "spend" ? "border-destructive ring-1 ring-destructive" : ""}`}
+                            required
+                          />
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
+                        </div>
+                        {validationError === "spend" && (
+                          <p className="text-xs text-destructive mt-1">Spend on Supplier is required.</p>
+                        )}
+                      </div>
 
                       {/* tCO2e calculated */}
                       <div>
