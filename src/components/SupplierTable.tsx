@@ -49,10 +49,6 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-self-published-bg text-target-self-published-text border-target-self-published-border"><FileText size={8} /></span>, label: "Self Published" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border"><Minus size={8} /></span>, label: "No Targets" },
   ],
-  cdp: [
-    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
-    { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not reported" },
-  ],
   sbtAligned: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "SBTi Aligned" },
     { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not Aligned" },
