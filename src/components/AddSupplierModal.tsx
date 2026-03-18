@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, DollarSign, Cloud, Info } from "lucide-react";
 import type { Supplier } from "@/data/suppliers";
+import { deriveSbtAligned } from "@/data/suppliers";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
