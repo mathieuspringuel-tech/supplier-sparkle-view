@@ -325,10 +325,10 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                           >
                             <div className="flex items-center gap-2">
                               <PenLine size={16} className={draft.methodology === "Input by User" ? "text-accent" : "text-muted-foreground"} />
-                              <span className="text-sm font-medium text-foreground">Use Your Own Factor</span>
+                              <span className="text-sm font-medium text-foreground">Use a Different Factor</span>
                             </div>
                             <span className="text-xs text-muted-foreground leading-snug">
-                              Enter a custom emission factor manually.
+                              Use another factor from the library.
                             </span>
                           </button>
                         </div>
@@ -357,18 +357,25 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                       ) : (
                         <div className="space-y-3">
                           <div>
-                            <Label htmlFor="emissionFactor">
-                              Emission Factor (per £)
+                            <Label>
+                              Select Factor from Library
                               <span className="text-destructive ml-1">*</span>
                             </Label>
-                            <Input
-                              id="emissionFactor"
-                              type="number"
-                              step="0.001"
-                              value={draft.emissionFactor}
-                              onChange={(e) => update("emissionFactor", Number(e.target.value))}
-                              className="mt-1"
-                            />
+                            <Select
+                              value={String(draft.emissionFactor)}
+                              onValueChange={(val) => update("emissionFactor", Number(val))}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Choose an emission factor" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="0.233">Professional Services — 0.233 kgCO₂e/£</SelectItem>
+                                <SelectItem value="0.392">Information Technology — 0.392 kgCO₂e/£</SelectItem>
+                                <SelectItem value="0.156">Financial Services — 0.156 kgCO₂e/£</SelectItem>
+                                <SelectItem value="0.541">Manufacturing — 0.541 kgCO₂e/£</SelectItem>
+                                <SelectItem value="0.089">Media & Advertising — 0.089 kgCO₂e/£</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                           <div>
                             <Label>Emission Factor Methodology</Label>
