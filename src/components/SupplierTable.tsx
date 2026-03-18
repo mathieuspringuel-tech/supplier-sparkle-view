@@ -317,11 +317,9 @@ export const SupplierTable = () => {
           <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Targets</option>
             <option value="sbti-validated">SBTi Validated</option>
-            <option value="sbti-validated-inherited">SBTi Inherited</option>
             <option value="sbti-committed">SBTi Committed</option>
-            <option value="non-sbti-validated">Other Validated</option>
-            <option value="non-sbti-committed">Other Committed</option>
-            <option value="non-sbti-inherited">Other Inherited</option>
+            <option value="sbti-inherited">Inherited</option>
+            <option value="self-published">Self Published</option>
             <option value="no-targets">No Targets</option>
           </select>
 
