@@ -45,7 +45,7 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
   targets: [
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-validated-bg text-target-sbti-validated-text border-target-sbti-validated-border"><ShieldCheck size={8} /> SBTi</span>, label: "Validated" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-committed-bg text-target-sbti-committed-text border-target-sbti-committed-border"><Clock size={8} /> SBTi</span>, label: "Committed" },
-    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} strokeWidth={3} /></span>, label: "Inherited" },
+    { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-sbti-inherited-bg text-target-sbti-inherited-text border-target-sbti-inherited-border"><ArrowUpRight size={8} /></span>, label: "SBTi Inherited" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-self-published-bg text-target-self-published-text border-target-self-published-border"><FileText size={8} /></span>, label: "Self Published" },
     { icon: <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold px-1 py-px rounded-full border bg-target-no-targets-bg text-target-no-targets-text border-target-no-targets-border"><Minus size={8} /></span>, label: "No Targets" },
   ],
