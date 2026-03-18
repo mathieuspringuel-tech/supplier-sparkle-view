@@ -394,7 +394,37 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, year }: SupplierE
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
+                    </div>
+
+                    {/* SBT Aligned */}
+                    <div>
+                      <Label>SBT Aligned?</Label>
+                      {(() => {
+                        const aligned = deriveSbtAligned(draft.targetStatus);
+                        return (
+                          <>
+                            <Select
+                              value={draft.sbtAligned ? "yes" : "no"}
+                              onValueChange={(v) => update("sbtAligned", v === "yes")}
+                              disabled={aligned.locked}
+                            >
+                              <SelectTrigger className={`mt-1 ${aligned.locked ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="yes">Yes</SelectItem>
+                                <SelectItem value="no">No</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {!aligned.locked && draft.targetStatus === "self-published" && (
+                              <p className="text-[11px] text-amber-600 mt-1">
+                                Please verify whether self-published targets are SBTi aligned
+                              </p>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
                 </div>
               </TabsContent>
 

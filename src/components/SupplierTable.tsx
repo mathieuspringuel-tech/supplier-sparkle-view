@@ -535,6 +535,38 @@ export const SupplierTable = () => {
                       )}
                     </td>
                     )}
+                    {!hiddenColumns.has("sbtAligned") && (
+                    <td className="px-4 py-3">
+                      {s.synced === "not-synced" ? (
+                        <span className="text-muted-foreground">-</span>
+                      ) : s.targetStatus === "self-published" && !s.sbtAligned ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex cursor-default">
+                              <AlertTriangle size={16} className="text-amber-500" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs max-w-[220px]">
+                            Self-published targets — please verify SBTi alignment
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex">
+                              {s.sbtAligned ? (
+                                <CheckCircle2 size={16} className="text-confidence-high-text" />
+                              ) : (
+                                <XCircle size={16} className="text-destructive/60" />
+                              )}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="text-xs">
+                            {s.sbtAligned ? "SBTi Aligned" : "Not SBTi Aligned"}
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </td>
                     {!hiddenColumns.has("cdp") && (
                     <td className="px-4 py-3">
                       {s.synced === "not-synced" ? (
