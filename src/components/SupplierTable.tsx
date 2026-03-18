@@ -53,6 +53,11 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Reported to CDP" },
     { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not reported" },
   ],
+  sbtAligned: [
+    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "SBTi Aligned" },
+    { icon: <XCircle size={12} className="text-destructive/60" />, label: "Not Aligned" },
+    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Verify (Self Published)" },
+  ],
   synced: [
     { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
     { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Uncertain match" },
