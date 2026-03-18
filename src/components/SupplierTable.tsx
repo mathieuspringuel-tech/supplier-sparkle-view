@@ -182,6 +182,23 @@ const TargetStatusCell = ({ status, inheritedFrom }: { status: TargetStatus; inh
               </div>
             </div>
           </div>
+        ) : status === "sbti-committed" ? (
+          <div className="space-y-2">
+            <p className="text-popover-foreground">Supplier has committed to set SBTi Targets</p>
+            <div className="border-t border-border pt-2">
+              <p className="font-semibold text-popover-foreground mb-1.5">SBTi Status</p>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Near Term</span>
+                  <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">Committed</span>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-muted-foreground">Net Zero</span>
+                  <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">Committed</span>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : tooltip}
       </TooltipContent>
     </Tooltip>
