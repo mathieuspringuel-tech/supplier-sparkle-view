@@ -325,10 +325,10 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                           >
                             <div className="flex items-center gap-2">
                               <PenLine size={16} className={draft.methodology === "Input by User" ? "text-accent" : "text-muted-foreground"} />
-                              <span className="text-sm font-medium text-foreground">Use Your Own Factor</span>
+                              <span className="text-sm font-medium text-foreground">Use a Different Factor</span>
                             </div>
                             <span className="text-xs text-muted-foreground leading-snug">
-                              Enter a custom emission factor manually.
+                              Use another factor from the library.
                             </span>
                           </button>
                         </div>
