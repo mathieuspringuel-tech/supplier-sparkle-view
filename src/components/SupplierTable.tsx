@@ -540,7 +540,7 @@ export const SupplierTable = () => {
                       {s.synced === "not-synced" ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
-                        <TargetStatusCell status={s.targetStatus} />
+                        <TargetStatusCell status={s.targetStatus} inheritedFrom={s.inheritedFrom} />
                       )}
                     </td>
                     )}
