@@ -203,27 +203,6 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                 </div>
 
                 <div>
-                  <Label htmlFor="add-email">Email</Label>
-                  <Input
-                    id="add-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="add-phone">Phone</Label>
-                  <Input
-                    id="add-phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
                   <Label htmlFor="add-url">URL</Label>
                   <Input
                     id="add-url"
@@ -231,6 +210,37 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                     onChange={(e) => setWebsite(e.target.value)}
                     className="mt-1"
                     placeholder="https://"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="add-duns">DUNS Number</Label>
+                  <Input
+                    id="add-duns"
+                    value={duns}
+                    onChange={(e) => {
+                      const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                      const formatted = digits.length > 4
+                        ? `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`
+                        : digits.length > 2
+                          ? `${digits.slice(0, 2)}-${digits.slice(2)}`
+                          : digits;
+                      setDuns(formatted);
+                    }}
+                    className="mt-1"
+                    placeholder="xx-xxx-xxxx"
+                    maxLength={11}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="add-email">Email</Label>
+                  <Input
+                    id="add-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1"
                   />
                 </div>
 
