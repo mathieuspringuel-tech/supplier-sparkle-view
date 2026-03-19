@@ -109,7 +109,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
       setDraft(null);
       originalRef.current = null;
     }
-    setActiveTab("year-data");
+    setActiveTab(supplier?.synced === "warning" ? "supplier-data" : "year-data");
     setValidationError(null);
   }, [supplier]);
 
