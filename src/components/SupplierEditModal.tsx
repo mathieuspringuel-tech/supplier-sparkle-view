@@ -109,7 +109,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
       setDraft(null);
       originalRef.current = null;
     }
-    setActiveTab("year-data");
+    setActiveTab(supplier?.synced === "warning" ? "supplier-data" : "year-data");
     setValidationError(null);
   }, [supplier]);
 
@@ -495,6 +495,13 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
               </TabsContent>
 
               <TabsContent value="supplier-data" className="pt-4">
+                {draft.synced === "warning" && (
+                  <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-700 p-3">
+                    <p className="text-sm text-amber-800 dark:text-amber-300">
+                      We could not confidently match your supplier. Please add more info on them or select a matching entity.
+                    </p>
+                  </div>
+                )}
                 {/* Supplier Info */}
                 <div className="mb-6">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
