@@ -563,6 +563,26 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                       />
                     </div>
 
+                    <div>
+                      <Label>DUNS Number</Label>
+                      <Input
+                        value={draft.duns ? `${draft.duns.replace(/\D/g, "").replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3")}` : "—"}
+                        disabled
+                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="edit-email">Email</Label>
+                      <Input
+                        id="edit-email"
+                        type="email"
+                        value={draft.email || ""}
+                        onChange={(e) => update("email", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+
                     <div className="col-span-2">
                       <Label htmlFor="edit-description">Description</Label>
                       <Textarea
