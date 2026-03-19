@@ -467,14 +467,17 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                         return (
                           <>
                             <Select
-                              value={draft.sbtAligned ? "yes" : "no"}
-                              onValueChange={(v) => update("sbtAligned", v === "yes")}
+                              value={!aligned.locked && draft.targetStatus === "self-published" && draft.sbtAligned === undefined ? "unknown" : draft.sbtAligned ? "yes" : "no"}
+                              onValueChange={(v) => update("sbtAligned", v === "unknown" ? undefined as any : v === "yes")}
                               disabled={aligned.locked}
                             >
                               <SelectTrigger className={`mt-1 ${aligned.locked ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}`}>
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
+                                {!aligned.locked && draft.targetStatus === "self-published" && (
+                                  <SelectItem value="unknown">Unknown</SelectItem>
+                                )}
                                 <SelectItem value="yes">Yes</SelectItem>
                                 <SelectItem value="no">No</SelectItem>
                               </SelectContent>
