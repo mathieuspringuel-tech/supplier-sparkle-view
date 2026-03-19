@@ -17,9 +17,9 @@ export interface Supplier {
   activityData?: { factorId: string; quantity: number }[];
   hqCountry: string;
   website: string;
-  sbtAligned: boolean;
+  sbtAligned?: boolean; // undefined = unknown (for self-published)
   inheritedFrom?: string;
-  influence?: number; // 1-5 scale: how much influence you have over this supplier
+  influence?: number;
 }
 
 export function deriveSbtAligned(targetStatus: TargetStatus): { value: boolean; locked: boolean } {
