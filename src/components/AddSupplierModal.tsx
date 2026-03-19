@@ -89,6 +89,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
       calculationMethodology: calcMethod,
       sbtAligned: deriveSbtAligned("no-targets").value,
       influence,
+      duns: duns.replace(/\D/g, "") || undefined,
     };
 
     onSave(newSupplier);
