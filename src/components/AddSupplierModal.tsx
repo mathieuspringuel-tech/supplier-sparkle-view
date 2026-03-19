@@ -61,8 +61,8 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
   const [spend, setSpend] = useState(0);
   const [tco2e, setTco2e] = useState(0);
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
+  const [duns, setDuns] = useState("");
   const [influence, setInfluence] = useState<number | undefined>(undefined);
 
   const canSave = name.trim() && hqCountry && category && (
