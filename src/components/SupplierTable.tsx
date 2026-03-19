@@ -568,7 +568,7 @@ export const SupplierTable = () => {
                 suppliers.map((s) => (
                   <tr
                     key={s.id}
-                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "not-synced" ? "bg-destructive/5 hover:bg-destructive/10" : s.sbtAligned === undefined ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
+                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "not-synced" ? "bg-destructive/5 hover:bg-destructive/10" : s.synced === "warning" ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
                   >
                     {!hiddenColumns.has("name") && (
                     <td className="px-4 py-3">
