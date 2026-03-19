@@ -519,90 +519,121 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                       />
                     </div>
 
-                    <div>
-                      <Label>Company HQ</Label>
-                      <Input
-                        value={countries.find((c) => c.code === draft.hqCountry)?.name || draft.hqCountry}
-                        disabled
-                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                      />
-                    </div>
+                     <div>
+                       <Label>Company HQ</Label>
+                       {isWarning ? (
+                         <Select value={draft.hqCountry} onValueChange={(v) => update("hqCountry", v)}>
+                           <SelectTrigger className="mt-1">
+                             <SelectValue />
+                           </SelectTrigger>
+                           <SelectContent>
+                             {countries.map((c) => (
+                               <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                             ))}
+                           </SelectContent>
+                         </Select>
+                       ) : (
+                         <Input
+                           value={countries.find((c) => c.code === draft.hqCountry)?.name || draft.hqCountry}
+                           disabled
+                           className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                         />
+                       )}
+                     </div>
 
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <Label>Category</Label>
-                        <TooltipProvider delayDuration={200}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Info size={13} className="text-muted-foreground cursor-help" />
-                            </TooltipTrigger>
-                            <TooltipContent side="top" className="max-w-[220px] text-xs">
-                              Which business category does this supplier belong to? If unsure, select Purchased Goods & Services.
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                      <Select value={draft.category} onValueChange={(v) => update("category", v)}>
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((cat) => (
-                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                     <div>
+                       <div className="flex items-center gap-1.5">
+                         <Label>Category</Label>
+                         <TooltipProvider delayDuration={200}>
+                           <Tooltip>
+                             <TooltipTrigger asChild>
+                               <Info size={13} className="text-muted-foreground cursor-help" />
+                             </TooltipTrigger>
+                             <TooltipContent side="top" className="max-w-[220px] text-xs">
+                               Which business category does this supplier belong to? If unsure, select Purchased Goods & Services.
+                             </TooltipContent>
+                           </Tooltip>
+                         </TooltipProvider>
+                       </div>
+                       <Select value={draft.category} onValueChange={(v) => update("category", v)}>
+                         <SelectTrigger className="mt-1">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {categories.map((cat) => (
+                             <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                     </div>
 
-                    <div>
-                      <Label>Industry</Label>
-                      <Input
-                        value={draft.industry}
-                        disabled
-                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                      />
-                    </div>
+                     <div>
+                       <Label>Industry</Label>
+                       <Input
+                         value={draft.industry}
+                         disabled
+                         className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                       />
+                     </div>
 
-                    <div>
-                      <Label htmlFor="edit-website">Website</Label>
-                      <Input
-                        id="edit-website"
-                        value={draft.website}
-                        disabled
-                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                      />
-                    </div>
+                     <div>
+                       <Label htmlFor="edit-website">Website</Label>
+                       <Input
+                         id="edit-website"
+                         value={draft.website}
+                         onChange={isWarning ? (e) => update("website", e.target.value) : undefined}
+                         disabled={!isWarning}
+                         className={`mt-1 ${!isWarning ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}`}
+                       />
+                     </div>
 
-                    <div>
-                      <Label>DUNS Number</Label>
-                      <Input
-                        value={draft.duns ? `${draft.duns.replace(/\D/g, "").replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3")}` : "—"}
-                        disabled
-                        className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                      />
-                    </div>
+                     <div>
+                       <Label>DUNS Number</Label>
+                       {isWarning ? (
+                         <Input
+                           value={draft.duns || ""}
+                           placeholder="xx-xxx-xxxx"
+                           onChange={(e) => {
+                             const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                             const formatted = digits.length > 4
+                               ? `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`
+                               : digits.length > 2
+                                 ? `${digits.slice(0, 2)}-${digits.slice(2)}`
+                                 : digits;
+                             update("duns", formatted);
+                           }}
+                           className="mt-1"
+                         />
+                       ) : (
+                         <Input
+                           value={draft.duns ? `${draft.duns.replace(/\D/g, "").replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3")}` : "—"}
+                           disabled
+                           className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                         />
+                       )}
+                     </div>
 
-                    <div>
-                      <Label htmlFor="edit-email">Email</Label>
-                      <Input
-                        id="edit-email"
-                        type="email"
-                        value={draft.email || ""}
-                        onChange={(e) => update("email", e.target.value)}
-                        className="mt-1"
-                      />
-                    </div>
+                     <div>
+                       <Label htmlFor="edit-email">Email</Label>
+                       <Input
+                         id="edit-email"
+                         type="email"
+                         value={draft.email || ""}
+                         onChange={(e) => update("email", e.target.value)}
+                         className="mt-1"
+                       />
+                     </div>
 
-                    <div className="col-span-2">
-                      <Label htmlFor="edit-description">Description</Label>
-                      <Textarea
-                        id="edit-description"
-                        value={draft.description}
-                        onChange={(e) => update("description", e.target.value)}
-                        className="mt-1"
-                        rows={3}
-                      />
-                    </div>
+                     <div className="col-span-2">
+                       <Label htmlFor="edit-description">Description</Label>
+                       <Textarea
+                         id="edit-description"
+                         value={draft.description}
+                         disabled
+                         className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                         rows={3}
+                       />
+                     </div>
 
                     <div>
                       <div className="flex items-center gap-1.5">
