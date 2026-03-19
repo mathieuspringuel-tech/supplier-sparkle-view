@@ -61,8 +61,8 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
   const [spend, setSpend] = useState(0);
   const [tco2e, setTco2e] = useState(0);
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
+  const [duns, setDuns] = useState("");
   const [influence, setInfluence] = useState<number | undefined>(undefined);
 
   const canSave = name.trim() && hqCountry && category && (
@@ -89,6 +89,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
       calculationMethodology: calcMethod,
       sbtAligned: deriveSbtAligned("no-targets").value,
       influence,
+      duns: duns.replace(/\D/g, "") || undefined,
     };
 
     onSave(newSupplier);
@@ -99,8 +100,8 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
     setSpend(0);
     setTco2e(0);
     setEmail("");
-    setPhone("");
     setWebsite("");
+    setDuns("");
     setInfluence(undefined);
     onClose();
   };
@@ -144,7 +145,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                       <Info size={13} className="text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-[220px] text-xs">
-                      The more info you add, the more likely we are to find information on this supplier.
+                      More details help us accurately identify and match your supplier.
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -202,27 +203,6 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                 </div>
 
                 <div>
-                  <Label htmlFor="add-email">Email</Label>
-                  <Input
-                    id="add-email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="add-phone">Phone</Label>
-                  <Input
-                    id="add-phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
                   <Label htmlFor="add-url">URL</Label>
                   <Input
                     id="add-url"
@@ -230,6 +210,37 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                     onChange={(e) => setWebsite(e.target.value)}
                     className="mt-1"
                     placeholder="https://"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="add-duns">DUNS Number</Label>
+                  <Input
+                    id="add-duns"
+                    value={duns}
+                    onChange={(e) => {
+                      const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                      const formatted = digits.length > 4
+                        ? `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`
+                        : digits.length > 2
+                          ? `${digits.slice(0, 2)}-${digits.slice(2)}`
+                          : digits;
+                      setDuns(formatted);
+                    }}
+                    className="mt-1"
+                    placeholder="xx-xxx-xxxx"
+                    maxLength={11}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="add-email">Email</Label>
+                  <Input
+                    id="add-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1"
                   />
                 </div>
 

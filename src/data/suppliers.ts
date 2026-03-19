@@ -20,6 +20,7 @@ export interface Supplier {
   sbtAligned?: boolean; // undefined = unknown (for self-published)
   inheritedFrom?: string;
   influence?: number;
+  duns?: string;
 }
 
 export function deriveSbtAligned(targetStatus: TargetStatus): { value: boolean; locked: boolean } {
