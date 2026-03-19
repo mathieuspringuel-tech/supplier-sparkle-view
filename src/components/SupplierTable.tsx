@@ -334,6 +334,37 @@ export const SupplierTable = () => {
     toast.success("Supplier updated");
   };
 
+  const handleResyncSupplier = (updated: Supplier) => {
+    // Save the updated supplier info first
+    handleSaveSupplier(updated);
+    // Trigger re-sync simulation
+    setSyncingIds((prev) => new Set(prev).add(updated.id));
+    setTimeout(() => {
+      const ef = +(0.05 + Math.random() * 0.8).toFixed(3);
+      const tco2e = +(updated.spend * ef).toFixed(2);
+      setYearData((prev) =>
+        prev.map((y) =>
+          y.year === selectedYear
+            ? {
+                ...y,
+                suppliers: y.suppliers.map((s) =>
+                  s.id === updated.id
+                    ? { ...s, synced: "synced" as const, emissionFactor: ef, tco2e }
+                    : s
+                ),
+              }
+            : y
+        )
+      );
+      setSyncingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(updated.id);
+        return next;
+      });
+      toast.success(`${updated.name} re-synced`);
+    }, 5000);
+  };
+
   const handleDeleteSupplier = (supplierId: string) => {
     setYearData((prev) =>
       prev.map((y) =>
@@ -732,7 +763,7 @@ export const SupplierTable = () => {
         </div>
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
-        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} onDelete={handleDeleteSupplier} year={selectedYear} />
+        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} onDelete={handleDeleteSupplier} onResync={handleResyncSupplier} year={selectedYear} />
         <AddSupplierModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddSupplier} year={selectedYear} />
         <BulkUploadModal open={bulkUploadOpen} onClose={() => setBulkUploadOpen(false)} />
         {copyModalData && (
