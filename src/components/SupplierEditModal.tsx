@@ -86,7 +86,7 @@ const countries = [
 ];
 
 
-export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }: SupplierEditModalProps) => {
+export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResync, year }: SupplierEditModalProps) => {
   const [draft, setDraft] = useState<Supplier | null>(null);
   const [activeTab, setActiveTab] = useState("year-data");
   const [validationError, setValidationError] = useState<string | null>(null);
