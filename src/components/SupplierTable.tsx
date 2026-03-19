@@ -257,8 +257,9 @@ export const SupplierTable = () => {
     if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
     if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
     if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
-    if (filterSbtAligned === "yes" && !s.sbtAligned) return false;
-    if (filterSbtAligned === "no" && s.sbtAligned) return false;
+    if (filterSbtAligned === "yes" && s.sbtAligned !== true) return false;
+    if (filterSbtAligned === "no" && s.sbtAligned !== false) return false;
+    if (filterSbtAligned === "unknown" && s.sbtAligned !== undefined) return false;
     if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
     return true;
   });
@@ -439,6 +440,7 @@ export const SupplierTable = () => {
             <option value="">SBT Aligned?</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
+            <option value="unknown">Unknown</option>
           </select>
 
           <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
