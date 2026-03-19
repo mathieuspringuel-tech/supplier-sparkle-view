@@ -21,6 +21,7 @@ export interface Supplier {
   inheritedFrom?: string;
   influence?: number;
   duns?: string;
+  email?: string;
 }
 
 export function deriveSbtAligned(targetStatus: TargetStatus): { value: boolean; locked: boolean } {

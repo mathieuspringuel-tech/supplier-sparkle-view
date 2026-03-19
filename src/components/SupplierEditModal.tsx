@@ -577,8 +577,8 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, year }:
                       <Input
                         id="edit-email"
                         type="email"
-                        value={(draft as any).email || ""}
-                        onChange={(e) => update("email" as any, e.target.value)}
+                        value={draft.email || ""}
+                        onChange={(e) => update("email", e.target.value)}
                         className="mt-1"
                       />
                     </div>
