@@ -440,6 +440,7 @@ export const SupplierTable = () => {
             <option value="">SBT Aligned?</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
+            <option value="unknown">Unknown</option>
           </select>
 
           <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
