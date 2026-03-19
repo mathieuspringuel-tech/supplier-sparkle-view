@@ -95,6 +95,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
     applyChange: () => void;
   } | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [resyncing, setResyncing] = useState(false);
   const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
