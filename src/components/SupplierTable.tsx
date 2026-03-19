@@ -257,8 +257,9 @@ export const SupplierTable = () => {
     if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
     if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
     if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
-    if (filterSbtAligned === "yes" && !s.sbtAligned) return false;
-    if (filterSbtAligned === "no" && s.sbtAligned) return false;
+    if (filterSbtAligned === "yes" && s.sbtAligned !== true) return false;
+    if (filterSbtAligned === "no" && s.sbtAligned !== false) return false;
+    if (filterSbtAligned === "unknown" && s.sbtAligned !== undefined) return false;
     if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
     return true;
   });
