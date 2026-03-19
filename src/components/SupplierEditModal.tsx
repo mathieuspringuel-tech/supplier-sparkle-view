@@ -31,6 +31,7 @@ interface SupplierEditModalProps {
   onClose: () => void;
   onSave: (updated: Supplier) => void;
   onDelete?: (supplierId: string) => void;
+  onResync?: (updated: Supplier) => void;
   year?: number;
 }
 
