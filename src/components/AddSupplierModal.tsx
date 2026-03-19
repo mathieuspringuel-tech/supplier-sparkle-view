@@ -100,8 +100,8 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
     setSpend(0);
     setTco2e(0);
     setEmail("");
-    setPhone("");
     setWebsite("");
+    setDuns("");
     setInfluence(undefined);
     onClose();
   };
