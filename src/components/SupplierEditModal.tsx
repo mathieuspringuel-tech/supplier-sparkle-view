@@ -687,12 +687,32 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                 >
                   Cancel
                 </button>
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
-                >
-                  Save Changes
-                </button>
+                {isWarning && activeTab === "supplier-data" && (
+                  <button
+                    onClick={() => {
+                      if (!draft || resyncing) return;
+                      setResyncing(true);
+                      // Save current edits and trigger re-sync
+                      if (onResync) {
+                        onResync(draft);
+                      }
+                      onClose();
+                    }}
+                    disabled={resyncing}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150 disabled:opacity-50"
+                  >
+                    <RefreshCw size={14} className={resyncing ? "animate-spin" : ""} />
+                    Re-sync
+                  </button>
+                )}
+                {!(isWarning && activeTab === "supplier-data") && (
+                  <button
+                    onClick={handleSave}
+                    className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
+                  >
+                    Save Changes
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>
