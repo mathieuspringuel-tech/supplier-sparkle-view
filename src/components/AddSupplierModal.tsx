@@ -145,7 +145,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                       <Info size={13} className="text-muted-foreground cursor-help" />
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-[220px] text-xs">
-                      The more info you add, the more likely we are to find information on this supplier.
+                      More details help us accurately identify and match your supplier.
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
