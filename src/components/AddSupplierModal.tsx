@@ -136,7 +136,19 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
 
             {/* Supplier Info */}
             <div className="mb-6">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
+              <div className="flex items-center gap-1.5 mb-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Supplier Info</p>
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info size={13} className="text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-[220px] text-xs">
+                      The more info you add, the more likely we are to find information on this supplier.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                 <div>
                   <Label htmlFor="add-name">Name *</Label>
