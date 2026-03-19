@@ -763,7 +763,7 @@ export const SupplierTable = () => {
         </div>
 
         <SupplierModal supplier={selected} onClose={() => setSelected(null)} />
-        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} onDelete={handleDeleteSupplier} year={selectedYear} />
+        <SupplierEditModal supplier={editing} onClose={() => setEditing(null)} onSave={handleSaveSupplier} onDelete={handleDeleteSupplier} onResync={handleResyncSupplier} year={selectedYear} />
         <AddSupplierModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onSave={handleAddSupplier} year={selectedYear} />
         <BulkUploadModal open={bulkUploadOpen} onClose={() => setBulkUploadOpen(false)} />
         {copyModalData && (
