@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus, ExternalLink } from "lucide-react";
+import { Info, CheckCircle2, XCircle, Plus, Copy, ChevronDown, Pencil, Loader2, Download, AlertTriangle, ArrowUpRight, Upload, Settings, Search, X, ShieldCheck, Clock, FileText, Minus, ExternalLink, RefreshCw } from "lucide-react";
 import type { TargetStatus } from "@/data/suppliers";
 import { type Supplier, type YearData, initialYearData, getFlagUrl, deriveSbtAligned } from "@/data/suppliers";
 import { SupplierModal } from "./SupplierModal";
@@ -647,6 +647,24 @@ export const SupplierTable = () => {
           )}
 
           <div className="flex items-center gap-3 ml-auto">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => {
+                    setIsSyncing(true);
+                    setTimeout(() => setIsSyncing(false), 1200);
+                  }}
+                  disabled={isSyncing}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150 disabled:opacity-50"
+                >
+                  <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
+                  Re-Sync
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">
+                This will pull the most recent data.
+              </TooltipContent>
+            </Tooltip>
             <button
               className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
             >
@@ -816,7 +834,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("synced") && (
                     <td className="px-4 py-3">
-                      {syncingIds.has(s.id) ? (
+                      {isSyncing || syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
                       ) : s.synced === "not-synced" ? (
                           <Tooltip>
