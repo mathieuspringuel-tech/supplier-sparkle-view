@@ -143,7 +143,7 @@ export function InsightDashboard({ suppliers, year }: InsightDashboardProps) {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.topSpend} margin={{ left: 10, right: 20, top: 5, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" tick={{ fontSize: 9, angle: -35, textAnchor: "end" }} stroke="hsl(var(--muted-foreground))" interval={0} />
+                  <XAxis dataKey="name" tick={<CustomAngleTick />} stroke="hsl(var(--muted-foreground))" interval={0} />
                   <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
                   <Tooltip formatter={(v: number) => [`$${v.toLocaleString()}`, "Spend"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid hsl(var(--border))" }} />
                   <Bar dataKey="value" fill="hsl(210 80% 45%)" radius={[4, 4, 0, 0]} />
