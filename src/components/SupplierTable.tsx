@@ -29,7 +29,7 @@ interface ColumnDef {
 const columns: ColumnDef[] = [
   { key: "name", label: "Name", tooltip: "Legal entity name of the supplier in your procurement system." },
   { key: "hq", label: "Company HQ", tooltip: "Country where the supplier's headquarters is located." },
-  { key: "tco2e", label: "tCO2e", tooltip: "Total metric tonnes of CO2 equivalent emissions attributed to this supplier." },
+  { key: "tco2e", label: "tCO2e", tooltip: "TOTAL METRIC TONNES OF CO2E EMISSIONS ATTRIBUTED TO THIS SUPPLIER." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
   { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
   { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
