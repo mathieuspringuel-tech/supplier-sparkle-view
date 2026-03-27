@@ -835,7 +835,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("synced") && (
                     <td className="px-4 py-3">
-                      {isSyncing || syncingIds.has(s.id) ? (
+                      {(isSyncing && s.synced === "synced") || syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
                       ) : s.synced === "not-synced" ? (
                           <Tooltip>
