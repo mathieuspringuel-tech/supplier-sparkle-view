@@ -566,11 +566,11 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                                 <SelectValue placeholder="Choose an emission factor" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="0.233">Professional Services — 0.233 kgCO₂e/£</SelectItem>
-                                <SelectItem value="0.392">Information Technology — 0.392 kgCO₂e/£</SelectItem>
-                                <SelectItem value="0.156">Financial Services — 0.156 kgCO₂e/£</SelectItem>
-                                <SelectItem value="0.541">Manufacturing — 0.541 kgCO₂e/£</SelectItem>
-                                <SelectItem value="0.089">Media & Advertising — 0.089 kgCO₂e/£</SelectItem>
+                                <SelectItem value="0.233">Professional Services — 0.233 kgCO₂e/$</SelectItem>
+                                <SelectItem value="0.392">Information Technology — 0.392 kgCO₂e/$</SelectItem>
+                                <SelectItem value="0.156">Financial Services — 0.156 kgCO₂e/$</SelectItem>
+                                <SelectItem value="0.541">Manufacturing — 0.541 kgCO₂e/$</SelectItem>
+                                <SelectItem value="0.089">Media & Advertising — 0.089 kgCO₂e/$</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -600,7 +600,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                             className={`mt-1 pr-14 ${validationError === "spend" ? "border-destructive ring-1 ring-destructive" : ""}`}
                             required
                           />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">GBP</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-xs text-muted-foreground font-medium">USD</span>
                         </div>
                         {validationError === "spend" && (
                           <p className="text-xs text-destructive mt-1">Spend on Supplier is required.</p>
