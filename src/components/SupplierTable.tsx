@@ -218,15 +218,15 @@ export const SupplierTable = () => {
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterHQ, setFilterHQ] = useState("");
-  const [filterTargets, setFilterTargets] = useState("");
+  const [filterHQ, setFilterHQ] = useState<string[]>([]);
+  const [filterTargets, setFilterTargets] = useState<string[]>([]);
   
-  const [filterCategory, setFilterCategory] = useState("");
-  const [filterSynced, setFilterSynced] = useState("");
-  const [filterCalcMethod, setFilterCalcMethod] = useState("");
-  const [filterSpendFactor, setFilterSpendFactor] = useState("");
-  const [filterSbtAligned, setFilterSbtAligned] = useState("");
-  const [filterInfluence, setFilterInfluence] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string[]>([]);
+  const [filterSynced, setFilterSynced] = useState<string[]>([]);
+  const [filterCalcMethod, setFilterCalcMethod] = useState<string[]>([]);
+  const [filterSpendFactor, setFilterSpendFactor] = useState<string[]>([]);
+  const [filterSbtAligned, setFilterSbtAligned] = useState<string[]>([]);
+  const [filterInfluence, setFilterInfluence] = useState<string[]>([]);
 
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
@@ -245,38 +245,47 @@ export const SupplierTable = () => {
   const allSuppliers = currentData?.suppliers ?? [];
 
   // Apply filters
+  // Helper to toggle a value in a filter array
+  const toggleFilter = (setter: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
+    setter(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+  };
+
   const suppliers = allSuppliers.filter((s) => {
     if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (filterHQ && s.hqCountry !== filterHQ) return false;
-    if (filterTargets === "empty" && s.targetStatus) return false;
-    if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
-    if (filterCategory && s.category !== filterCategory) return false;
-    if (filterSynced === "yes" && s.synced !== "synced") return false;
-    if (filterSynced === "no" && s.synced === "synced") return false;
-    if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
-    if (filterSpendFactor === "supplier-specific" && s.methodology !== "Organisation specific") return false;
-    if (filterSpendFactor === "supplier-specific" && s.calculationMethodology === "tco2e") return false;
-    if (filterSpendFactor === "industry-benchmark" && s.methodology !== "Industry benchmark") return false;
-    if (filterSbtAligned === "yes" && s.sbtAligned !== true) return false;
-    if (filterSbtAligned === "no" && s.sbtAligned !== false) return false;
-    if (filterSbtAligned === "unknown" && s.sbtAligned !== undefined) return false;
-    if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
+    if (filterHQ.length > 0 && !filterHQ.includes(s.hqCountry)) return false;
+    if (filterTargets.length > 0 && !filterTargets.includes(s.targetStatus || "")) return false;
+    if (filterCategory.length > 0 && !filterCategory.includes(s.category)) return false;
+    if (filterSynced.length > 0) {
+      const statusVal = s.synced === "synced" ? "yes" : s.synced === "not-synced" ? "not-connected" : "action";
+      if (!filterSynced.includes(statusVal)) return false;
+    }
+    if (filterCalcMethod.length > 0 && !filterCalcMethod.includes(s.calculationMethodology || "")) return false;
+    if (filterSpendFactor.length > 0) {
+      if (s.calculationMethodology === "tco2e") return false;
+      const spendVal = s.methodology === "Organisation specific" ? "supplier-specific" : "industry-benchmark";
+      if (!filterSpendFactor.includes(spendVal)) return false;
+    }
+    if (filterSbtAligned.length > 0) {
+      const sbtVal = s.sbtAligned === true ? "yes" : s.sbtAligned === false ? "no" : "unknown";
+      if (!filterSbtAligned.includes(sbtVal)) return false;
+    }
+    if (filterInfluence.length > 0 && !filterInfluence.includes(String(s.influence))) return false;
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned || filterInfluence;
+  const hasActiveFilters = searchQuery || filterHQ.length > 0 || filterTargets.length > 0 || filterCategory.length > 0 || filterSynced.length > 0 || filterCalcMethod.length > 0 || filterSpendFactor.length > 0 || filterSbtAligned.length > 0 || filterInfluence.length > 0;
 
   const clearFilters = () => {
     setSearchQuery("");
-    setFilterHQ("");
-    setFilterTargets("");
+    setFilterHQ([]);
+    setFilterTargets([]);
     
-    setFilterCategory("");
-    setFilterSynced("");
-    setFilterCalcMethod("");
-    setFilterSpendFactor("");
-    setFilterSbtAligned("");
-    setFilterInfluence("");
+    setFilterCategory([]);
+    setFilterSynced([]);
+    setFilterCalcMethod([]);
+    setFilterSpendFactor([]);
+    setFilterSbtAligned([]);
+    setFilterInfluence([]);
   };
 
   // Unique values for filter dropdowns
@@ -452,59 +461,125 @@ export const SupplierTable = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Company HQ</option>
-            {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Company HQ {filterHQ.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterHQ.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
+              {uniqueCountries.map((c) => (
+                <DropdownMenuItem key={c} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterHQ, c); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterHQ.includes(c)} className="pointer-events-none" />
+                  {c}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Targets</option>
-            <option value="sbti-validated">SBTi Validated</option>
-            <option value="sbti-committed">SBTi Committed</option>
-            <option value="sbti-inherited">SBTi Inherited</option>
-            <option value="self-published">Self Published</option>
-            <option value="no-targets">No Targets</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Targets {filterTargets.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterTargets.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "sbti-validated", label: "SBTi Validated" }, { value: "sbti-committed", label: "SBTi Committed" }, { value: "sbti-inherited", label: "SBTi Inherited" }, { value: "self-published", label: "Self Published" }, { value: "no-targets", label: "No Targets" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterTargets, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterTargets.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Category {filterCategory.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterCategory.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
+              {uniqueCategories.map((c) => (
+                <DropdownMenuItem key={c} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterCategory, c); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterCategory.includes(c)} className="pointer-events-none" />
+                  {c}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Category</option>
-            {uniqueCategories.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Status {filterSynced.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSynced.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "yes", label: "Connected" }, { value: "action", label: "Action Required" }, { value: "not-connected", label: "Not Connected" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSynced, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSynced.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSynced} onChange={(e) => setFilterSynced(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Status</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Calc. Methodology {filterCalcMethod.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterCalcMethod.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "spend", label: "Spend Data Input" }, { value: "tco2e", label: "CO₂e Data Input" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterCalcMethod, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterCalcMethod.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterCalcMethod} onChange={(e) => setFilterCalcMethod(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Calc. Methodology</option>
-            <option value="spend">Spend Data Input</option>
-            <option value="tco2e">CO₂e Data Input</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Spend Factor Type {filterSpendFactor.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSpendFactor.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "supplier-specific", label: "Supplier Specific" }, { value: "industry-benchmark", label: "Industry Benchmark" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSpendFactor, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSpendFactor.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSpendFactor} onChange={(e) => setFilterSpendFactor(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Spend Factor Type</option>
-            <option value="supplier-specific">Supplier Specific</option>
-            <option value="industry-benchmark">Industry Benchmark</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              SBT Aligned? {filterSbtAligned.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSbtAligned.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }, { value: "unknown", label: "Unknown" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSbtAligned, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSbtAligned.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSbtAligned} onChange={(e) => setFilterSbtAligned(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">SBT Aligned?</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="unknown">Unknown</option>
-          </select>
-
-          <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Influence</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Influence {filterInfluence.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterInfluence.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {["1", "2", "3", "4", "5"].map((val) => (
+                <DropdownMenuItem key={val} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterInfluence, val); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterInfluence.includes(val)} className="pointer-events-none" />
+                  {val}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {hasActiveFilters && (
             <button
