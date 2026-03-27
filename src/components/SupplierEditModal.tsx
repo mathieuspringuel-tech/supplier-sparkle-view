@@ -96,6 +96,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
   } | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [resyncing, setResyncing] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState<string | null>(null);
   const originalRef = useRef<Supplier | null>(null);
 
   useEffect(() => {
@@ -113,6 +114,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
     }
     setActiveTab(supplier?.synced === "warning" ? "supplier-data" : "year-data");
     setValidationError(null);
+    setSelectedEntity(null);
   }, [supplier]);
 
   if (!draft) return null;
@@ -286,6 +288,40 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                   </div>
                 </div>
 
+                {/* Matching Entities Section */}
+                <div className="mb-6">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Or select a matching entity</p>
+                  <p className="text-xs text-muted-foreground mb-3">Selection will automatically link organisation data, emissions, and targets.</p>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {[
+                      { id: "match-1", name: `${draft.name.split(" ")[0]} Inc.`, duns: "37137489", match: 96 },
+                      { id: "match-2", name: `${draft.name.split(" ")[0]} Corporation`, duns: "140168757", match: 91 },
+                      { id: "match-3", name: `${draft.name.split(" ")[0]} Technologies, Inc.`, duns: "84291034", match: 85 },
+                    ].map((entity) => (
+                      <button
+                        key={entity.id}
+                        type="button"
+                        onClick={() => setSelectedEntity(selectedEntity === entity.id ? null : entity.id)}
+                        className={`w-full text-left rounded-lg border-2 p-3 transition-all duration-150 ${
+                          selectedEntity === entity.id
+                            ? "border-accent bg-accent/5"
+                            : "border-border hover:border-muted-foreground/30"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-foreground">{entity.name}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">DUNS: {entity.duns}</p>
+                          </div>
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                            {entity.match}% match
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <button
                     onClick={() => setDeleteConfirm(true)}
@@ -308,6 +344,13 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                     <button
                       onClick={() => {
                         if (!draft || resyncing) return;
+                        if (selectedEntity) {
+                          // Connect: set status to synced
+                          const updated = { ...draft, synced: "synced" as const };
+                          onSave(updated);
+                          onClose();
+                          return;
+                        }
                         setResyncing(true);
                         if (onResync) {
                           onResync(draft);
@@ -317,8 +360,14 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                       disabled={resyncing}
                       className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150 disabled:opacity-50"
                     >
-                      <RefreshCw size={14} className={resyncing ? "animate-spin" : ""} />
-                      Try again
+                      {selectedEntity ? (
+                        <>Connect</>
+                      ) : (
+                        <>
+                          <RefreshCw size={14} className={resyncing ? "animate-spin" : ""} />
+                          Try again
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
