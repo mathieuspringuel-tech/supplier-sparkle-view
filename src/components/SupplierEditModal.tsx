@@ -535,7 +535,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                       {draft.methodology !== "Input by User" ? (
                         <div className="space-y-3">
                           <div>
-                            <Label>Emission Factor (per £)</Label>
+                            <Label>Emission Factor (per $)</Label>
                             <Input
                               value={draft.emissionFactor}
                               disabled
