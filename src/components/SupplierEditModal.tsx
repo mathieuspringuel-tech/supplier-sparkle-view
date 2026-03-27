@@ -121,6 +121,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
 
   const isWarning = draft.synced === "warning";
   const isSynced = draft.synced === "synced";
+  const isNotSynced = draft.synced === "not-synced";
 
   const update = <K extends keyof Supplier>(key: K, value: Supplier[K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
