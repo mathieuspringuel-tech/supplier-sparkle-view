@@ -192,6 +192,139 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
 
             <h2 className="text-lg font-semibold text-foreground mb-4">Edit Supplier</h2>
 
+            {/* WARNING STATE: Show dedicated match resolution flow */}
+            {isWarning ? (
+              <div>
+                <div className="mb-5 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-700 p-3">
+                  <p className="text-sm font-medium text-amber-800 dark:text-amber-300 mb-1">
+                    We could not confidently match your supplier
+                  </p>
+                  <p className="text-xs text-amber-700 dark:text-amber-400">
+                    Please review and add more details to help us find them in our database, or continue without connecting.
+                  </p>
+                </div>
+
+                <div className="mb-6">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+                    <div>
+                      <Label htmlFor="warning-name">Name</Label>
+                      <Input
+                        id="warning-name"
+                        value={draft.name}
+                        onChange={(e) => update("name", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Company HQ</Label>
+                      <Select value={draft.hqCountry} onValueChange={(v) => update("hqCountry", v)}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map((c) => (
+                            <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label>Category</Label>
+                      <Select value={draft.category} onValueChange={(v) => update("category", v)}>
+                        <SelectTrigger className="mt-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="warning-website">Website</Label>
+                      <Input
+                        id="warning-website"
+                        value={draft.website}
+                        onChange={(e) => update("website", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>DUNS Number</Label>
+                      <Input
+                        value={draft.duns || ""}
+                        placeholder="xx-xxx-xxxx"
+                        onChange={(e) => {
+                          const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                          const formatted = digits.length > 4
+                            ? `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`
+                            : digits.length > 2
+                              ? `${digits.slice(0, 2)}-${digits.slice(2)}`
+                              : digits;
+                          update("duns", formatted);
+                        }}
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="warning-email">Email</Label>
+                      <Input
+                        id="warning-email"
+                        type="email"
+                        value={draft.email || ""}
+                        onChange={(e) => update("email", e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <button
+                    onClick={() => setDeleteConfirm(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors duration-150"
+                  >
+                    <Trash2 size={14} />
+                    Delete
+                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        const updated = { ...draft, synced: "not-synced" as const };
+                        onSave(updated);
+                        onClose();
+                      }}
+                      className="px-4 py-2 text-sm font-medium text-muted-foreground border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
+                    >
+                      Continue without connecting
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!draft || resyncing) return;
+                        setResyncing(true);
+                        if (onResync) {
+                          onResync(draft);
+                        }
+                        onClose();
+                      }}
+                      disabled={resyncing}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150 disabled:opacity-50"
+                    >
+                      <RefreshCw size={14} className={resyncing ? "animate-spin" : ""} />
+                      Try again
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+            /* NORMAL STATE: Tabbed edit flow */
             <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setValidationError(null); }}>
               <TabsList className="w-full">
                 <TabsTrigger value="year-data" className="flex-1">{year || "Year"} Data</TabsTrigger>
@@ -498,13 +631,6 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
               </TabsContent>
 
               <TabsContent value="supplier-data" className="pt-4">
-                {draft.synced === "warning" && (
-                  <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-700 p-3">
-                    <p className="text-sm text-amber-800 dark:text-amber-300">
-                      We could not confidently match your supplier. Please add more info on them or select a matching entity.
-                    </p>
-                  </div>
-                )}
                 {/* Supplier Info */}
                 <div className="mb-6">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Supplier Info</p>
@@ -521,24 +647,11 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
 
                      <div>
                        <Label>Company HQ</Label>
-                       {isWarning ? (
-                         <Select value={draft.hqCountry} onValueChange={(v) => update("hqCountry", v)}>
-                           <SelectTrigger className="mt-1">
-                             <SelectValue />
-                           </SelectTrigger>
-                           <SelectContent>
-                             {countries.map((c) => (
-                               <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>
-                             ))}
-                           </SelectContent>
-                         </Select>
-                       ) : (
-                         <Input
-                           value={countries.find((c) => c.code === draft.hqCountry)?.name || draft.hqCountry}
-                           disabled
-                           className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                         />
-                       )}
+                       <Input
+                         value={countries.find((c) => c.code === draft.hqCountry)?.name || draft.hqCountry}
+                         disabled
+                         className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                       />
                      </div>
 
                      <div>
@@ -581,36 +694,18 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                        <Input
                          id="edit-website"
                          value={draft.website}
-                         onChange={isWarning ? (e) => update("website", e.target.value) : undefined}
-                         disabled={!isWarning}
-                         className={`mt-1 ${!isWarning ? "bg-muted text-muted-foreground cursor-not-allowed" : ""}`}
+                         disabled
+                         className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
                        />
                      </div>
 
                      <div>
                        <Label>DUNS Number</Label>
-                       {isWarning ? (
-                         <Input
-                           value={draft.duns || ""}
-                           placeholder="xx-xxx-xxxx"
-                           onChange={(e) => {
-                             const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
-                             const formatted = digits.length > 4
-                               ? `${digits.slice(0, 2)}-${digits.slice(2, 5)}-${digits.slice(5)}`
-                               : digits.length > 2
-                                 ? `${digits.slice(0, 2)}-${digits.slice(2)}`
-                                 : digits;
-                             update("duns", formatted);
-                           }}
-                           className="mt-1"
-                         />
-                       ) : (
-                         <Input
-                           value={draft.duns ? `${draft.duns.replace(/\D/g, "").replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3")}` : "—"}
-                           disabled
-                           className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                         />
-                       )}
+                       <Input
+                         value={draft.duns ? `${draft.duns.replace(/\D/g, "").replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3")}` : "—"}
+                         disabled
+                         className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
+                       />
                      </div>
 
                      <div>
@@ -671,7 +766,10 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
 
               </TabsContent>
             </Tabs>
+            )}
 
+            {/* Footer for normal (non-warning) state */}
+            {!isWarning && (
             <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
               <button
                 onClick={() => setDeleteConfirm(true)}
@@ -687,34 +785,15 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                 >
                   Cancel
                 </button>
-                {isWarning && activeTab === "supplier-data" && (
-                  <button
-                    onClick={() => {
-                      if (!draft || resyncing) return;
-                      setResyncing(true);
-                      // Save current edits and trigger re-sync
-                      if (onResync) {
-                        onResync(draft);
-                      }
-                      onClose();
-                    }}
-                    disabled={resyncing}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150 disabled:opacity-50"
-                  >
-                    <RefreshCw size={14} className={resyncing ? "animate-spin" : ""} />
-                    Re-sync
-                  </button>
-                )}
-                {!(isWarning && activeTab === "supplier-data") && (
-                  <button
-                    onClick={handleSave}
-                    className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
-                  >
-                    Save Changes
-                  </button>
-                )}
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 text-sm font-medium bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors duration-150"
+                >
+                  Save Changes
+                </button>
               </div>
             </div>
+            )}
           </motion.div>
         </motion.div>
       )}
