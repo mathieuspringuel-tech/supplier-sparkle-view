@@ -461,59 +461,125 @@ export const SupplierTable = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Company HQ</option>
-            {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Company HQ {filterHQ.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterHQ.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
+              {uniqueCountries.map((c) => (
+                <DropdownMenuItem key={c} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterHQ, c); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterHQ.includes(c)} className="pointer-events-none" />
+                  {c}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterTargets} onChange={(e) => setFilterTargets(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Targets</option>
-            <option value="sbti-validated">SBTi Validated</option>
-            <option value="sbti-committed">SBTi Committed</option>
-            <option value="sbti-inherited">SBTi Inherited</option>
-            <option value="self-published">Self Published</option>
-            <option value="no-targets">No Targets</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Targets {filterTargets.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterTargets.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "sbti-validated", label: "SBTi Validated" }, { value: "sbti-committed", label: "SBTi Committed" }, { value: "sbti-inherited", label: "SBTi Inherited" }, { value: "self-published", label: "Self Published" }, { value: "no-targets", label: "No Targets" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterTargets, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterTargets.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Category {filterCategory.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterCategory.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
+              {uniqueCategories.map((c) => (
+                <DropdownMenuItem key={c} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterCategory, c); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterCategory.includes(c)} className="pointer-events-none" />
+                  {c}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Category</option>
-            {uniqueCategories.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Status {filterSynced.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSynced.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "yes", label: "Connected" }, { value: "action", label: "Action Required" }, { value: "not-connected", label: "Not Connected" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSynced, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSynced.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSynced} onChange={(e) => setFilterSynced(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Status</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Calc. Methodology {filterCalcMethod.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterCalcMethod.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "spend", label: "Spend Data Input" }, { value: "tco2e", label: "CO₂e Data Input" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterCalcMethod, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterCalcMethod.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterCalcMethod} onChange={(e) => setFilterCalcMethod(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Calc. Methodology</option>
-            <option value="spend">Spend Data Input</option>
-            <option value="tco2e">CO₂e Data Input</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Spend Factor Type {filterSpendFactor.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSpendFactor.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "supplier-specific", label: "Supplier Specific" }, { value: "industry-benchmark", label: "Industry Benchmark" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSpendFactor, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSpendFactor.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSpendFactor} onChange={(e) => setFilterSpendFactor(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Spend Factor Type</option>
-            <option value="supplier-specific">Supplier Specific</option>
-            <option value="industry-benchmark">Industry Benchmark</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              SBT Aligned? {filterSbtAligned.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterSbtAligned.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }, { value: "unknown", label: "Unknown" }].map((opt) => (
+                <DropdownMenuItem key={opt.value} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterSbtAligned, opt.value); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterSbtAligned.includes(opt.value)} className="pointer-events-none" />
+                  {opt.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <select value={filterSbtAligned} onChange={(e) => setFilterSbtAligned(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">SBT Aligned?</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="unknown">Unknown</option>
-          </select>
-
-          <select value={filterInfluence} onChange={(e) => setFilterInfluence(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Influence</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              Influence {filterInfluence.length > 0 && <span className="bg-accent text-accent-foreground text-[10px] font-bold rounded-full px-1.5">{filterInfluence.length}</span>}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {["1", "2", "3", "4", "5"].map((val) => (
+                <DropdownMenuItem key={val} onClick={(e) => { e.preventDefault(); toggleFilter(setFilterInfluence, val); }} className="flex items-center gap-2">
+                  <Checkbox checked={filterInfluence.includes(val)} className="pointer-events-none" />
+                  {val}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {hasActiveFilters && (
             <button
