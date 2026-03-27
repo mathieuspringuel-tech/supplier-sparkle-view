@@ -31,7 +31,7 @@ const columns: ColumnDef[] = [
   { key: "hq", label: "Company HQ", tooltip: "Country where the supplier's headquarters is located." },
   { key: "tco2e", label: "tCO2e", tooltip: "TOTAL METRIC TONNES OF CO2E EMISSIONS ATTRIBUTED TO THIS SUPPLIER." },
   { key: "spend", label: "Spend on Supplier", tooltip: "Total annual procurement spend with this supplier in USD." },
-  { key: "targets", label: "Targets", tooltip: "Whether the supplier has set science-based or net-zero emission reduction targets." },
+  { key: "targets", label: "Targets", tooltip: "WHETHER THE SUPPLIER HAS SET EMISSION REDUCTION TARGETS." },
   { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
   
   { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
