@@ -23,6 +23,12 @@ const COLORS = [
   "hsl(190 70% 45%)",
 ];
 
+const CustomAngleTick = ({ x, y, payload }: any) => (
+  <text x={x} y={y} dy={10} textAnchor="end" fontSize={9} fill="hsl(var(--muted-foreground))" transform={`rotate(-35, ${x}, ${y})`}>
+    {payload.value}
+  </text>
+);
+
 export function InsightDashboard({ suppliers, year }: InsightDashboardProps) {
   const stats = useMemo(() => {
     const totalSuppliers = suppliers.length;
