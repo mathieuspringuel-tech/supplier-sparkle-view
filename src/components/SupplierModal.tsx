@@ -86,7 +86,7 @@ export const SupplierModal = ({ supplier, onClose }: SupplierModalProps) => {
                   <div className="grid grid-cols-2 gap-4">
                     <section>
                       <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                        Emission Factor / $
+                        Emission Factor
                       </label>
                       <p className="text-xl font-mono-tabular font-medium text-foreground mt-1">
                         {supplier.emissionFactor.toFixed(3)}
