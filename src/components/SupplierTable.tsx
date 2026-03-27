@@ -632,7 +632,7 @@ export const SupplierTable = () => {
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="inline-flex cursor-default">
-                              <AlertTriangle size={16} className="text-destructive" />
+                              <AlertTriangle size={16} className="text-amber-500" />
                             </span>
                           </TooltipTrigger>
                           <TooltipContent side="bottom" className="text-xs max-w-[220px]">
