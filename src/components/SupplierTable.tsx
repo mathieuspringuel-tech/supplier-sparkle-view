@@ -245,38 +245,47 @@ export const SupplierTable = () => {
   const allSuppliers = currentData?.suppliers ?? [];
 
   // Apply filters
+  // Helper to toggle a value in a filter array
+  const toggleFilter = (setter: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
+    setter(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+  };
+
   const suppliers = allSuppliers.filter((s) => {
     if (searchQuery && !s.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (filterHQ && s.hqCountry !== filterHQ) return false;
-    if (filterTargets === "empty" && s.targetStatus) return false;
-    if (filterTargets && filterTargets !== "empty" && s.targetStatus !== filterTargets) return false;
-    if (filterCategory && s.category !== filterCategory) return false;
-    if (filterSynced === "yes" && s.synced !== "synced") return false;
-    if (filterSynced === "no" && s.synced === "synced") return false;
-    if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
-    if (filterSpendFactor === "supplier-specific" && s.methodology !== "Organisation specific") return false;
-    if (filterSpendFactor === "supplier-specific" && s.calculationMethodology === "tco2e") return false;
-    if (filterSpendFactor === "industry-benchmark" && s.methodology !== "Industry benchmark") return false;
-    if (filterSbtAligned === "yes" && s.sbtAligned !== true) return false;
-    if (filterSbtAligned === "no" && s.sbtAligned !== false) return false;
-    if (filterSbtAligned === "unknown" && s.sbtAligned !== undefined) return false;
-    if (filterInfluence && s.influence !== Number(filterInfluence)) return false;
+    if (filterHQ.length > 0 && !filterHQ.includes(s.hqCountry)) return false;
+    if (filterTargets.length > 0 && !filterTargets.includes(s.targetStatus || "")) return false;
+    if (filterCategory.length > 0 && !filterCategory.includes(s.category)) return false;
+    if (filterSynced.length > 0) {
+      const statusVal = s.synced === "synced" ? "yes" : s.synced === "action-required" ? "action" : "no";
+      if (!filterSynced.includes(statusVal)) return false;
+    }
+    if (filterCalcMethod.length > 0 && !filterCalcMethod.includes(s.calculationMethodology || "")) return false;
+    if (filterSpendFactor.length > 0) {
+      if (s.calculationMethodology === "tco2e") return false;
+      const spendVal = s.methodology === "Organisation specific" ? "supplier-specific" : "industry-benchmark";
+      if (!filterSpendFactor.includes(spendVal)) return false;
+    }
+    if (filterSbtAligned.length > 0) {
+      const sbtVal = s.sbtAligned === true ? "yes" : s.sbtAligned === false ? "no" : "unknown";
+      if (!filterSbtAligned.includes(sbtVal)) return false;
+    }
+    if (filterInfluence.length > 0 && !filterInfluence.includes(String(s.influence))) return false;
     return true;
   });
 
-  const hasActiveFilters = searchQuery || filterHQ || filterTargets || filterCategory || filterSynced || filterCalcMethod || filterSpendFactor || filterSbtAligned || filterInfluence;
+  const hasActiveFilters = searchQuery || filterHQ.length > 0 || filterTargets.length > 0 || filterCategory.length > 0 || filterSynced.length > 0 || filterCalcMethod.length > 0 || filterSpendFactor.length > 0 || filterSbtAligned.length > 0 || filterInfluence.length > 0;
 
   const clearFilters = () => {
     setSearchQuery("");
-    setFilterHQ("");
-    setFilterTargets("");
+    setFilterHQ([]);
+    setFilterTargets([]);
     
-    setFilterCategory("");
-    setFilterSynced("");
-    setFilterCalcMethod("");
-    setFilterSpendFactor("");
-    setFilterSbtAligned("");
-    setFilterInfluence("");
+    setFilterCategory([]);
+    setFilterSynced([]);
+    setFilterCalcMethod([]);
+    setFilterSpendFactor([]);
+    setFilterSbtAligned([]);
+    setFilterInfluence([]);
   };
 
   // Unique values for filter dropdowns
