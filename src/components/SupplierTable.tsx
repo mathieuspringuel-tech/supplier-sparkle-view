@@ -627,7 +627,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
-                      {s.synced === "not-synced" && s.calculationMethodology === "spend" ? (
+                      {(s.synced === "not-synced" || s.synced === "warning" || s.synced === "error") && s.calculationMethodology === "spend" ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="inline-flex cursor-default">
@@ -648,7 +648,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("targets") && (
                     <td className="px-4 py-3">
-                      {s.synced === "not-synced" ? (
+                      {(s.synced === "not-synced" || s.synced === "warning" || s.synced === "error") ? (
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <TargetStatusCell status={s.targetStatus} inheritedFrom={s.inheritedFrom} />
@@ -657,7 +657,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("sbtAligned") && (
                     <td className="px-4 py-3">
-                      {s.synced === "not-synced" ? (
+                      {(s.synced === "not-synced" || s.synced === "warning" || s.synced === "error") ? (
                         <span className="text-muted-foreground">-</span>
                       ) : s.targetStatus === "self-published" && !s.sbtAligned ? (
                         <Tooltip>
