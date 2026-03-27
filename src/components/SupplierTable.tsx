@@ -738,8 +738,7 @@ export const SupplierTable = () => {
                     <td className="px-4 py-3">
                       {syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
-                      ) : (
-                        {s.synced === "not-synced" ? (
+                      ) : s.synced === "not-synced" ? (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <span className="inline-flex cursor-default text-muted-foreground">—</span>
@@ -764,7 +763,6 @@ export const SupplierTable = () => {
                             </TooltipContent>
                           </Tooltip>
                         )}
-                      )}
                     </td>
                     )}
                   </tr>
