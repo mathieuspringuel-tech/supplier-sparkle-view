@@ -622,7 +622,7 @@ export const SupplierTable = () => {
               className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent hover:bg-accent/90 transition-colors duration-150"
             >
               <Plus size={14} />
-              ADD
+              ADD SUPPLIER
             </button>
             <DropdownMenu>
               <DropdownMenuTrigger className="inline-flex items-center px-2 py-1.5 text-accent-foreground bg-accent hover:bg-accent/90 border-l border-accent-foreground/20 transition-colors duration-150">
