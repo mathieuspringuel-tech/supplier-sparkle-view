@@ -429,6 +429,29 @@ export const SupplierTable = () => {
             />
           </div>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              {selectedYear}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {years.map((year) => (
+                <DropdownMenuItem
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={selectedYear === year ? "bg-secondary" : ""}
+                >
+                  {year}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleAddNewYear}>
+                <Plus size={14} className="mr-2" />
+                Add new year
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Company HQ</option>
             {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
