@@ -429,6 +429,29 @@ export const SupplierTable = () => {
             />
           </div>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 h-8 px-3 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
+              {selectedYear}
+              <ChevronDown size={14} className="text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {years.map((year) => (
+                <DropdownMenuItem
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={selectedYear === year ? "bg-secondary" : ""}
+                >
+                  {year}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleAddNewYear}>
+                <Plus size={14} className="mr-2" />
+                Add new year
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <select value={filterHQ} onChange={(e) => setFilterHQ(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Company HQ</option>
             {uniqueCountries.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -516,28 +539,27 @@ export const SupplierTable = () => {
               </div>
             </PopoverContent>
           </Popover>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150">
-              {selectedYear}
-              <ChevronDown size={14} className="text-muted-foreground" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              {years.map((year) => (
-                <DropdownMenuItem
-                  key={year}
-                  onClick={() => setSelectedYear(year)}
-                  className={selectedYear === year ? "bg-secondary" : ""}
-                >
-                  {year}
+
+          <div className="inline-flex rounded-lg overflow-hidden">
+            <button
+              onClick={() => setAddModalOpen(true)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent hover:bg-accent/90 transition-colors duration-150"
+            >
+              <Plus size={14} />
+              ADD
+            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="inline-flex items-center px-2 py-1.5 text-accent-foreground bg-accent hover:bg-accent/90 border-l border-accent-foreground/20 transition-colors duration-150">
+                <ChevronDown size={14} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setBulkUploadOpen(true)}>
+                  <Upload size={14} className="mr-2" />
+                  Bulk Upload
                 </DropdownMenuItem>
-              ))}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleAddNewYear}>
-                <Plus size={14} className="mr-2" />
-                Add new year
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
           {suppliers.length === 0 && (
             <button
@@ -550,26 +572,6 @@ export const SupplierTable = () => {
           )}
 
           <div className="flex items-center gap-3 ml-auto">
-            <div className="inline-flex rounded-lg overflow-hidden">
-              <button
-                onClick={() => setAddModalOpen(true)}
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-accent-foreground bg-accent hover:bg-accent/90 transition-colors duration-150"
-              >
-                <Plus size={14} />
-                ADD
-              </button>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="inline-flex items-center px-2 py-1.5 text-accent-foreground bg-accent hover:bg-accent/90 border-l border-accent-foreground/20 transition-colors duration-150">
-                  <ChevronDown size={14} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setBulkUploadOpen(true)}>
-                    <Upload size={14} className="mr-2" />
-                    Bulk Upload
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
             <button
               className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150"
             >
