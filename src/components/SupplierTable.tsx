@@ -612,12 +612,16 @@ export const SupplierTable = () => {
                         >
                           <Pencil size={13} />
                         </button>
-                        <button
-                          onClick={() => setSelected(s)}
-                          className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
-                        >
-                          {s.name}
-                        </button>
+                        {s.synced === "warning" ? (
+                          <span className="font-medium text-foreground text-left">{s.name}</span>
+                        ) : (
+                          <button
+                            onClick={() => setSelected(s)}
+                            className="font-medium text-foreground underline-offset-4 hover:underline hover:text-accent transition-colors duration-150 text-left"
+                          >
+                            {s.name}
+                          </button>
+                        )}
                       </div>
                     </td>
                     )}
