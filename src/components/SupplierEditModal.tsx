@@ -114,6 +114,7 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
     }
     setActiveTab(supplier?.synced === "warning" ? "supplier-data" : "year-data");
     setValidationError(null);
+    setSelectedEntity(null);
   }, [supplier]);
 
   if (!draft) return null;
