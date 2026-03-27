@@ -215,6 +215,7 @@ export const SupplierTable = () => {
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
   const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set(["calcMethod", "spendFactorType", "influence"]));
   const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
