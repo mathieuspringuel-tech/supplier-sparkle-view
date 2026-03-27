@@ -218,15 +218,15 @@ export const SupplierTable = () => {
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterHQ, setFilterHQ] = useState("");
-  const [filterTargets, setFilterTargets] = useState("");
+  const [filterHQ, setFilterHQ] = useState<string[]>([]);
+  const [filterTargets, setFilterTargets] = useState<string[]>([]);
   
-  const [filterCategory, setFilterCategory] = useState("");
-  const [filterSynced, setFilterSynced] = useState("");
-  const [filterCalcMethod, setFilterCalcMethod] = useState("");
-  const [filterSpendFactor, setFilterSpendFactor] = useState("");
-  const [filterSbtAligned, setFilterSbtAligned] = useState("");
-  const [filterInfluence, setFilterInfluence] = useState("");
+  const [filterCategory, setFilterCategory] = useState<string[]>([]);
+  const [filterSynced, setFilterSynced] = useState<string[]>([]);
+  const [filterCalcMethod, setFilterCalcMethod] = useState<string[]>([]);
+  const [filterSpendFactor, setFilterSpendFactor] = useState<string[]>([]);
+  const [filterSbtAligned, setFilterSbtAligned] = useState<string[]>([]);
+  const [filterInfluence, setFilterInfluence] = useState<string[]>([]);
 
   // Columns that can be toggled (exclude "name" as it's always visible)
   const toggleableColumns = columns.filter((c) => c.key !== "name");
