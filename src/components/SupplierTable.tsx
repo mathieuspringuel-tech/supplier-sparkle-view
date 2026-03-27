@@ -38,7 +38,7 @@ const columns: ColumnDef[] = [
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
   { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
-  { key: "synced", label: "Synced", tooltip: "Whether the supplier was successfully found in 51-0's supplier database." },
+  { key: "synced", label: "Status", tooltip: "Whether the supplier was successfully found in 51-0's supplier database." },
 ];
 
 // Legends are built after targetStatusConfig is defined, so we use a function
@@ -450,7 +450,7 @@ export const SupplierTable = () => {
           </select>
 
           <select value={filterSynced} onChange={(e) => setFilterSynced(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
-            <option value="">Synced</option>
+            <option value="">Status</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
@@ -596,10 +596,12 @@ export const SupplierTable = () => {
                   </td>
                 </tr>
               ) : (
-                suppliers.map((s) => (
+                suppliers.map((s) => {
+                  const isWarningRow = s.synced === "warning";
+                  const rowContent = (
                   <tr
                     key={s.id}
-                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "error" ? "bg-destructive/5 hover:bg-destructive/10" : s.synced === "warning" ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
+                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "error" ? "bg-destructive/5 hover:bg-destructive/10" : isWarningRow ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
                   >
                     {!hiddenColumns.has("name") && (
                     <td className="px-4 py-3">
