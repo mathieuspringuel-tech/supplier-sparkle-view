@@ -659,7 +659,7 @@ export const SupplierTable = () => {
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary transition-colors duration-150 disabled:opacity-50"
                 >
                   <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
-                  Re-Sync
+                  RefreshData
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom" className="text-xs">
