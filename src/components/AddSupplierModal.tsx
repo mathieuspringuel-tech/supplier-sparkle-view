@@ -336,7 +336,7 @@ export const AddSupplierModal = ({ open, onClose, onSave, year }: AddSupplierMod
                       className="pr-12"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-muted-foreground">
-                      GBP
+                      USD
                     </span>
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-1">
