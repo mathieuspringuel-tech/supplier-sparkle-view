@@ -36,7 +36,7 @@ const columns: ColumnDef[] = [
   
   { key: "category", label: "Category", tooltip: "THE BUSINESS CATEGORY THIS SUPPLIER FALLS UNDER" },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
-  { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
+  { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor is supplier-specific or based on an industry benchmark. Only applicable to spend-based calculations." },
   { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
   { key: "synced", label: "Status", tooltip: "Whether the supplier was successfully found in 51-0's supplier database." },
 ];
@@ -65,8 +65,8 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
     { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-accent/10 text-accent">CO₂e</span>, label: "CO₂e Data Input" },
   ],
   spendFactorType: [
-    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">AI</span>, label: "AI Generated" },
-    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-amber-500/10 text-amber-600">Custom</span>, label: "User Input" },
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">SS</span>, label: "Supplier Specific" },
+    { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-amber-500/10 text-amber-600">IB</span>, label: "Industry Benchmark" },
   ],
 });
 
@@ -254,9 +254,9 @@ export const SupplierTable = () => {
     if (filterSynced === "yes" && s.synced !== "synced") return false;
     if (filterSynced === "no" && s.synced === "synced") return false;
     if (filterCalcMethod && s.calculationMethodology !== filterCalcMethod) return false;
-    if (filterSpendFactor === "ai" && s.methodology === "Input by User") return false;
-    if (filterSpendFactor === "ai" && s.calculationMethodology === "tco2e") return false;
-    if (filterSpendFactor === "custom" && s.methodology !== "Input by User") return false;
+    if (filterSpendFactor === "supplier-specific" && s.methodology !== "Organisation specific") return false;
+    if (filterSpendFactor === "supplier-specific" && s.calculationMethodology === "tco2e") return false;
+    if (filterSpendFactor === "industry-benchmark" && s.methodology !== "Industry benchmark") return false;
     if (filterSbtAligned === "yes" && s.sbtAligned !== true) return false;
     if (filterSbtAligned === "no" && s.sbtAligned !== false) return false;
     if (filterSbtAligned === "unknown" && s.sbtAligned !== undefined) return false;
@@ -486,8 +486,8 @@ export const SupplierTable = () => {
 
           <select value={filterSpendFactor} onChange={(e) => setFilterSpendFactor(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
             <option value="">Spend Factor Type</option>
-            <option value="ai">AI Generated</option>
-            <option value="custom">Custom</option>
+            <option value="supplier-specific">Supplier Specific</option>
+            <option value="industry-benchmark">Industry Benchmark</option>
           </select>
 
           <select value={filterSbtAligned} onChange={(e) => setFilterSbtAligned(e.target.value)} className="h-8 px-2 text-sm bg-card border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-accent">
@@ -714,11 +714,11 @@ export const SupplierTable = () => {
                         <span className="text-muted-foreground">-</span>
                       ) : (
                         <span className={`inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-full ${
-                          s.methodology === "Input by User"
-                            ? "bg-amber-500/10 text-amber-600"
-                            : "bg-secondary text-foreground"
+                          s.methodology === "Organisation specific"
+                            ? "bg-secondary text-foreground"
+                            : "bg-amber-500/10 text-amber-600"
                         }`}>
-                          {s.methodology === "Input by User" ? "Custom" : "AI Generated"}
+                          {s.methodology === "Organisation specific" ? "Supplier Specific" : "Industry Benchmark"}
                         </span>
                       )}
                     </td>
