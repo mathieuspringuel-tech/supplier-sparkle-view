@@ -256,7 +256,7 @@ export const SupplierTable = () => {
     if (filterTargets.length > 0 && !filterTargets.includes(s.targetStatus || "")) return false;
     if (filterCategory.length > 0 && !filterCategory.includes(s.category)) return false;
     if (filterSynced.length > 0) {
-      const statusVal = s.synced === "synced" ? "yes" : s.synced === "action-required" ? "action" : "no";
+      const statusVal = s.synced === "synced" ? "yes" : s.synced === "not-synced" ? "not-connected" : "action";
       if (!filterSynced.includes(statusVal)) return false;
     }
     if (filterCalcMethod.length > 0 && !filterCalcMethod.includes(s.calculationMethodology || "")) return false;
