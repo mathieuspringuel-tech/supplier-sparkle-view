@@ -34,7 +34,7 @@ const columns: ColumnDef[] = [
   { key: "targets", label: "Targets", tooltip: "WHETHER THE SUPPLIER HAS SET EMISSION REDUCTION TARGETS." },
   { key: "sbtAligned", label: "SBT Aligned?", tooltip: "Shows whether the supplier's targets are SBTi aligned." },
   
-  { key: "category", label: "Category", tooltip: "GHG Protocol Scope 3 category classification for this supplier's emissions." },
+  { key: "category", label: "Category", tooltip: "THE BUSINESS CATEGORY THIS SUPPLIER FALLS UNDER" },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
   { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
