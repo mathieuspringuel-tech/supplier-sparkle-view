@@ -36,7 +36,7 @@ const columns: ColumnDef[] = [
   
   { key: "category", label: "Category", tooltip: "THE BUSINESS CATEGORY THIS SUPPLIER FALLS UNDER" },
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
-  { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor is supplier-specific or based on an industry benchmark. Only applicable to spend-based calculations." },
+  { key: "spendFactorType", label: "Spend Factor Type", tooltip: "WHETHER THE SPEND FACTOR IS SUPPLIER-SPECIFIC OR BASED ON AN INDUSTRY BENCHMARK." },
   { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
   { key: "synced", label: "Status", tooltip: "Whether the supplier was successfully found in 51-0's supplier database." },
 ];
