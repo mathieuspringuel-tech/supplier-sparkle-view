@@ -1,7 +1,14 @@
+import { useState } from "react";
 import { SupplierTable } from "@/components/SupplierTable";
-import { Download } from "lucide-react";
+import { InsightDashboard } from "@/components/InsightDashboard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Download, Table2, BarChart3 } from "lucide-react";
+import { initialYearData } from "@/data/suppliers";
 
 const Index = () => {
+  const [selectedYear, setSelectedYear] = useState(initialYearData[0].year);
+  const currentYearData = initialYearData.find(y => y.year === selectedYear) || initialYearData[0];
+
   const handleDownloadSpec = () => {
     const link = document.createElement("a");
     link.href = "/supplier-module-spec.md";
@@ -26,8 +33,27 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <SupplierTable />
+      <main className="max-w-7xl mx-auto px-6 py-6">
+        <Tabs defaultValue="suppliers" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="suppliers" className="gap-1.5">
+              <Table2 size={14} />
+              Suppliers
+            </TabsTrigger>
+            <TabsTrigger value="insight" className="gap-1.5">
+              <BarChart3 size={14} />
+              Insight
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="suppliers">
+            <SupplierTable />
+          </TabsContent>
+
+          <TabsContent value="insight">
+            <InsightDashboard suppliers={currentYearData.suppliers} year={selectedYear} />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
