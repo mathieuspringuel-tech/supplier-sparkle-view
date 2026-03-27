@@ -601,7 +601,6 @@ export const SupplierTable = () => {
                 suppliers.map((s) => (
                   <tr
                     key={s.id}
-                    title={s.synced === "warning" ? "Action Required — Please edit supplier to add more detail" : undefined}
                     className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "error" ? "bg-destructive/5 hover:bg-destructive/10" : s.synced === "warning" ? "bg-amber-500/5 hover:bg-amber-500/10 cursor-pointer" : "hover:bg-table-hover"}`}
                   >
                     {!hiddenColumns.has("name") && (
@@ -634,7 +633,7 @@ export const SupplierTable = () => {
                     )}
                     {!hiddenColumns.has("tco2e") && (
                     <td className="px-4 py-3 font-mono-tabular">
-                      {(s.synced === "not-synced" || s.synced === "warning" || s.synced === "error") && s.calculationMethodology === "spend" ? (
+                      {!s.tco2e ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span className="inline-flex cursor-default">
