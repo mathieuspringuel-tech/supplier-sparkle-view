@@ -38,7 +38,7 @@ const columns: ColumnDef[] = [
   { key: "calcMethod", label: "Calc. Methodology", tooltip: "Whether emissions are calculated from spend data or directly from CO₂e data provided by the supplier." },
   { key: "spendFactorType", label: "Spend Factor Type", tooltip: "Whether the emission factor used is AI-generated or a custom value entered by the user. Only applicable to spend-based calculations." },
   { key: "influence", label: "Influence", tooltip: "Your estimated level of influence over this supplier's sustainability practices, rated 1–5." },
-  { key: "synced", label: "Synced", tooltip: "Whether emission data is synced with the supplier's latest disclosure." },
+  { key: "synced", label: "Synced", tooltip: "Whether the supplier was successfully found in 51-0's supplier database." },
 ];
 
 // Legends are built after targetStatusConfig is defined, so we use a function
@@ -56,9 +56,10 @@ const getColumnLegends = (): Record<string, { icon: React.ReactNode; label: stri
     { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Verify (Self Published)" },
   ],
   synced: [
-    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "AI found data" },
-    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Uncertain match" },
-    { icon: <XCircle size={12} className="text-destructive" />, label: "Could not sync" },
+    { icon: <CheckCircle2 size={12} className="text-confidence-high-text" />, label: "Successfully found" },
+    { icon: <AlertTriangle size={12} className="text-destructive" />, label: "Error" },
+    { icon: <AlertTriangle size={12} className="text-amber-500" />, label: "Action Required" },
+    { icon: <span className="inline-block w-3 h-3 rounded-full bg-muted" />, label: "Not connected" },
   ],
   calcMethod: [
     { icon: <span className="inline-flex text-[9px] font-medium px-1 py-px rounded-full bg-secondary text-foreground">Spend</span>, label: "Spend Data Input" },
@@ -599,7 +600,7 @@ export const SupplierTable = () => {
                 suppliers.map((s) => (
                   <tr
                     key={s.id}
-                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "not-synced" ? "bg-destructive/5 hover:bg-destructive/10" : s.synced === "warning" ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
+                    className={`border-b border-border last:border-b-0 transition-colors duration-75 ${s.synced === "error" ? "bg-destructive/5 hover:bg-destructive/10" : s.synced === "warning" ? "bg-amber-500/5 hover:bg-amber-500/10" : "hover:bg-table-hover"}`}
                   >
                     {!hiddenColumns.has("name") && (
                     <td className="px-4 py-3">
@@ -737,22 +738,31 @@ export const SupplierTable = () => {
                     <td className="px-4 py-3">
                       {syncingIds.has(s.id) ? (
                         <Loader2 size={16} className="text-muted-foreground animate-spin" />
-                      ) : (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className={`inline-flex cursor-default`}>
-                              {s.synced === "synced" && <CheckCircle2 size={16} className="text-confidence-high-text" />}
-                              {s.synced === "warning" && <AlertTriangle size={16} className="text-amber-500" />}
-                              {s.synced === "not-synced" && <XCircle size={16} className="text-destructive" />}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="text-xs">
-                            {s.synced === "synced" && "AI successfully found data"}
-                            {s.synced === "warning" && "AI couldn't be sure which company this is. Edit supplier to add more detail."}
-                            {s.synced === "not-synced" && "AI could not sync company data."}
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
+                      ) : s.synced === "not-synced" ? (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="inline-flex cursor-default text-muted-foreground">—</span>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="text-xs">
+                              Not connected to 51-0's Supplier Database.
+                            </TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className={`inline-flex cursor-default`}>
+                                {s.synced === "synced" && <CheckCircle2 size={16} className="text-confidence-high-text" />}
+                                {s.synced === "error" && <AlertTriangle size={16} className="text-destructive" />}
+                                {s.synced === "warning" && <AlertTriangle size={16} className="text-amber-500" />}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="text-xs max-w-[220px]">
+                              {s.synced === "synced" && "Successfully found Supplier Data."}
+                              {s.synced === "error" && "Error — Please Try Again."}
+                              {s.synced === "warning" && "Action Required. Please edit supplier to add more detail."}
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
                     </td>
                     )}
                   </tr>
