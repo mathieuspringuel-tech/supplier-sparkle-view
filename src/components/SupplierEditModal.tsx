@@ -535,12 +535,15 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                       {draft.methodology !== "Input by User" ? (
                         <div className="space-y-3">
                           <div>
-                            <Label>Emission Factor (per $)</Label>
-                            <Input
-                              value={draft.emissionFactor}
-                              disabled
-                              className="mt-1 bg-muted text-muted-foreground cursor-not-allowed"
-                            />
+                            <Label>Emission Factor</Label>
+                            <div className="relative mt-1">
+                              <Input
+                                value={draft.emissionFactor}
+                                disabled
+                                className="bg-muted text-muted-foreground cursor-not-allowed pr-24"
+                              />
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-medium">kgCO₂e / USD</span>
+                            </div>
                           </div>
                           <div>
                             <Label>Emission Factor Methodology</Label>
