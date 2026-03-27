@@ -1,35 +1,18 @@
 
 
-## Add Tabbed Layout with Insights Dashboard
+## Add Re-Sync Button
 
-### Overview
-Add a two-tab layout ("Suppliers" and "Insight") above the current content. The Suppliers tab shows the existing table. The Insight tab shows a dashboard with summary KPI panels and charts derived from the supplier data.
+### What
+Add a "Re-Sync" button to the left of the existing "Download" button in the toolbar. It will have a tooltip saying "This will pull the most recent data." When clicked, all supplier Status icons briefly show a loading spinner (~1 second), then revert to their original status.
 
-### Tab Design (matching uploaded reference)
-- Full-width tab bar with two tabs: "Suppliers" (table icon) and "Insight" (chart icon)
-- Clean, minimal style matching the reference screenshot
+### Technical approach
 
-### Insight Dashboard Content
+**File: `src/components/SupplierTable.tsx`**
 
-**Top KPI Panels (3 cards matching reference)**
-1. **No. of Suppliers** - white card, count of suppliers
-2. **Total tCO2e** - dark navy card, sum of all tCO2e
-3. **Suppliers /w Targets** - teal card, percentage with targets (excluding "no-targets")
+1. **Add state**: `const [isSyncing, setIsSyncing] = useState(false);`
+2. **Add handler**: `handleResync` sets `isSyncing = true`, then after ~1.2s timeout sets it back to `false`.
+3. **Add button**: Inside the `ml-auto` div (line 649), before the Download button, add a `RefreshCw` icon button wrapped in a `Tooltip` with text "This will pull the most recent data."
+4. **Status column**: When `isSyncing` is true, render a `Loader2` spinner (with animate-spin) for every row's status cell instead of the normal icon.
 
-**Charts Section**
-- **tCO2e by Category** - horizontal bar chart
-- **Spend by Supplier (Top 10)** - bar chart
-- **Target Status Breakdown** - donut/pie chart
-- **Calc Methodology Split** - pie chart
-
-### Technical Approach
-
-**Files to create:**
-- `src/components/InsightDashboard.tsx` - new dashboard component with KPI panels and charts using Recharts (already in project)
-
-**Files to modify:**
-- `src/pages/Index.tsx` - add Radix Tabs wrapping Suppliers and Insight tabs
-- Move year selector state up to Index so both tabs can share the selected year's data
-
-The dashboard will compute all metrics from the same supplier data array, keeping everything consistent.
+Import additions: `RefreshCw` from lucide-react, `Tooltip`/`TooltipTrigger`/`TooltipContent`/`TooltipProvider` from UI components.
 
