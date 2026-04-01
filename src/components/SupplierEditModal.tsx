@@ -503,10 +503,10 @@ export const SupplierEditModal = ({ supplier, onClose, onSave, onDelete, onResyn
                           >
                             <div className="flex items-center gap-2">
                               <Sparkles size={16} className={draft.methodology !== "Input by User" ? "text-accent" : "text-muted-foreground"} />
-                              <span className="text-sm font-medium text-foreground">AI Generated Factor</span>
+                              <span className="text-sm font-medium text-foreground">Factor From 51-0 Supplier Database</span>
                             </div>
                             <span className="text-xs text-muted-foreground leading-snug">
-                              Use an AI generated emission factor.
+                              Suggested Factor for this Supplier
                             </span>
                           </button>
 
